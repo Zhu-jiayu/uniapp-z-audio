@@ -47,7 +47,7 @@ export default {
 						*/,
 		theme: {
 			type: String, // 主题 'music' or 'fm'
-			default: 'fm'
+			default: 'music'
 		},
 		themeColor: {
 			type: String, 

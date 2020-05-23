@@ -3,7 +3,7 @@
 ---
 #### 预览
 <img src="screenshop/../screenshot/music.png" style="width:200px">
-<img src="screenshop/../screenshot/fm.png" style="width:205px;margin-left: 20px">
+<img src="screenshop/../screenshot/fm.png" style="width:240px;margin-left: 20px">
 
 #### 更新日志
 v0.0.3
@@ -46,3 +46,7 @@ theme | String | false | 皮肤 | 枚举值 `fm` or `music`;  默认`fm`
 themeColor | String | false | 进度条颜色 | 默认 `#42b983`
 stepShow | Boolean | false | 显示快进按钮 | 默认 `true`
 
+#### Donate
+如果你觉得这个项目帮助到了你，你可以帮作者买一杯果汁表示鼓励
+
+![wechat](./screenshot/wechat.jpg)
