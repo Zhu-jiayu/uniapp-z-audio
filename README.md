@@ -6,7 +6,7 @@
 <img src="screenshop/../screenshot/fm.png" style="width:205px;margin-left: 20px">
 
 #### 更新日志
-v0.0.2
+v0.0.3
 
 - 增加皮肤选择,  自定义主题色, 隐藏快进按钮
 
