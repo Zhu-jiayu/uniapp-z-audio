@@ -1,0 +1,1 @@
+<view><button data-event-opts="{{[['tap',[['go',[0]]]]]}}" bindtap="__e">第1首</button><button data-event-opts="{{[['tap',[['go',[1]]]]]}}" bindtap="__e">第2首</button></view>

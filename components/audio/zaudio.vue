@@ -1,19 +1,22 @@
 <template>
-	<view class="imt-audio">
-		<view class="audio-control-wrapper">
-			<image :src="info.coverImgUrl" mode="aspectFill" class="cover" :class="{ on: !paused }"></image>
-			<image src="/static/playbtn.png" alt="" @click="operation" class="play" v-if="paused"></image>
-			<image src="/static/pausebtn.png" alt="" @click="operation" class="play" v-else></image>
+	<view class="imt-audio" :class="[`${theme}`]">
+		<view class="top"  >
+			<view class="audio-control-wrapper">
+				<image :src="info.coverImgUrl" mode="aspectFill" class="cover" :class="{ on: !paused }" ></image>
+				<image src="./static/playbtn.png" alt="" @click="operation" class="play" v-if="paused" ></image>
+				<image src="./static/pausebtn.png" alt="" @click="operation" class="play" v-else ></image>
+			</view>
+
+			<view>
+				<view class="title">{{ info.title }}</view>
+				<view class="singer">{{ info.singer }}</view>
+			</view>
 		</view>
-
-		<view style="font-weight:bold;font-size:34rpx;margin-top:24rpx;text-align: center;">{{ info.title }}</view>
-		<view style="color:#999;font-size:26rpx;margin-top:10rpx;text-align: center;margin-bottom:18rpx;">{{ info.singer }}</view>
-
 		<view class="audio-wrapper">
-			<image src="/static/prev.png" class="prevbtn" @click="step(0)" mode="widthFix"></image>
-			<slider class="audio-slider" activeColor="#68339A" block-size="16" :value="current_value" :max="duration_value" @changing="changing" @change="change"></slider>
+			<image src="./static/prev.png" class="prevbtn" @click="step(0)" mode="widthFix" v-if="stepShow"></image>
+			<slider class="audio-slider" :activeColor="themeColor" block-size="16" :value="current_value" :max="duration_value" @changing="changing" @change="change"></slider>
 			<view class="audio-number">{{ current }}/{{ duration }}</view>
-			<image src="/static/next.png" class="nextbtn" @click="step(1)" mode="widthFix"></image>
+			<image src="./static/next.png" class="nextbtn" @click="step(1)" mode="widthFix" v-if="stepShow"></image>
 		</view>
 	</view>
 </template>
@@ -41,7 +44,20 @@ export default {
 								singer, 作者
 								coverImgUrl  海报
 							}
-						*/
+						*/,
+		theme: {
+			type: String, // 主题 'music' or 'fm'
+			default: 'fm'
+		},
+		themeColor: {
+			type: String, 
+			default: '#42b983'
+		},
+		stepShow: {
+			//是否显示快进后退按钮
+			type: Boolean,
+			default: true
+		}
 	},
 
 	created() {
@@ -68,16 +84,12 @@ export default {
 			this.saveplay('src', this.info.src);
 			this.$store.commit('setpause', false); //记录音频正常停止 false
 			this.$store.commit('set_n_pause', false); //标记音频异常中断 为false 用于电话来电中断音频的判断
-			
-		
-			console.log('onplay')
+
+			console.log('onplay');
 			this.duration = this.format(this.$audio.duration);
 			this.duration_value = this.$audio.duration;
 			this.saveplay('duration', this.duration);
 			this.saveplay('duration_value', this.duration_value);
-			
-			
-			
 		});
 
 		this.$audio.onPause(() => {
@@ -99,25 +111,19 @@ export default {
 			this.saveplay('current_value', this.current_value);
 		});
 		this.$audio.onTimeUpdate(() => {
-			
-	
-			console.log('-->', this.info.src == this.$store.state.playinfo.src)
+			console.log('-->', this.info.src == this.$store.state.playinfo.src);
 			if (this.info.src == this.$store.state.playinfo.src) {
 				this.current = this.format(this.$audio.currentTime);
 				this.current_value = this.$audio.currentTime;
 				this.saveplay('current', this.current);
 				this.saveplay('current_value', this.$audio.currentTime);
 
-			
-					console.log(123123)
-					this.duration = this.format(this.$audio.duration);
-					this.duration_value = this.$audio.duration;
+				console.log(123123);
+				this.duration = this.format(this.$audio.duration);
+				this.duration_value = this.$audio.duration;
 
-					this.saveplay('duration', this.duration);
-					this.saveplay('duration_value', this.duration_value);
-			
-				
-				
+				this.saveplay('duration', this.duration);
+				this.saveplay('duration_value', this.duration_value);
 			}
 		});
 		this.$audio.onError(() => {
@@ -231,85 +237,188 @@ export default {
 };
 </script>
 
-<style>
-.imt-audio {
+<style scoped lang="scss">
+.imt-audio.music {
 	padding: 0 30upx 30upx;
 	background: #fff;
-}
-
-.audio-wrapper {
-	display: flex;
-	align-items: center;
-}
-.tips {
-	position: absolute;
-	right: 4rpx;
-	bottom: 4rpx;
-	width: 86rpx;
-	height: 34rpx;
-	opacity: 1;
-}
-.audio-number {
-	font-size: 24upx;
-	line-height: 1;
-	color: #333;
-}
-
-.audio-slider {
-	flex: 1;
-	margin: 0 30rpx 0 10rpx;
-}
-
-.audio-control-wrapper {
-	width: 226rpx;
-	height: 320rpx;
-	margin: 30upx auto;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	position: relative;
-}
-.cover {
-	width: 280rpx;
-	height: 280rpx;
-	box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.13);
-	border-radius: 10rpx;
-	border-radius: 5px;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	border-radius: 50%;
-}
-.cover.on {
-	-webkit-animation: 10s rowup linear infinite normal;
-	animation: 10s rowup linear infinite normal;
-}
-@keyframes rowup {
-	0% {
-		-webkit-transform: translate(-50%, -50%) rotate(0deg) ;
-		transform-origin: center center;
+	.top {
+		& > view:nth-child(2) {
+			.title {
+				font-weight: bold;
+				font-size: 34rpx;
+				margin-top: 24rpx;
+				text-align: center;
+			}
+			.singer {
+				color: #999;
+				font-size: 26rpx;
+				margin-top: 10rpx;
+				text-align: center;
+				margin-bottom: 18rpx;
+			}
+		}
+	}
+	.audio-wrapper {
+		display: flex;
+		align-items: center;
 	}
 
-	100% {
-		-webkit-transform:  translate(-50%, -50%) rotate(360deg);
-		transform-origin: center center;
+	.audio-number {
+		font-size: 24upx;
+		line-height: 1;
+		color: #333;
+	}
+
+	.audio-slider {
+		flex: 1;
+		margin: 0 30rpx 0 10rpx;
+	}
+
+	.audio-control-wrapper {
+		margin: 100rpx auto;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+		
+	}
+	.cover {
+		width: 280rpx;
+		height: 280rpx;
+		box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.13);
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		border-radius: 50%;
+		border:2px solid #fff
+	}
+	.cover.on {
+		-webkit-animation: 10s rowup linear infinite normal;
+		animation: 10s rowup linear infinite normal;
+	}
+
+	.play {
+		width: 130rpx;
+		height: 130rpx;
+		z-index: 99;
+		background: rgba(0,0,0,.4);
+		border-radius:50%
+	}
+
+	.prevbtn {
+		width: 48rpx;
+		height: 48rpx;
+		margin-right: 40rpx;
+	}
+	.nextbtn {
+		width: 48rpx;
+		height: 48rpx;
+		margin-left: 40rpx;
 	}
 }
-.play {
-	width: 130rpx;
-	height: 130rpx;
-	z-index: 99;
+
+.imt-audio.fm {
+	background: #fff;
+	border: 1px solid #cecece;
+	width: 90%;
+	margin: 0 auto;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	overflow: hidden;
+	.top {
+		background: #f5f5f5;
+		display: flex;
+		align-items: center;
+		& > view:nth-child(2) {
+			flex: 1;
+			margin-left: 30rpx;
+			.title {
+				font-weight: bold;
+				font-size: 34rpx;
+				margin-top: 24rpx;
+				text-align: left;
+			}
+			.singer {
+				color: #999;
+				font-size: 26rpx;
+				margin-top: 10rpx;
+				text-align: left;
+				margin-bottom: 18rpx;
+			}
+		}
+	}
+	.audio-wrapper {
+		display: flex;
+		align-items: center;
+		padding: 30rpx 20rpx;
+	}
+
+	.audio-number {
+		font-size: 24upx;
+		line-height: 1;
+		color: #333;
+	}
+
+	.audio-slider {
+		flex: 1;
+		margin: 0 30rpx 0 10rpx;
+	}
+
+	.audio-control-wrapper {
+		margin: 60rpx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+		padding: 30rpx 20rpx;
+		
+	}
+	.cover {
+		width: 180rpx;
+		height: 180rpx;
+		box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		border-radius: 50%;
+		border:2px solid #fff
+	}
+	.cover.on {
+		-webkit-animation: 10s rowup linear infinite normal;
+		animation: 10s rowup linear infinite normal;
+	}
+
+	.play {
+		width: 80rpx;
+		height: 80rpx;
+		z-index: 99;
+		background: rgba(0,0,0,.4);
+		border-radius:50%
+	}
+
+	.prevbtn {
+		width: 48rpx;
+		height: 48rpx;
+		margin-right: 40rpx;
+	}
+	.nextbtn {
+		width: 48rpx;
+		height: 48rpx;
+		margin-left: 40rpx;
+	}
 }
 
-.prevbtn {
-	width: 48rpx;
-	height: 48rpx;
-	margin-right: 40rpx;
-}
-.nextbtn {
-	width: 48rpx;
-	height: 48rpx;
-	margin-left: 40rpx;
-}
+	@keyframes rowup {
+		0% {
+			-webkit-transform: translate(-50%, -50%) rotate(0deg);
+			transform-origin: center center;
+		}
+
+		100% {
+			-webkit-transform: translate(-50%, -50%) rotate(360deg);
+			transform-origin: center center;
+		}
+	}
 </style>
