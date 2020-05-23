@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "uni-app",
-  "usingComponents": {
-    "zaudio": "/components/audio/zaudio"
-  }
-}
