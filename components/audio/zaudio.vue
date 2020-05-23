@@ -69,13 +69,13 @@ export default {
 			this.$store.commit('setpause', false); //记录音频正常停止 false
 			this.$store.commit('set_n_pause', false); //标记音频异常中断 为false 用于电话来电中断音频的判断
 			
-			// app wx小程序获取总长度
-			// #ifndef H5 
+		
+			console.log('onplay')
 			this.duration = this.format(this.$audio.duration);
 			this.duration_value = this.$audio.duration;
 			this.saveplay('duration', this.duration);
 			this.saveplay('duration_value', this.duration_value);
-			// #endif
+			
 			
 			
 		});
@@ -108,24 +108,16 @@ export default {
 				this.saveplay('current', this.current);
 				this.saveplay('current_value', this.$audio.currentTime);
 
-				if (uni.getSystemInfoSync().platform == 'ios') {
-					// 解决ios端初始获取不到音频长度
-
+			
+					console.log(123123)
 					this.duration = this.format(this.$audio.duration);
 					this.duration_value = this.$audio.duration;
 
 					this.saveplay('duration', this.duration);
 					this.saveplay('duration_value', this.duration_value);
-					
-				}
-				//解决h5端初始获取不到音频长度
-				// #ifdef h5 
-				this.duration = this.format(this.$audio.duration);
-				this.duration_value = this.$audio.duration;
-				this.saveplay('duration', this.duration);
-				this.saveplay('duration_value', this.duration_value);
-				console.log(this.duration_value)
-				// #endif
+			
+				
+				
 			}
 		});
 		this.$audio.onError(() => {
