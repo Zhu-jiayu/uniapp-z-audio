@@ -31,7 +31,7 @@ export default {
 			duration_value: 100, //slider总长度
 			paused: true, //是否处于暂停状态
 
-			default_cover: 'https://zijing-sz.oss-cn-shenzhen.aliyuncs.com/api_upload/2019-11-06_15_26_32_735247.png', //默认海报
+			default_cover: '/static/logo.png', //默认海报
 			hassrc: '' //////////////正在播放的音频
 		};
 	},
@@ -129,7 +129,14 @@ export default {
 		this.$audio.onError(() => {
 			this.paused = true;
 			this.$store.commit('setpause', true);
-			this.$api.msg('音频播放错误');
+			
+			uni.showToast({
+				title: "音频播放错误",
+				duration:1500,
+				mask:false,
+				icon: 'none',
+				position: "center"
+			});
 
 			this.$store.commit('setaudio', {
 				src: '',
