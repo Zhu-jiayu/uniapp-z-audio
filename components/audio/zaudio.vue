@@ -3,8 +3,8 @@
 		<view class="top"  >
 			<view class="audio-control-wrapper">
 				<image :src="info.coverImgUrl" mode="aspectFill" class="cover" :class="{ on: !paused }" ></image>
-				<image src="./static/playbtn.png" alt="" @click="operation" class="play" v-if="paused" ></image>
-				<image src="./static/pausebtn.png" alt="" @click="operation" class="play" v-else ></image>
+				<image src="/static/playbtn.png" alt="" @click="operation" class="play" v-if="paused" ></image>
+				<image src="/static/pausebtn.png" alt="" @click="operation" class="play" v-else ></image>
 			</view>
 
 			<view>
@@ -13,10 +13,10 @@
 			</view>
 		</view>
 		<view class="audio-wrapper">
-			<image src="./static/prev.png" class="prevbtn" @click="step(0)" mode="widthFix" v-if="stepShow"></image>
+			<image src="/static/prev.png" class="prevbtn" @click="step(0)" mode="widthFix" v-if="stepShow"></image>
 			<slider class="audio-slider" :activeColor="themeColor" block-size="16" :value="current_value" :max="duration_value" @changing="changing" @change="change"></slider>
 			<view class="audio-number">{{ current }}/{{ duration }}</view>
-			<image src="./static/next.png" class="nextbtn" @click="step(1)" mode="widthFix" v-if="stepShow"></image>
+			<image src="/static/next.png" class="nextbtn" @click="step(1)" mode="widthFix" v-if="stepShow"></image>
 		</view>
 	</view>
 </template>
@@ -79,13 +79,12 @@ export default {
 
 		this.$audio.onCanplay(() => {});
 		this.$audio.onPlay(() => {
-			console.log('++++++++++++++++++', this.$audio.currentTime);
+			console.log('+++++++onplay+++++++++++', this.$audio.currentTime);
 			this.paused = false;
 			this.saveplay('src', this.info.src);
 			this.$store.commit('setpause', false); //记录音频正常停止 false
 			this.$store.commit('set_n_pause', false); //标记音频异常中断 为false 用于电话来电中断音频的判断
 
-			console.log('onplay');
 			this.duration = this.format(this.$audio.duration);
 			this.duration_value = this.$audio.duration;
 			this.saveplay('duration', this.duration);
@@ -111,14 +110,14 @@ export default {
 			this.saveplay('current_value', this.current_value);
 		});
 		this.$audio.onTimeUpdate(() => {
-			console.log('-->', this.info.src == this.$store.state.playinfo.src);
+			
 			if (this.info.src == this.$store.state.playinfo.src) {
+				console.log('onTimeUpdate-->', this.info.src == this.$store.state.playinfo.src);
 				this.current = this.format(this.$audio.currentTime);
 				this.current_value = this.$audio.currentTime;
 				this.saveplay('current', this.current);
 				this.saveplay('current_value', this.$audio.currentTime);
 
-				console.log(123123);
 				this.duration = this.format(this.$audio.duration);
 				this.duration_value = this.$audio.duration;
 
@@ -169,6 +168,7 @@ export default {
 		},
 
 		format(num) {
+			if(isNaN(num)) return
 			try {
 				return (
 					'0'.repeat(2 - String(Math.floor(num / 60)).length) + Math.floor(num / 60) + ':' + '0'.repeat(2 - String(Math.floor(num % 60)).length) + Math.floor(num % 60)

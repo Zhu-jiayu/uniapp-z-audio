@@ -76,15 +76,13 @@
 .imt-audio.music .cover.data-v-0aa62570 {
   width: 280rpx;
   height: 280rpx;
-  -webkit-box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.13);
-          box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.13);
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.13);
   position: absolute;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
-  -webkit-border-radius: 50%;
-          border-radius: 50%;
+  border-radius: 50%;
   border: 2px solid #fff;
 }
 .imt-audio.music .cover.on.data-v-0aa62570 {
@@ -96,8 +94,7 @@
   height: 130rpx;
   z-index: 99;
   background: rgba(0, 0, 0, 0.4);
-  -webkit-border-radius: 50%;
-          border-radius: 50%;
+  border-radius: 50%;
 }
 .imt-audio.music .prevbtn.data-v-0aa62570 {
   width: 48rpx;
@@ -114,10 +111,8 @@
   border: 1px solid #cecece;
   width: 90%;
   margin: 0 auto;
-  -webkit-border-radius: 10px;
-          border-radius: 10px;
-  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
 .imt-audio.fm .top.data-v-0aa62570 {
@@ -185,15 +180,13 @@
 .imt-audio.fm .cover.data-v-0aa62570 {
   width: 180rpx;
   height: 180rpx;
-  -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-          box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
   position: absolute;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
-  -webkit-border-radius: 50%;
-          border-radius: 50%;
+  border-radius: 50%;
   border: 2px solid #fff;
 }
 .imt-audio.fm .cover.on.data-v-0aa62570 {
@@ -205,8 +198,7 @@
   height: 80rpx;
   z-index: 99;
   background: rgba(0, 0, 0, 0.4);
-  -webkit-border-radius: 50%;
-          border-radius: 50%;
+  border-radius: 50%;
 }
 .imt-audio.fm .prevbtn.data-v-0aa62570 {
   width: 48rpx;
