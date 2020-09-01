@@ -5,6 +5,29 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
+		audiolist: [
+			{
+				src: 'http://mouyizhan.com/1.mp3',
+				title: '第1首',
+				singer: '作者1111',
+				coverImgUrl: "/static/logo.png"
+			},
+			{
+				src: 'http://mouyizhan.com/2.mp3',
+				title: '第2首',
+				singer: '作者22222',
+				coverImgUrl: "/static/logo.png"
+			}
+		],
+		audiolist2: [
+			{
+				src: 'http://mouyizhan.com/3.mp3',
+				title: '第3首',
+				singer: '作者3333',
+				coverImgUrl: '/static/logo.png'
+			}
+		],
+		
 		
 		audio:{
 			src:'',
@@ -21,7 +44,7 @@ const store = new Vuex.Store({
 		},
 		paused:true,
 		
-		n_pause:false  //意外断开状态 
+		n_pause:false,  //意外断开状态 
 	},
 	mutations: {
 		
@@ -58,9 +81,18 @@ const store = new Vuex.Store({
 		},
 		set_n_pause(state,data){
 			state.n_pause = data
+		},
+		
+		
+		updateAudioList(state, data){
+			state.audiolist=state.audiolist2
 		}
 	},
-	actions: {}
+	actions: {},
+	getters: {
+		audiolist: state=>state.audiolist,
+		audiolist2: state=>state.audiolist2,
+	}
 })
 
 export default store

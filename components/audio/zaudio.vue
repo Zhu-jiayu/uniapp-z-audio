@@ -290,19 +290,23 @@ export default {
 		
 	}
 	.cover {
-		width: 280rpx;
-		height: 280rpx;
+		width: 200rpx;
+		height: 200rpx;
 		box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.13);
 		position: absolute;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
 		border-radius: 50%;
-		border:2px solid #fff
+		border:2px solid #fff;
+		animation-fill-mode : forwards ;
+		-webkit-animation-fill-mode : forwards ;
 	}
 	.cover.on {
 		-webkit-animation: 10s rowup linear infinite normal;
 		animation: 10s rowup linear infinite normal;
+		animation-fill-mode : forwards ; 
+		-webkit-animation-fill-mode : forwards ;
 	}
 
 	.play {
@@ -373,7 +377,7 @@ export default {
 	}
 
 	.audio-control-wrapper {
-		margin: 60rpx;
+		margin: 20rpx;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -382,19 +386,24 @@ export default {
 		
 	}
 	.cover {
-		width: 180rpx;
-		height: 180rpx;
+		width: 120rpx;
+		height: 120rpx;
 		box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
 		position: absolute;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
 		border-radius: 50%;
-		border:2px solid #fff
+		border:2px solid #fff;
+		animation-fill-mode : forwards ;
+		-webkit-animation-fill-mode : forwards ;
+		
 	}
 	.cover.on {
 		-webkit-animation: 10s rowup linear infinite normal;
 		animation: 10s rowup linear infinite normal;
+		animation-fill-mode : forwards ;
+		-webkit-animation-fill-mode : forwards ;
 	}
 
 	.play {
