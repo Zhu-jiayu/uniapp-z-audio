@@ -7,13 +7,13 @@ const store = new Vuex.Store({
 	state: {
 		audiolist: [
 			{
-				src: 'http://mouyizhan.com/1.mp3',
+				src: 'http://m10.music.126.net/20200918103253/8cd03e094366e6ee0206e07f22a2f183/ymusic/83c9/88b2/cff8/083b74603f4731513371b5aee3903911.mp3',
 				title: '第1首',
 				singer: '作者1111',
 				coverImgUrl: "/static/logo.png"
 			},
 			{
-				src: 'http://mouyizhan.com/2.mp3',
+				src: 'http://m10.music.126.net/20200918103526/37dbe4ad313bab6899929bb091d3b2bb/ymusic/8367/a3b1/ec55/c05574f545748c870cb85b575b0da2ee.mp3',
 				title: '第2首',
 				singer: '作者22222',
 				coverImgUrl: "/static/logo.png"
@@ -21,7 +21,7 @@ const store = new Vuex.Store({
 		],
 		audiolist2: [
 			{
-				src: 'http://mouyizhan.com/3.mp3',
+				src: 'http://m10.music.126.net/20200918103608/1ccbc963b8e7e33948b7b5571419bd6d/ymusic/obj/w5zDlMODwrDDiGjCn8Ky/3954395484/d3de/919c/fa79/5db7ba1da02b169079318f385ce65f5a.mp3',
 				title: '第3首',
 				singer: '作者3333',
 				coverImgUrl: '/static/logo.png'

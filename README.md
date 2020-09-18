@@ -6,10 +6,15 @@
 <img src="screenshop/../screenshot/fm.png" style="width:240px;margin-left: 20px">
 
 #### 更新日志
+
+
+v0.0.33
+- 替换音频链接,原音频链接失效
+
 v0.0.32
 - 增加音频列表更新, 切换主题的示例
-v0.0.3
 
+v0.0.3
 - 增加皮肤选择,  自定义主题色, 隐藏快进按钮
 
 v0.0.1
