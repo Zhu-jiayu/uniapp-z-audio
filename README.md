@@ -4,7 +4,7 @@
 #### 特性
 + 支持H5, app, 微信小程序播放
 + 支持切换后台播放
-+ 支持电话来电以外中断后继续播放
++ 支持来电中断后续播
 
 #### 预览
 <img src="screenshop/../screenshot/music.png" style="width:200px">
@@ -41,8 +41,8 @@ var gaudioctx=uni.createInnerAudioContext()
 Vue.prototype.$audio = gaudioctx
 ```
 2. 引入并使用组件 (详见示例`/pages/detail/index.vue`和参数配置)
-`import zaudio from '@/components/audio/zaudio';`
-`<zaudio :info="audiolist[k]" v-if="k" :theme="theme"></zaudio>`
+  - `import zaudio from '@/components/audio/zaudio';`
+  - `<zaudio :info="audiolist[k]" v-if="k" :theme="theme"></zaudio>`
 
 3. 配置vuex属性和方法
 
@@ -60,18 +60,29 @@ stepShow | Boolean | false | 显示快进按钮 |  默认 `true`
 #### vuex配置
 store/index.js
 + state: 
-`audiolist`: 播放列表
-`audiolist2`: 切换的播放列表
-`audio`: zaudio组件的渲染的音频数据
-`playinfo`: $audio对象当前播放的音频数据
-`paused`: $audio对象当前播放音频的暂停状态
-`n_pause`: $audio对象当前播放音频的意外中断的状态
+  - `audiolist`: 播放列表
+
+  - `audiolist2`: 切换的播放列表
+
+  - `audio`: zaudio组件的渲染的音频数据
+
+  - `playinfo`: $audio对象当前播放的音频数据
+
+  - `paused`: $audio对象当前播放音频的暂停状态
+
+  - `n_pause`: $audio对象当前播放音频的意外中断的状态
+
 + mutations: 
-`setaudio`: 设置zaudio组件的渲染的音频数据
-`setplay`: 设置$audio对象当前播放的音频数据
-`setpause`: 设置$audio对象当前播放音频的暂停状态
-`set_n_pause`: 设置$audio对象当前播放音频的意外中断的状态
-`updateAudioList`: 切换播放列表
+
+  - `setaudio`: 设置zaudio组件的渲染的音频数据
+
+  - `setplay`: 设置$audio对象当前播放的音频数据
+
+  - `setpause`: 设置$audio对象当前播放音频的暂停状态
+
+  - `set_n_pause`: 设置$audio对象当前播放音频的意外中断的状态
+
+  - `updateAudioList`: 切换播放列表
 
 #### 后台播放配置
 在manifest.json中配置
