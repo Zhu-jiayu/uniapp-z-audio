@@ -7,9 +7,10 @@
 + 支持来电中断后续播
 
 #### 预览
-<img src="screenshop/../screenshot/music.png" style="width:200px">
-<img src="screenshop/../screenshot/fm.png" style="width:240px;margin-left: 20px">
 
+<img src="screenshop/../screenshot/2.png" style="width:240px;margin-left: 10px">
+<img src="screenshop/../screenshot/3.png" style="width:240px;margin-left: 10px">
+<img src="screenshop/../screenshot/1.png" style="width:200px">
 #### 更新日志
 
 v0.0.4
@@ -125,4 +126,4 @@ iOS
 #### Donate
 如果你觉得这个项目帮助到了你，你可以帮作者买一杯果汁表示鼓励
 
-![wechat](http://cdn.jingangtui.top/wechat.jpg)
+![wechat](http://jingangtui.gitee.io/uniapp-z-audio/wechat.jpg)
