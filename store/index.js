@@ -7,13 +7,13 @@ const store = new Vuex.Store({
 	state: {
 		audiolist: [
 			{
-				src: 'http://m10.music.126.net/20200918103253/8cd03e094366e6ee0206e07f22a2f183/ymusic/83c9/88b2/cff8/083b74603f4731513371b5aee3903911.mp3',
+				src: 'https://audio04.dmhmusic.com/71_53_T10053309326_128_4_1_0_sdk-cpm/cn/0104/M00/D5/38/ChR45V5GUyKAXRl6ADNILXTwE84654.mp3?xcode=8e5b6965f8c4a5ca70185393ef5f54ea472894b',
 				title: '第1首',
 				singer: '作者1111',
 				coverImgUrl: "/static/logo.png"
 			},
 			{
-				src: 'http://m10.music.126.net/20200918103526/37dbe4ad313bab6899929bb091d3b2bb/ymusic/8367/a3b1/ec55/c05574f545748c870cb85b575b0da2ee.mp3',
+				src: 'https://audio04.dmhmusic.com/71_53_T10056851085_128_4_1_0_sdk-cpm/cn/0412/M00/4A/6F/ChAKEV9jWAmAOJvcADwo_VhUxyg734.mp3?xcode=68727c95918182b670186fe4686efe2f8c16eed',
 				title: '第2首',
 				singer: '作者22222',
 				coverImgUrl: "/static/logo.png"
@@ -21,7 +21,7 @@ const store = new Vuex.Store({
 		],
 		audiolist2: [
 			{
-				src: 'http://m10.music.126.net/20200918103608/1ccbc963b8e7e33948b7b5571419bd6d/ymusic/obj/w5zDlMODwrDDiGjCn8Ky/3954395484/d3de/919c/fa79/5db7ba1da02b169079318f385ce65f5a.mp3',
+				src: 'https://audio04.dmhmusic.com/71_53_T10049556149_128_4_1_0_sdk-cpm/cn/0209/M00/BE/57/ChR47F17MIaAUdvuAEGK8iaOIJM634.mp3?xcode=88f0d65556edaba07018548add8ac51838d088c',
 				title: '第3首',
 				singer: '作者3333',
 				coverImgUrl: '/static/logo.png'
@@ -29,22 +29,22 @@ const store = new Vuex.Store({
 		],
 		
 		
-		audio:{
+		audio:{            //当前zaudio组件渲染的音频数据
 			src:'',
 			title:'',
 			singer:'',
 			coverImgUrl:''
 		},
-		playinfo:{
+		playinfo:{           //$audio对象当前播放的音频数据
 			current:0, //当前时间
 			duration:0  ,//总时间
 			duration_value:0, //总长度
 			current_value:0 ,//当前长度
 			src:""
 		},
-		paused:true,
+		paused:true,  //$audio对象当前播放音频的暂停状态
 		
-		n_pause:false,  //意外断开状态 
+		n_pause:false,  //$audio对象当前播放音频的意外中断的状态
 	},
 	mutations: {
 		
@@ -53,9 +53,7 @@ const store = new Vuex.Store({
 		setaudio(state,data){
 			state.audio=data;	
 		},
-		setnextaudio(state,data){
-			state.nextaudio=data
-		},
+		
 		setplay(state,data){
 			if(data.current){
 				state.playinfo.current=data.current;	

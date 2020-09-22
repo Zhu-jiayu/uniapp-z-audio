@@ -17,7 +17,7 @@ var gaudioctx=uni.createInnerAudioContext()
 Vue.prototype.$audio = gaudioctx
 
 
-//////////////////此处为app端 判断音频电话来点意外中断后的继续播放
+//////////////////此处为app端 判断电话来电后, 音频意外中断之后的继续播放 
 // #ifdef APP-PLUS
 try{
 	if(uni.getSystemInfoSync().platform == 'android'){

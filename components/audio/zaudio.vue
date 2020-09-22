@@ -46,8 +46,8 @@ export default {
 							}
 						*/,
 		theme: {
-			type: String, // 主题 'music' or 'fm'
-			default: 'music'
+			type: String, // 主题 'theme1' or 'theme2'
+			default: 'theme1'
 		},
 		themeColor: {
 			type: String, 
@@ -245,7 +245,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.imt-audio.music {
+.imt-audio.theme1 {
 	padding: 0 30upx 30upx;
 	background: #fff;
 	.top {
@@ -329,7 +329,7 @@ export default {
 	}
 }
 
-.imt-audio.fm {
+.imt-audio.theme2 {
 	background: #fff;
 	border: 1px solid #cecece;
 	width: 90%;

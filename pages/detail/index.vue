@@ -11,7 +11,7 @@ import { mapGetters } from 'vuex';
 export default {
 	data() {
 		return {
-			theme: 'music',
+			theme: 'theme1',
 			k: ''
 		};
 	},
@@ -22,12 +22,11 @@ export default {
 		...mapGetters(['audiolist'])
 	},
 	onLoad(o) {
-		console.log(o);
 		this.k = o.k;
 	},
 	methods: {
 		changeTheme() {
-			this.theme = this.theme == 'fm' ? 'music' : 'fm';
+			this.theme = this.theme == 'theme2' ? 'theme1' : 'theme2';
 		}
 	}
 };
