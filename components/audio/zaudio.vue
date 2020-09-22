@@ -1,10 +1,12 @@
 <template>
 	<view class="imt-audio" :class="[`${theme}`]">
-		<view class="top"  >
+		<view class="top">
 			<view class="audio-control-wrapper">
-				<image :src="info.coverImgUrl" mode="aspectFill" class="cover" :class="{ on: !paused }" ></image>
-				<image src="/static/playbtn.png" alt="" @click="operation" class="play" v-if="paused" ></image>
-				<image src="/static/pausebtn.png" alt="" @click="operation" class="play" v-else ></image>
+				<image :src="info.coverImgUrl" mode="aspectFit" class="cover" :class="{ on: !paused }"></image>
+				<template v-if="theme == 'theme2'">
+					<image src="/static/playbtn.png" alt="" @click="operation" class="play" v-if="paused"></image>
+					<image src="/static/pausebtn.png" alt="" @click="operation" class="play" v-else></image>
+				</template>
 			</view>
 
 			<view>
@@ -13,15 +15,29 @@
 			</view>
 		</view>
 		<view class="audio-wrapper">
-			<image src="/static/prev.png" class="prevbtn" @click="step(0)" mode="widthFix" v-if="stepShow"></image>
+			<view class="audio-number">{{ current }}</view>
 			<slider class="audio-slider" :activeColor="themeColor" block-size="16" :value="current_value" :max="duration_value" @changing="changing" @change="change"></slider>
-			<view class="audio-number">{{ current }}/{{ duration }}</view>
+			<view class="audio-number">{{ duration }}</view>
+		</view>
+		<view class="audio-button-box" v-if="theme == 'theme1'">
+			<!-- 块退15s -->
+			<image src="/static/prev.png" class="prevbtn" @click="step(0)" mode="widthFix" v-if="stepShow"></image>
+			<!-- 上一首 -->
+			<image src="/static/go.png" class="prevplay" @click="changeplay(-1)" mode="widthFix"></image>
+			<!-- 播放 -->
+			<image src="/static/playbtn2.png" alt="" @click="operation" class="play" v-if="paused"></image>
+			<!-- 暂停 -->
+			<image src="/static/pausebtn2.png" alt="" @click="operation" class="pause" v-else></image>
+			<!-- 下一首 -->
+			<image src="/static/go.png" class="nextplay" @click="changeplay(1)" mode="widthFix"></image>
+			<!-- 快进15s -->
 			<image src="/static/next.png" class="nextbtn" @click="step(1)" mode="widthFix" v-if="stepShow"></image>
 		</view>
 	</view>
 </template>
 
 <script>
+import { format } from './play.js';
 export default {
 	data() {
 		return {
@@ -32,25 +48,31 @@ export default {
 			paused: true, //是否处于暂停状态
 
 			default_cover: '/static/logo.png', //默认海报
-			hassrc: '' //////////////正在播放的音频
+			hassrc: '', //--------------------当前组件正在播放的音频
+
+			info: {
+				src: '',
+				title: '',
+				singer: '',
+				coverImgUrl: ''
+			},
+			
 		};
 	},
 
 	props: {
-		info: Object /*************
-							info对象 {
-								src, 音频地址
-								title, 标题
-								singer, 作者
-								coverImgUrl  海报
-							}
-						*/,
+		//自动播放
+		autoplay: {
+			type:Boolean,
+			default: false
+		},
+		list: Array, //音频列表
 		theme: {
 			type: String, // 主题 'theme1' or 'theme2'
 			default: 'theme1'
 		},
 		themeColor: {
-			type: String, 
+			type: String,
 			default: '#42b983'
 		},
 		stepShow: {
@@ -59,11 +81,17 @@ export default {
 			default: true
 		}
 	},
+	computed: {
+		format() {
+			return num => format(num);
+		}
+	},
 
 	created() {
 		const { duration, current, duration_value, current_value, src } = this.$store.state.playinfo;
-		this.hassrc = src;
-		console.log(this.info, 1, this.hassrc);
+		this.hassrc = src; //设置正在播放的音频连接
+
+		this.info = this.list[this.$store.state.playIndex];
 
 		//对比 新的音频与旧音频 地址  从而渲染 对应进度条
 
@@ -75,13 +103,23 @@ export default {
 			this.current_value = current_value;
 			this.paused = this.$store.state.paused;
 		} else {
+			//自动播放
+			if(this.autoplay){
+				this.operation()
+			}
 		}
-
+		
+		
+		
+		
 		this.$audio.onCanplay(() => {});
 		this.$audio.onPlay(() => {
-			console.log('+++++++onplay+++++++++++', this.$audio.currentTime);
+			// console.log('+++++++onplay+++++++++++', this.$audio.currentTime);
 			this.paused = false;
 			this.saveplay('src', this.info.src);
+			this.saveplay('title', this.info.title);
+			this.saveplay('singer', this.info.singer);
+			this.saveplay('coverImgUrl', this.info.coverImgUrl);
 			this.$store.commit('setpause', false); //记录音频正常停止 false
 			this.$store.commit('set_n_pause', false); //标记音频异常中断 为false 用于电话来电中断音频的判断
 
@@ -110,7 +148,6 @@ export default {
 			this.saveplay('current_value', this.current_value);
 		});
 		this.$audio.onTimeUpdate(() => {
-			
 			if (this.info.src == this.$store.state.playinfo.src) {
 				console.log('onTimeUpdate-->', this.info.src == this.$store.state.playinfo.src);
 				this.current = this.format(this.$audio.currentTime);
@@ -128,13 +165,13 @@ export default {
 		this.$audio.onError(() => {
 			this.paused = true;
 			this.$store.commit('setpause', true);
-			
+
 			uni.showToast({
-				title: "音频播放错误",
-				duration:1500,
-				mask:false,
+				title: '音频播放错误',
+				duration: 1500,
+				mask: false,
 				icon: 'none',
-				position: "center"
+				position: 'center'
 			});
 
 			this.$store.commit('setaudio', {
@@ -147,15 +184,21 @@ export default {
 				current: 0,
 				current_value: 0,
 				duration: 0,
-				duration_value: 0
+				duration_value: 0,
+				title: '',
+				src: ''
 			});
 		});
 	},
 
 	methods: {
+		//记录播放信息
 		saveplay(type, e) {
-			//记录播放信息
 			this.$store.commit('setplay', { [type]: e });
+		},
+		//记录播放组件的渲染数据
+		saveaudio(data) {
+			this.$store.commit('setaudio', data);
 		},
 		timeupdate() {
 			const { current, current_value } = this.$store.state.playinfo;
@@ -166,34 +209,21 @@ export default {
 			this.current_value = event.detail.value;
 			this.current = this.format(event.detail.value);
 		},
-
-		format(num) {
-			if(isNaN(num)) return
-			try {
-				return (
-					'0'.repeat(2 - String(Math.floor(num / 60)).length) + Math.floor(num / 60) + ':' + '0'.repeat(2 - String(Math.floor(num % 60)).length) + Math.floor(num % 60)
-				);
-			} catch (e) {
-				return (
-					'0'.repeat(3 - String(Math.floor(num / 60)).length) + Math.floor(num / 60) + ':' + '0'.repeat(2 - String(Math.floor(num % 60)).length) + Math.floor(num % 60)
-				);
-			}
-		},
-
+		//播放暂停
 		operation() {
 			if (this.hassrc != this.info.src) {
 				if (this.paused) {
-					const { src, title, singer, poster } = this.info;
-					this.$store.commit('setaudio', {
+					const { src, title, singer, coverImgUrl } = this.info;
+					this.saveaudio({
 						src: src,
 						title: title,
 						singer: singer,
-						coverImgUrl: poster || this.default_cover
+						coverImgUrl: coverImgUrl || this.default_cover
 					});
 					this.$audio.src = src;
 					this.$audio.title = title;
 					this.$audio.singer = singer;
-					this.$audio.coverImgUrl = poster || this.default_cover;
+					this.$audio.coverImgUrl = coverImgUrl || this.default_cover;
 					this.$audio.play();
 
 					this.$audio.startTime = 0;
@@ -217,7 +247,8 @@ export default {
 
 					this.$audio.startTime = parseFloat(this.$store.state.playinfo.current_value);
 					this.$audio.seek(parseFloat(this.$store.state.playinfo.current_value));
-					this.$store.commit('setaudio', {
+
+					this.saveaudio({
 						src: src,
 						title: title,
 						singer: singer,
@@ -232,209 +263,46 @@ export default {
 				}
 			}
 		},
-		//完成拖动事件
+		//拖动
 		change(e) {
 			this.$audio.seek(e.detail.value);
 		},
+		//快进
 		step(type) {
 			var pos = !type ? this.current_value - 15 : this.current_value + 15;
 			this.$audio.seek(pos);
+		},
+		//切歌
+		changeplay(count) {
+			var nowindex = this.$store.state.playIndex;
+			nowindex += count;
+			nowindex = nowindex < 0 ? this.$store.state.audiolist.length - 1 : nowindex > this.$store.state.audiolist.length - 1 ? 0 : nowindex;
+			this.$store.commit('set_playIndex', nowindex);
+			const { src: nsrc, title, singer, coverImgUrl } = this.$store.state.audiolist[nowindex];
+
+			this.saveaudio({
+				src: nsrc,
+				title,
+				singer,
+				coverImgUrl
+			});
+			this.reset({ src: nsrc, title, singer, coverImgUrl });
+
+			this.operation();
+		},
+		//重置组件的渲染
+		reset(audioInfo) {
+			this.info = audioInfo;
+			this.current = '00:00';
+			this.duration = '00:00';
+			this.current_value = 0;
+			this.duration_value = 100;
+			this.paused = true;
 		}
 	}
 };
 </script>
 
 <style scoped lang="scss">
-.imt-audio.theme1 {
-	padding: 0 30upx 30upx;
-	background: #fff;
-	.top {
-		& > view:nth-child(2) {
-			.title {
-				font-weight: bold;
-				font-size: 34rpx;
-				margin-top: 24rpx;
-				text-align: center;
-			}
-			.singer {
-				color: #999;
-				font-size: 26rpx;
-				margin-top: 10rpx;
-				text-align: center;
-				margin-bottom: 18rpx;
-			}
-		}
-	}
-	.audio-wrapper {
-		display: flex;
-		align-items: center;
-	}
-
-	.audio-number {
-		font-size: 24upx;
-		line-height: 1;
-		color: #333;
-	}
-
-	.audio-slider {
-		flex: 1;
-		margin: 0 30rpx 0 10rpx;
-	}
-
-	.audio-control-wrapper {
-		margin: 100rpx auto;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		position: relative;
-		
-	}
-	.cover {
-		width: 200rpx;
-		height: 200rpx;
-		box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.13);
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		border-radius: 50%;
-		border:2px solid #fff;
-		animation-fill-mode : forwards ;
-		-webkit-animation-fill-mode : forwards ;
-	}
-	.cover.on {
-		-webkit-animation: 10s rowup linear infinite normal;
-		animation: 10s rowup linear infinite normal;
-		animation-fill-mode : forwards ; 
-		-webkit-animation-fill-mode : forwards ;
-	}
-
-	.play {
-		width: 130rpx;
-		height: 130rpx;
-		z-index: 99;
-		background: rgba(0,0,0,.4);
-		border-radius:50%
-	}
-
-	.prevbtn {
-		width: 48rpx;
-		height: 48rpx;
-		margin-right: 40rpx;
-	}
-	.nextbtn {
-		width: 48rpx;
-		height: 48rpx;
-		margin-left: 40rpx;
-	}
-}
-
-.imt-audio.theme2 {
-	background: #fff;
-	border: 1px solid #cecece;
-	width: 90%;
-	margin: 0 auto;
-	border-radius: 10px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-	overflow: hidden;
-	.top {
-		background: #f5f5f5;
-		display: flex;
-		align-items: center;
-		& > view:nth-child(2) {
-			flex: 1;
-			margin-left: 30rpx;
-			.title {
-				font-weight: bold;
-				font-size: 34rpx;
-				margin-top: 24rpx;
-				text-align: left;
-			}
-			.singer {
-				color: #999;
-				font-size: 26rpx;
-				margin-top: 10rpx;
-				text-align: left;
-				margin-bottom: 18rpx;
-			}
-		}
-	}
-	.audio-wrapper {
-		display: flex;
-		align-items: center;
-		padding: 30rpx 20rpx;
-	}
-
-	.audio-number {
-		font-size: 24upx;
-		line-height: 1;
-		color: #333;
-	}
-
-	.audio-slider {
-		flex: 1;
-		margin: 0 30rpx 0 10rpx;
-	}
-
-	.audio-control-wrapper {
-		margin: 20rpx;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		position: relative;
-		padding: 30rpx 20rpx;
-		
-	}
-	.cover {
-		width: 120rpx;
-		height: 120rpx;
-		box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		border-radius: 50%;
-		border:2px solid #fff;
-		animation-fill-mode : forwards ;
-		-webkit-animation-fill-mode : forwards ;
-		
-	}
-	.cover.on {
-		-webkit-animation: 10s rowup linear infinite normal;
-		animation: 10s rowup linear infinite normal;
-		animation-fill-mode : forwards ;
-		-webkit-animation-fill-mode : forwards ;
-	}
-
-	.play {
-		width: 80rpx;
-		height: 80rpx;
-		z-index: 99;
-		background: rgba(0,0,0,.4);
-		border-radius:50%
-	}
-
-	.prevbtn {
-		width: 48rpx;
-		height: 48rpx;
-		margin-right: 40rpx;
-	}
-	.nextbtn {
-		width: 48rpx;
-		height: 48rpx;
-		margin-left: 40rpx;
-	}
-}
-
-	@keyframes rowup {
-		0% {
-			-webkit-transform: translate(-50%, -50%) rotate(0deg);
-			transform-origin: center center;
-		}
-
-		100% {
-			-webkit-transform: translate(-50%, -50%) rotate(360deg);
-			transform-origin: center center;
-		}
-	}
+@import './index.scss';
 </style>
