@@ -7,11 +7,16 @@
 + 支持来电中断后续播
 
 #### 预览
-
+<img src="screenshop/../screenshot/1.png" style="width:200px">
 <img src="screenshop/../screenshot/2.png" style="width:240px;margin-left: 10px">
 <img src="screenshop/../screenshot/3.png" style="width:240px;margin-left: 10px">
-<img src="screenshop/../screenshot/1.png" style="width:200px">
 #### 更新日志
+
+v0.0.42
+- 增加theme3主题
+
+v0.0.41
+- 支持下一首续播
 
 v0.0.4
 - 增加自动播放
@@ -37,7 +42,8 @@ v0.0.1
 
 暴露`$audio`音频对象 和 zaudio全局音频组件(全局组件只在H5中生效)
 
-`$audio`为`uni.getBackgroundAudioManager`或`uni.createInnerAudioContext`实例对象,具体参考uniapp文档
+`$audio`为`uni.getBackgroundAudioManager`或`uni.createInnerAudioContext`实例对象,可通过`this.$audio`访问;
+具体参考uniapp文档
 
 ```javascript
 import ZAudioCtx from 'components/audio/index.js'
@@ -67,11 +73,11 @@ export default {
 参数 | 类型 | 必填 | 描述 | 其他
 -|-|-|-|-
 list | [Object] | true | 音频列表 |  [{`src` (音频地址), `title` (标题), `singer`(作者), `coverImgUrl`(海报)}]
-theme | String | false | 皮肤 | `theme2` or `theme1`;   默认`theme1`
+theme | String | false | 皮肤 | `theme2` or `theme1` or `theme3`;   默认`theme1`
 themeColor | String | false | 进度条颜色 |  默认 `#42b983`
 stepShow | Boolean | false | 显示快进按钮 |  默认 `true`, 只作用于`theme1`
 autoplay | Boolean | false | 自动播放 |  默认 `false` 
-
+continue | Boolean | false | 下一首续播 |  默认 `true` 
 
 #### vuex配置
 store/index.js
@@ -126,4 +132,4 @@ iOS
 #### Donate
 如果你觉得这个项目帮助到了你，你可以帮作者买一杯果汁表示鼓励
 
-![wechat](http://jingangtui.gitee.io/uniapp-z-audio/wechat.jpg)
+![wechat](http://jingangtui.gitee.io/static/wechat.jpg)

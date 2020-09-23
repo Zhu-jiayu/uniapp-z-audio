@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
-		<zaudio :list="audiolist"  :theme="theme" :autoplay='false'></zaudio>
-		<button @click="changeTheme" class="bottom" type="primary">替换主题</button>
+		<zaudio :list="audiolist" :theme="themelist[key]" :autoplay="false" :continue="true"></zaudio>
+		<button @click="changeTheme(k)" class="bottom" type="primary" size="mini" v-for="(i, k) in themelist" :key="k">{{ i }}</button>
 	</view>
 </template>
 
@@ -11,29 +11,29 @@ import { mapGetters } from 'vuex';
 export default {
 	data() {
 		return {
-			theme: 'theme1', //主题
-			
+			key: 0,
+			themelist: ['theme1', 'theme2', 'theme3']
 		};
 	},
-	components:{zaudio},
+	components: { zaudio },
 	computed: {
-		...mapGetters(['audiolist'])  //音频列表
+		...mapGetters(['audiolist']) //音频列表
 	},
 	onLoad(o) {
 		this.k = o.k;
 	},
 	methods: {
-		changeTheme() {
-			this.theme = this.theme == 'theme2' ? 'theme1' : 'theme2';
+		changeTheme(k) {
+			this.key = k;
 		}
 	}
 };
 </script>
 <style scoped>
-	body{
-		height:100%
-	}
+body {
+	height: 100%;
+}
 .bottom {
-	margin-top: 40px;
+	margin: 20rpx
 }
 </style>

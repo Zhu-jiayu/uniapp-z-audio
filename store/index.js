@@ -7,13 +7,13 @@ const store = new Vuex.Store({
 	state: {
 		playIndex: 0, //正在播放的索引
 		audiolist: [{
-				src: 'http://jingangtui.gitee.io/uniapp-z-audio/1.mp3',
+				src: 'http://jingangtui.gitee.io/static/1.mp3',
 				title: '第1首',
 				singer: '作者1111',
 				coverImgUrl: "/static/logo.png"
 			},
 			{
-				src: 'http://jingangtui.gitee.io/uniapp-z-audio/2.mp3',
+				src: 'http://jingangtui.gitee.io/static/2.mp3',
 				title: '第2首',
 				singer: '作者22222',
 				coverImgUrl: "/static/logo.png"

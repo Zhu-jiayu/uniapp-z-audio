@@ -1,38 +1,84 @@
 <template>
 	<view class="imt-audio" :class="[`${theme}`]">
-		<view class="top">
-			<view class="audio-control-wrapper">
-				<image :src="info.coverImgUrl" mode="aspectFit" class="cover" :class="{ on: !paused }"></image>
-				<template v-if="theme == 'theme2'">
+		<template v-if="theme == 'theme3'">
+			<slider class="audio-slider" :activeColor="themeColor" block-size="0" :value="current_value" :max="duration_value" @changing="changing" @change="change"></slider>
+
+			<view class="top">
+				<view class="audio-control-wrapper">
+					<image :src="info.coverImgUrl" mode="aspectFit" class="cover" :class="{ on: !paused }"></image>
+
 					<image src="/static/playbtn.png" alt="" @click="operation" class="play" v-if="paused"></image>
 					<image src="/static/pausebtn.png" alt="" @click="operation" class="play" v-else></image>
-				</template>
+				</view>
+			</view>
+			<view class="audio-wrapper">
+				<view class="titlebox">
+					<view class="title">{{ info.title }}</view>
+					<view class="singer">{{ info.singer }}</view>
+				</view>
+
+				<view class="slidebox">
+					<view>{{ current }}/ {{ duration }}</view>
+					<view>
+						<text @click="changeplay(-1)">上一首</text><text @click="changeplay(1)">下一首</text>
+					</view>
+				</view>
+			
+			</view>
+		</template>
+
+		<template v-if="theme == 'theme2'">
+			<view class="top">
+				<view class="audio-control-wrapper">
+					<image :src="info.coverImgUrl" mode="aspectFit" class="cover" :class="{ on: !paused }"></image>
+					<template>
+						<image src="/static/playbtn.png" alt="" @click="operation" class="play" v-if="paused"></image>
+						<image src="/static/pausebtn.png" alt="" @click="operation" class="play" v-else></image>
+					</template>
+				</view>
+
+				<view>
+					<view class="title">{{ info.title }}</view>
+					<view class="singer">{{ info.singer }}</view>
+				</view>
+			</view>
+			<view class="audio-wrapper">
+				<view class="audio-number">{{ current }}</view>
+				<slider class="audio-slider" :activeColor="themeColor" block-size="16" :value="current_value" :max="duration_value" @changing="changing" @change="change"></slider>
+				<view class="audio-number">{{ duration }}</view>
+			</view>
+		</template>
+
+		<template v-if="theme == 'theme1'">
+			<view class="top">
+				<view class="audio-control-wrapper"><image :src="info.coverImgUrl" mode="aspectFit" class="cover" :class="{ on: !paused }"></image></view>
+
+				<view>
+					<view class="title">{{ info.title }}</view>
+					<view class="singer">{{ info.singer }}</view>
+				</view>
+			</view>
+			<view class="audio-wrapper">
+				<view class="audio-number">{{ current }}</view>
+				<slider class="audio-slider" :activeColor="themeColor" block-size="16" :value="current_value" :max="duration_value" @changing="changing" @change="change"></slider>
+				<view class="audio-number">{{ duration }}</view>
 			</view>
 
-			<view>
-				<view class="title">{{ info.title }}</view>
-				<view class="singer">{{ info.singer }}</view>
+			<view class="audio-button-box">
+				<!-- 块退15s -->
+				<image src="/static/prev.png" class="prevbtn" @click="step(0)" mode="widthFix" v-if="stepShow"></image>
+				<!-- 上一首 -->
+				<image src="/static/go.png" class="prevplay" @click="changeplay(-1)" mode="widthFix"></image>
+				<!-- 播放 -->
+				<image src="/static/playbtn2.png" alt="" @click="operation" class="play" v-if="paused"></image>
+				<!-- 暂停 -->
+				<image src="/static/pausebtn2.png" alt="" @click="operation" class="pause" v-else></image>
+				<!-- 下一首 -->
+				<image src="/static/go.png" class="nextplay" @click="changeplay(1)" mode="widthFix"></image>
+				<!-- 快进15s -->
+				<image src="/static/next.png" class="nextbtn" @click="step(1)" mode="widthFix" v-if="stepShow"></image>
 			</view>
-		</view>
-		<view class="audio-wrapper">
-			<view class="audio-number">{{ current }}</view>
-			<slider class="audio-slider" :activeColor="themeColor" block-size="16" :value="current_value" :max="duration_value" @changing="changing" @change="change"></slider>
-			<view class="audio-number">{{ duration }}</view>
-		</view>
-		<view class="audio-button-box" v-if="theme == 'theme1'">
-			<!-- 块退15s -->
-			<image src="/static/prev.png" class="prevbtn" @click="step(0)" mode="widthFix" v-if="stepShow"></image>
-			<!-- 上一首 -->
-			<image src="/static/go.png" class="prevplay" @click="changeplay(-1)" mode="widthFix"></image>
-			<!-- 播放 -->
-			<image src="/static/playbtn2.png" alt="" @click="operation" class="play" v-if="paused"></image>
-			<!-- 暂停 -->
-			<image src="/static/pausebtn2.png" alt="" @click="operation" class="pause" v-else></image>
-			<!-- 下一首 -->
-			<image src="/static/go.png" class="nextplay" @click="changeplay(1)" mode="widthFix"></image>
-			<!-- 快进15s -->
-			<image src="/static/next.png" class="nextbtn" @click="step(1)" mode="widthFix" v-if="stepShow"></image>
-		</view>
+		</template>
 	</view>
 </template>
 
@@ -55,15 +101,19 @@ export default {
 				title: '',
 				singer: '',
 				coverImgUrl: ''
-			},
-			
+			}
 		};
 	},
 
 	props: {
+		//自动续播下一首
+		continue: {
+			type: Boolean,
+			default: true
+		},
 		//自动播放
 		autoplay: {
-			type:Boolean,
+			type: Boolean,
 			default: false
 		},
 		list: Array, //音频列表
@@ -104,14 +154,11 @@ export default {
 			this.paused = this.$store.state.paused;
 		} else {
 			//自动播放
-			if(this.autoplay){
-				this.operation()
+			if (this.autoplay) {
+				this.operation();
 			}
 		}
-		
-		
-		
-		
+
 		this.$audio.onCanplay(() => {});
 		this.$audio.onPlay(() => {
 			// console.log('+++++++onplay+++++++++++', this.$audio.currentTime);
@@ -146,6 +193,11 @@ export default {
 			this.current_value = '0';
 			this.saveplay('current', this.current);
 			this.saveplay('current_value', this.current_value);
+
+			//续播
+			if (this.continue) {
+				this.changeplay(1);
+			}
 		});
 		this.$audio.onTimeUpdate(() => {
 			if (this.info.src == this.$store.state.playinfo.src) {
