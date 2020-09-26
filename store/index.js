@@ -7,14 +7,14 @@ const store = new Vuex.Store({
 	state: {
 		playIndex: 0, //正在播放的索引
 		audiolist: [{
-				src: 'http://jingangtui.gitee.io/static/1.mp3',
-				title: '第1首',
+				src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2015kNov/25X/25m_XiaoQ/03.mp3',
+				title: '好运来',
 				singer: '作者1111',
 				coverImgUrl: "/static/logo.png"
 			},
 			{
-				src: 'http://jingangtui.gitee.io/static/2.mp3',
-				title: '第2首',
+				src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2014eMay/29L/29dance/31.mp3',
+				title: 'remix版好运来',
 				singer: '作者22222',
 				coverImgUrl: "/static/logo.png"
 			}

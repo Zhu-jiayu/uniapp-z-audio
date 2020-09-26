@@ -12,6 +12,11 @@
 <img src="screenshop/../screenshot/3.png" style="width:240px;margin-left: 10px">
 #### 更新日志
 
+v0.0.43
+- 修复进度条不同步的bug
+- 替换音频链接
+
+
 v0.0.42
 - 增加theme3主题
 

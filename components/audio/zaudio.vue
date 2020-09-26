@@ -136,12 +136,22 @@ export default {
 			return num => format(num);
 		}
 	},
-
+	watch: {
+		'$store.state.playinfo.src':{
+			deep: true,
+			immediate: true,
+			handler(nvalue){
+				//音频变更时,更新渲染数据
+				this.hassrc = nvalue; 
+				
+				this.info = this.list[this.$store.state.playIndex];
+				
+			}
+		}
+	},
 	created() {
 		const { duration, current, duration_value, current_value, src } = this.$store.state.playinfo;
-		this.hassrc = src; //设置正在播放的音频连接
 
-		this.info = this.list[this.$store.state.playIndex];
 
 		//对比 新的音频与旧音频 地址  从而渲染 对应进度条
 
@@ -201,7 +211,7 @@ export default {
 		});
 		this.$audio.onTimeUpdate(() => {
 			if (this.info.src == this.$store.state.playinfo.src) {
-				console.log('onTimeUpdate-->', this.info.src == this.$store.state.playinfo.src);
+				// console.log('onTimeUpdate-->', this.info.src == this.$store.state.playinfo.src);
 				this.current = this.format(this.$audio.currentTime);
 				this.current_value = this.$audio.currentTime;
 				this.saveplay('current', this.current);
