@@ -40,15 +40,17 @@ const store = new Vuex.Store({
 		//保存音频列表
 		set_audiolist(state, data) {
 			state.audiolist.push(...data)
-
+			return Promise.resolve(state.audiolist)
 		},
-
+		//设置渲染的音频列表
 		set_audio(state, data) {
 			state.audio = data;
-			let renderIndex = state.audiolist.findIndex(i => i.url == data.url);
+			let renderIndex = state.audiolist.findIndex(i => i.src == data.src);
 
-
-			this.commit('set_renderIndex', renderIndex || 0)
+			if(renderIndex>=0){
+				this.commit('set_renderIndex', renderIndex)
+			}
+			
 		},
 		//设置播放信息
 		set_playinfo(state, data) {
@@ -69,7 +71,7 @@ const store = new Vuex.Store({
 		//设置渲染索引 和 渲染信息
 		set_renderIndex(state, data) {
 			state.renderIndex = data;
-			// if (state.audiolist.length == 0) return
+			if (state.audiolist.length == 0) return
 			state.audio = {
 				src: state.audiolist[data].src,
 				title: state.audiolist[data].title,
@@ -89,7 +91,11 @@ const store = new Vuex.Store({
 		n_pause: state => state.n_pause,
 		paused: state => state.paused,
 		renderIndex: state => state.renderIndex,
-		audio: state => state.audio
+		audio: state => state.audio,
+		playIndex: state => {
+			let index = state.audiolist.findIndex(i => i.src == state.playinfo.src)
+			return index <= 0 ? 0 : index
+		}
 	}
 })
 

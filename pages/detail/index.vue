@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<zaudio :theme="themelist[key]" :autoplay="false" :continue="false"></zaudio>
+		<zaudio :theme="themelist[key]" :autoplay="true" :continue="true"></zaudio>
 		<button @click="changeTheme(k)" class="bottom" type="primary" size="mini" v-for="(i, k) in themelist" :key="k">{{ i }}</button>
 	</view>
 </template>

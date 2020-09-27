@@ -218,6 +218,7 @@
 	padding: 40rpx 20rpx;
 	box-sizing: border-box;
 	max-height: 200rpx;
+	position:relative;
 	.top {
 		width: 140rpx;
 		display: flex;
@@ -288,7 +289,11 @@
 		width: 100%;
 		left: 0;
 		padding: 0;
+		// #ifdef MP-WEIXIN
+		margin-top: -8px
+		// #endif
 	}
+	
 
 	.cover {
 		width: 120rpx;
@@ -308,5 +313,9 @@
 		z-index: 99;
 		background: rgba(0, 0, 0, 0.4);
 		border-radius: 50%;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
 	}
 }

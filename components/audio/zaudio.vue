@@ -1,5 +1,5 @@
 <template>
-	<view class="imt-audio" :class="[`${theme}`]">
+	<view class="imt-audio" :class="[`${theme}`]"  v-if='audiolist.length>0'>
 		<template v-if="theme == 'theme3'">
 			<slider
 				class="audio-slider"
@@ -13,9 +13,9 @@
 
 			<view class="top">
 				<view class="audio-control-wrapper">
-					<image :src="renderData('coverImgUrl')" mode="aspectFit" class="cover" :class="{ on: !paused }"></image>
+					<image :src="renderData('coverImgUrl')" mode="aspectFit" class="cover" :class="{ on: !renderData('paused') }"></image>
 
-					<image src="/static/playbtn.png" alt="" @click="operation" class="play" v-if="paused"></image>
+					<image src="/static/playbtn.png" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
 					<image src="/static/pausebtn.png" alt="" @click="operation" class="play" v-else></image>
 				</view>
 			</view>
@@ -38,9 +38,9 @@
 		<template v-if="theme == 'theme2'">
 			<view class="top">
 				<view class="audio-control-wrapper">
-					<image :src="renderData('coverImgUrl')" mode="aspectFit" class="cover" :class="{ on: !paused }"></image>
+					<image :src="renderData('coverImgUrl')" mode="aspectFit" class="cover" :class="{ on: !renderData('paused') }"></image>
 					<template>
-						<image src="/static/playbtn.png" alt="" @click="operation" class="play" v-if="paused"></image>
+						<image src="/static/playbtn.png" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
 						<image src="/static/pausebtn.png" alt="" @click="operation" class="play" v-else></image>
 					</template>
 				</view>
@@ -67,7 +67,7 @@
 
 		<template v-if="theme == 'theme1'">
 			<view class="top">
-				<view class="audio-control-wrapper"><image :src="renderData('coverImgUrl')" mode="aspectFit" class="cover" :class="{ on: !paused }"></image></view>
+				<view class="audio-control-wrapper"><image :src="renderData('coverImgUrl')" mode="aspectFit" class="cover" :class="{ on: !renderData('paused') }"></image></view>
 
 				<view>
 					<view class="title">{{ renderData('title') }}</view>
@@ -94,7 +94,7 @@
 				<!-- 上一首 -->
 				<image src="/static/go.png" class="prevplay" @click="changeplay(-1)" mode="widthFix"></image>
 				<!-- 播放 -->
-				<image src="/static/playbtn2.png" alt="" @click="operation" class="play" v-if="paused"></image>
+				<image src="/static/playbtn2.png" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
 				<!-- 暂停 -->
 				<image src="/static/pausebtn2.png" alt="" @click="operation" class="pause" v-else></image>
 				<!-- 下一首 -->
@@ -145,48 +145,43 @@ export default {
 		format() {
 			return num => format(num);
 		},
-		...mapGetters(['audiolist', 'playinfo', 'n_pause', 'paused', 'renderIndex', 'audio']),
+		...mapGetters(['audiolist', 'playinfo', 'n_pause', 'paused', 'renderIndex', 'audio', 'playIndex']),
 		renderData() {
 			return name => {
 				const { src: renderSrc } = this.audio;
 				const { src } = this.playinfo;
-
 				if (src != renderSrc) {
+					if(name=='paused'){
+						return true
+					}
 					return this.audio[name];
 				} else {
+					if(name=='paused'){
+						return this.paused
+					}
 					return this.playinfo[name];
 				}
 			};
 		}
 	},
-	watch: {
-		'playinfo.src': {
-			deep: true,
-			immediate: true,
-			handler(nvalue) {
-				const { duration, current, duration_value, current_value, src } = this.playinfo;
-				const { src: renderSrc } = this.audio;
-
-				if (renderSrc != src) {
-					if (this.autoplay) {
-						this.operation();
-					}
-				}
-				// console.log(this.$audio.started)
-				;
-			}
-		}
-	},
+	
 	created(){
 		this.audioInit()
 	},
 	methods: {
 		audioInit() {
-			console.log('start listen')
-			// if(this.$audio.started) return
-			// this.$audio.started = true;
+			console.log(this.$audio.started)
+			if(this.$audio.started) return
+			this.$audio.started = true;
+			console.log('$audio开始监听事件')
 			
-			this.$audio.onCanplay(() => {});
+			
+			this.$audio.onCanplay(() => {
+				
+			});
+			if (this.autoplay) {
+				this.operation();
+			}
 			this.$audio.onPlay(() => {
 				const { src } = this.playinfo;
 				const { src: renderSrc, title: renderTitle, singer: renderSinger, coverImgUrl: renderCoverImgUrl } = this.audio;
@@ -227,7 +222,6 @@ export default {
 			this.$audio.onTimeUpdate(() => {
 				const { src } = this.playinfo;
 				const { src: renderSrc, title: renderTitle, singer: renderSinger, coverImgUrl: renderCoverImgUrl } = this.audio;
-				console.log(renderSrc, renderSrc == src, src)
 				if (renderSrc == src) {
 					this.$store.commit('set_playinfo', {
 						current: this.format(this.$audio.currentTime),
@@ -272,13 +266,13 @@ export default {
 			});
 		},
 		//播放or暂停
-		operation() {
+		operation(status) {
 			const { duration, current, duration_value, current_value, src } = this.playinfo;
 			const { src: renderSrc, title: renderTitle, singer: renderSinger, coverImgUrl: renderCoverImgUrl } = this.audio;
 
 			//渲染与播放地址 不同
 			if (src != renderSrc) {
-				if (this.paused) {
+				if (this.paused || status) {
 					// 播放 渲染的数据
 
 					this.$audio.src = renderSrc;
@@ -345,9 +339,10 @@ export default {
 
 			//更新渲染数据的索引值
 			this.$store.commit('set_renderIndex', nowindex);
-
+			this.$store.commit('set_pause', true);
 			this.operation();
-		}
+		},
+
 	}
 };
 </script>
