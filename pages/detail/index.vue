@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<zaudio :list="audiolist" :theme="themelist[key]" :autoplay="false" :continue="true"></zaudio>
+		<zaudio :theme="themelist[key]" :autoplay="false" :continue="false"></zaudio>
 		<button @click="changeTheme(k)" class="bottom" type="primary" size="mini" v-for="(i, k) in themelist" :key="k">{{ i }}</button>
 	</view>
 </template>
@@ -16,12 +16,7 @@ export default {
 		};
 	},
 	components: { zaudio },
-	computed: {
-		...mapGetters(['audiolist']) //音频列表
-	},
-	onLoad(o) {
-		this.k = o.k;
-	},
+
 	methods: {
 		changeTheme(k) {
 			this.key = k;

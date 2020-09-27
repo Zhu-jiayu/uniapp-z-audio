@@ -89,27 +89,27 @@ store/index.js
 + state: 
   - `audiolist`: 播放列表
 
-  - `playIndex`: 当前播放索引
+  - `renderIndex`: 当前zaudio`渲染数据`的索引`(不一定是正在播放的数据,这里只的是渲染看到的数据)`
   
-  - `audio`: zaudio组件的渲染的音频数据
+  - `audio`: zaudio组件的`渲染的音频数据`
 
-  - `playinfo`: $audio对象当前播放的音频数据
+  - `playinfo`: $audio对象当前`正在播放`的音频数据
 
-  - `paused`: $audio对象当前播放音频的暂停状态
+  - `paused`: $audio对象当前`正在播放`音频的暂停状态
 
-  - `n_pause`: $audio对象当前播放音频的意外中断的状态
+  - `n_pause`: $audio对象当前`正在播放`音频的意外中断的状态
 
 + mutations: 
 
-  - `setaudio`: 设置zaudio组件的渲染的音频数据
+  - `setaudio`: 设置zaudio组件的`渲染的音频数据`
 
-  - `setplay`: 设置$audio对象当前播放的音频数据
+  - `setplay`: 设置$audio对象当前`正在播放`的音频数据
 
-  - `setpause`: 设置$audio对象当前播放音频的暂停状态
+  - `setpause`: 设置$audio对象`当前正在播放`音频的暂停状态
 
-  - `set_n_pause`: 设置$audio对象当前播放音频的意外中断的状态
+  - `set_n_pause`: 设置$audio对象`当前正在播放`音频的意外中断的状态
   
-  - `set_playIndex`: 设置播放索引
+  - `set_renderIndex`: 设置zaudio`渲染数据`的索引(不一定是正在播放的数据,这里只的是渲染看到的数据)
 
 #### 后台播放配置
 在manifest.json中配置

@@ -23,11 +23,11 @@ const install = function(Vue) {
 
 			var main = plus.android.runtimeMainActivity();
 			var Context = plus.android.importClass("android.content.Context");
-			// console.log('Context ->',Context)
+	
 			var telephonyManager = plus.android.importClass("android.telephony.TelephonyManager");
-			// console.log('telephonyManager ->',telephonyManager)
+
 			var telephonyManager = plus.android.runtimeMainActivity().getSystemService(Context.TELEPHONY_SERVICE);
-			// console.log('telephonyManager ->',telephonyManager)
+	
 			var receiver = plus.android.implements('io.dcloud.android.content.BroadcastReceiver', {
 				onReceive: function(context, intent) { //实现onReceiver回调函数  
 					plus.android.importClass(intent);
