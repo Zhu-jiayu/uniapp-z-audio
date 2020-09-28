@@ -42,7 +42,6 @@ export default {
 		this.set_audiolist(this.songlist);
 	},
 	onShow() {
-		
 		//渲染当前列表中歌曲的播放的进度
 		//必须放在onShow中
 		this.set_renderIndex(this.playIndex);

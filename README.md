@@ -55,7 +55,7 @@ v0.0.1
 ### 使用步骤 
 
 0. 配置vuex属性和方法(必须) 
-直接复制store/zaudioModule即可, 在store/index引入`zaudioModule`并引用
+直接复制store/modules/zaudio即可
 
 1. 引入挂载音频对象 
 此时会创建zaudio全局组件, 和$audio音频播放对象 
@@ -140,7 +140,7 @@ autoplay | Boolean | false | 自动播放 |  默认 `false`
 continue | Boolean | false | 下一首续播 |  默认 `true` 
 
 ### vuex配置 
-store/zaudioModule.js
+store/modules/zuadio.js
 
 + state: 
   ```javascript

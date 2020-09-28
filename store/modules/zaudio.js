@@ -1,5 +1,6 @@
 
 const store = {
+	namespaced: false,
     state: {
     	renderIndex: 0, // 组件渲染的索引值
     	audiolist: [],  //音频列表
