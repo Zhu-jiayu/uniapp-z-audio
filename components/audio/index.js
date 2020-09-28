@@ -39,7 +39,7 @@ const install = function(Vue, store) {
 					console.log("phonetype:" + phonetype);
 					console.log("phonetype:" + phoneNumber);
 
-					if (phonetype == 0 && !store.state.n_pause) {
+					if (phonetype == 0 && !store.state.zaudio.n_pause) {
 						gaudioctx.play()
 					}
 				}
@@ -58,7 +58,7 @@ const install = function(Vue, store) {
 			center.setCallEventHandler(function(ctCall) {
 				console.log('=============', ctCall)
 				callstatus = !callstatus
-				if (!callstatus && !store.state.n_pause) {
+				if (!callstatus && !store.state.zaudio.n_pause) {
 					gaudioctx.play()
 				} else {
 					gaudioctx.pause()
