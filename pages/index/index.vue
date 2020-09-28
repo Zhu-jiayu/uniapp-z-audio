@@ -49,16 +49,24 @@ export default {
 	},
 	methods: {
 		...mapMutations(['set_renderIndex', 'set_audiolist', 'set_audio']),
+		// 指定播放
 		play(key) {
-			//渲染指定的列表索引
-			this.set_renderIndex(key);
+			//渲染指定的列表索引, 方法1: 
+			// this.set_renderIndex(key);
+			
+			// 指定列表中具体信息, 方法2:
+			this.set_audio(this.audiolist[key]);
+			
 			// 播放音频
 			this.$refs.zaudio.operation(true);
 		},
-
+		// 查看全局播放信息
 		go(key) {
-			//渲染指定的列表索引
-			this.set_renderIndex(key);
+			//渲染指定的列表索引, 方法1:
+			// this.set_renderIndex(key);
+			// 指定列表中具体信息, 方法2:
+			this.set_audio(this.audiolist[key]);
+			
 			uni.navigateTo({
 				url: '/pages/detail/index'
 			});

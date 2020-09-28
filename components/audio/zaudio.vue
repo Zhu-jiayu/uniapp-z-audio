@@ -1,5 +1,5 @@
 <template>
-	<view class="imt-audio" :class="[`${theme}`]"  v-if='audiolist.length>0'>
+	<view class="imt-audio" :class="[`${theme}`]" v-if="audiolist.length > 0">
 		<template v-if="theme == 'theme3'">
 			<slider
 				class="audio-slider"
@@ -151,34 +151,30 @@ export default {
 				const { src: renderSrc } = this.audio;
 				const { src } = this.playinfo;
 				if (src != renderSrc) {
-					if(name=='paused'){
-						return true
+					if (name == 'paused') {
+						return true;
 					}
 					return this.audio[name];
 				} else {
-					if(name=='paused'){
-						return this.paused
+					if (name == 'paused') {
+						return this.paused;
 					}
 					return this.playinfo[name];
 				}
 			};
 		}
 	},
-	
-	created(){
-		this.audioInit()
+
+	created() {
+		this.audioInit();
 	},
 	methods: {
 		audioInit() {
-			console.log(this.$audio.started)
-			if(this.$audio.started) return
+			if (this.$audio.started) return;
 			this.$audio.started = true;
-			console.log('$audio开始监听事件')
-			
-			
-			this.$audio.onCanplay(() => {
-				
-			});
+			console.log('$audio开始监听事件');
+
+			this.$audio.onCanplay(() => {});
 			if (this.autoplay) {
 				this.operation();
 			}
@@ -284,9 +280,9 @@ export default {
 					this.$audio.seek(0);
 
 					this.$audio.play();
-					
+
 					this.$store.commit('set_pause', false);
-					
+
 					this.$store.commit('set_playinfo', {
 						src: renderSrc,
 						title: renderTitle,
@@ -303,12 +299,12 @@ export default {
 				//渲染与播放地址相同
 				if (this.paused) {
 					this.$audio.play();
-					
+
 					this.$audio.startTime = parseFloat(current_value);
 					this.$audio.seek(parseFloat(current_value));
 
 					this.$store.commit('set_pause', false);
-					
+
 					this.$store.commit('set_playinfo', {
 						src: renderSrc,
 						title: renderTitle,
@@ -341,12 +337,16 @@ export default {
 			this.$store.commit('set_renderIndex', nowindex);
 			this.$store.commit('set_pause', true);
 			this.operation();
-		},
-
+		}
 	}
 };
 </script>
 
 <style scoped lang="scss">
 @import './index.scss';
+//  #ifdef MP-WEIXIN
+.theme3 .audio-slider {
+	margin-top: -8px!important;
+}
+// #endif
 </style>

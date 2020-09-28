@@ -5,29 +5,29 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
-		renderIndex: 0, //正在播放的索引
-		audiolist: [],
+		renderIndex: 0, // 组件渲染的索引值
+		audiolist: [],  //音频列表
 
 
-		audio: { //当前zaudio组件渲染的音频数据
-			current: 0, //当前时间
-			duration: 0, //总时间
-			duration_value: 0, //总长度
-			current_value: 0, //当前长度
-			src: '',
-			title: '',
-			singer: '',
-			coverImgUrl: '',
+		audio: { 		 //zaudio组件-当前渲染的音频数据
+			current: 0,  		//当前时间
+			duration: 0, 		//总时间
+			duration_value: 0,  //总长度
+			current_value: 0,   //当前长度
+			src: '',     		//当前音频地址
+			title: '',	 		//当前音频标题
+			singer: '',  		//当前音频作者
+			coverImgUrl: '',    //当前音频封面
 		},
-		playinfo: { //$audio对象当前播放的音频数据
-			current: 0, //当前时间
-			duration: 0, //总时间
-			duration_value: 0, //总长度
-			current_value: 0, //当前长度
-			src: "",
-			title: '',
-			singer: '',
-			coverImgUrl: ''
+		playinfo: {      //$audio对象-当前播放的音频数据
+			current: 0,   		//当前时间
+			duration: 0, 		//总时间
+			duration_value: 0,  //总长度
+			current_value: 0,   //当前长度
+			src: "",			//当前音频地址	
+			title: '',			//当前音频标题
+			singer: '',			//当前音频作者
+			coverImgUrl: ''		//当前音频封面
 		},
 		paused: true, //$audio对象当前播放音频的暂停状态
 
@@ -37,12 +37,12 @@ const store = new Vuex.Store({
 	},
 	mutations: {
 
-		//保存音频列表
+		//设置音频列表数据
 		set_audiolist(state, data) {
 			state.audiolist.push(...data)
 			return Promise.resolve(state.audiolist)
 		},
-		//设置渲染的音频列表
+		//设置zaudio组件当前渲染的音频信息
 		set_audio(state, data) {
 			state.audio = data;
 			let renderIndex = state.audiolist.findIndex(i => i.src == data.src);
@@ -52,7 +52,7 @@ const store = new Vuex.Store({
 			}
 			
 		},
-		//设置播放信息
+		//设置当前播放信息
 		set_playinfo(state, data) {
 			for (var i in data) {
 				if (state.playinfo.hasOwnProperty(i)) {
