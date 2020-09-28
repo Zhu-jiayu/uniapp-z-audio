@@ -97,7 +97,7 @@ export default {
    ```
    方法2:  指定播放信息
    ```
-   this.set_renderIndex(this.audiolist[key]);   //染播放信息
+   this.set_audio(this.audiolist[key]);   //染播放信息
    this.$refs.zaudio.operation(true);    // 播放或暂停, true为固定值,  zaudio组件添加ref属性
    ```
 
@@ -113,7 +113,7 @@ export default {
 	```
    方法2:  指定播放信息
 	```
-	this.set_renderIndex(this.audiolist[key]);   //染播放信息
+	this.set_audio(this.audiolist[key]);   //染播放信息
 	uni.navigateTo({      //跳转页面后看到渲染信息已改变
 		url: '/pages/detail/index'
 	});
@@ -182,16 +182,71 @@ store/modules/zuadio.js
 
 + mutations: 
   - `set_renderIndex`: 设置`zaudio组件`渲染的索引值和渲染信息
+
+  用法:  
+  渲染列表索引为2的数据
+  ```
+  set_renderIndex(2)
+  ```
   
   - `set_audiolist`: 设置音频列表数据
+  
+   用法:  
+   更新列表数据(push到audiolist)
+   ```
+   set_audiolist([
+	   {
+	   	src: '',     //地址
+	   	title: '',     //标题
+	   	singer: '',      //作者
+	   	coverImgUrl: ''     //封面
+	   }
+   ])
+   ```
 
   - `set_audio`: 设置`zaudio组件`当前渲染的音频信息, 若音频信息包含在`audiolist`中, 则会更新`renderIndex`
 
-  - `set_playinfo`: 设置当前音频播放信息(如进度信息,播放音频地址)
+  用法:
+  更新zaudio展示的数据
+  ```
+  set_audio({
+	   	src: '',     //地址
+	   	title: '',     //标题
+	   	singer: '',      //作者
+	   	coverImgUrl: ''     //封面
+	   });
+  ```
 
-  - `set_pause`: 设置当前音频暂停状态
+  - `set_playinfo`: 设置当前音频播放信息(具体开发时不需要用到)
+
+  用法:
+  更新当前正在播放的数据, 不会影响zaudio的展示
+  ```
+  set_playinfo({
+		src: '',
+		title: '',
+		singer: '',
+		coverImgUrl: '',
+		duration: '',
+		duration_value: ''
+	});
+  ```
+
+  - `set_pause`: 设置当前音频暂停状态(具体开发时不需要用到)
   
-  - `set_n_pause`: 设置当前音频意外中断状态
+  用法:
+  更新为意外中断状态, 不会直接暂停音频,只是记录状态
+  ```
+  set_pause(true);
+  ```
+  
+  - `set_n_pause`: 设置当前音频意外中断状态(具体开发时不需要用到)
+  
+  用法:
+  更新为播放状态, 不会直接暂停音频,只是记录状态
+  ```
+  set_n_pause(false);
+  ```
   
 + getters:
   - audiolist: 返回音频列表数据
