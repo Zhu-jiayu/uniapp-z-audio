@@ -93,6 +93,8 @@ export default {
    ```
 
 5. 多个页面共享播放状态:  
+   例如: 当前列表有A和B两首歌, 当前正在播放A, 跳转B这首歌的详情页,需要渲染B这首歌的信息,之后再返回,需要看到同步当前A歌曲的播放状态
+   
    方法1: 指定索引
 	```
 	this.set_renderIndex(key);   //渲染指定索引
@@ -108,7 +110,7 @@ export default {
 	});
 	```
 	
-	另外:
+	之后返回页面需要同步当前播放信息,
 	因为`renderIndex`会变动,所以需要在onShow中再次更新当前的播放索引(此步必须放onShow中)
    ```
    this.set_renderIndex(this.playIndex);
