@@ -51,11 +51,36 @@ const store = {
     	},
     	//设置当前播放信息
     	set_playinfo(state, data) {
-    		for (var i in data) {
-    			if (state.playinfo.hasOwnProperty(i)) {
-    				state.playinfo[i] = data[i]
-    			}
-    		}
+
+			if(data.current){
+				state.playinfo.current = data.current
+			}
+			if(data.duration){
+				state.playinfo.duration = data.duration
+			}
+			if(data.duration_value){
+				state.playinfo.duration_value = data.duration_value
+			}
+			if(data.current_value){
+				state.playinfo.current_value = data.current_value
+			}
+			if(data.src){
+				state.playinfo.src = data.src
+			}
+			if(data.title){
+				state.playinfo.title = data.title
+			}
+			if(data.singer){
+				state.playinfo.singer = data.singer
+			}
+			if(data.coverImgUrl){
+				state.playinfo.coverImgUrl = data.coverImgUrl
+			}
+    		// for (var i in data) {
+    		// 	if (state.playinfo.hasOwnProperty(i)) {
+    		// 		state.playinfo[i] = data[i]
+    		// 	}
+    		// }
     
     	},
     	set_pause(state, data) {
@@ -92,7 +117,10 @@ const store = {
     	playIndex: state => {
     		let index = state.audiolist.findIndex(i => i.src == state.playinfo.src)
     		return index <= 0 ? 0 : index
-    	}
+    	},
+		renderIsPlay: state =>{
+			return state.audio.src == state.playinfo.src
+		}
     }
 }
 export default store

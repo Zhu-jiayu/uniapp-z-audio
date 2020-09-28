@@ -9,6 +9,7 @@
 				:max="renderData('duration_value')"
 				@changing="changing"
 				@change="change"
+				:disabled="!renderIsPlay"
 			></slider>
 
 			<view class="top">
@@ -60,6 +61,7 @@
 					:max="renderData('duration_value')"
 					@changing="changing"
 					@change="change"
+					:disabled="!renderIsPlay"
 				></slider>
 				<view class="audio-number">{{ renderData('duration') }}</view>
 			</view>
@@ -84,6 +86,7 @@
 					:max="renderData('duration_value')"
 					@changing="changing"
 					@change="change"
+					:disabled="!renderIsPlay"
 				></slider>
 				<view class="audio-number">{{ renderData('duration') }}</view>
 			</view>
@@ -145,12 +148,11 @@ export default {
 		format() {
 			return num => format(num);
 		},
-		...mapGetters(['audiolist', 'playinfo', 'n_pause', 'paused', 'renderIndex', 'audio', 'playIndex']),
+		...mapGetters(['audiolist', 'playinfo', 'n_pause', 'paused', 'renderIndex', 'audio', 'playIndex', 'renderIsPlay']),
 		renderData() {
 			return name => {
-				const { src: renderSrc } = this.audio;
-				const { src } = this.playinfo;
-				if (src != renderSrc) {
+
+				if (!this.renderIsPlay) {
 					if (name == 'paused') {
 						return true;
 					}
@@ -162,7 +164,8 @@ export default {
 					return this.playinfo[name];
 				}
 			};
-		}
+		},
+	
 	},
 
 	created() {
@@ -179,7 +182,6 @@ export default {
 				this.operation();
 			}
 			this.$audio.onPlay(() => {
-				const { src } = this.playinfo;
 				const { src: renderSrc, title: renderTitle, singer: renderSinger, coverImgUrl: renderCoverImgUrl } = this.audio;
 				this.$store.commit('set_playinfo', {
 					src: renderSrc,
@@ -216,9 +218,7 @@ export default {
 				}
 			});
 			this.$audio.onTimeUpdate(() => {
-				const { src } = this.playinfo;
-				const { src: renderSrc, title: renderTitle, singer: renderSinger, coverImgUrl: renderCoverImgUrl } = this.audio;
-				if (renderSrc == src) {
+				if (this.renderIsPlay) {
 					this.$store.commit('set_playinfo', {
 						current: this.format(this.$audio.currentTime),
 						current_value: this.$audio.currentTime,
@@ -267,7 +267,7 @@ export default {
 			const { src: renderSrc, title: renderTitle, singer: renderSinger, coverImgUrl: renderCoverImgUrl } = this.audio;
 
 			//渲染与播放地址 不同
-			if (src != renderSrc) {
+			if (!this.renderIsPlay) {
 				if (this.paused || status) {
 					// 播放 渲染的数据
 
@@ -320,22 +320,26 @@ export default {
 		},
 		//拖动
 		change(e) {
-			this.$audio.seek(e.detail.value);
+
+			if(this.renderIsPlay){
+				this.$audio.seek(e.detail.value);
+			}
 		},
 		//快进
 		step(type) {
-			var pos = !type ? this.current_value - 15 : this.current_value + 15;
-			this.$audio.seek(pos);
+			if(this.renderIsPlay){
+				var pos = !type ? this.playinfo.current_value - 15 : this.playinfo.current_value + 15;
+				this.$audio.seek(pos);
+			}
 		},
 		//切歌
 		changeplay(count) {
 			var nowindex = this.renderIndex;
 			nowindex += count;
 			nowindex = nowindex < 0 ? this.audiolist.length - 1 : nowindex > this.audiolist.length - 1 ? 0 : nowindex;
-
+			this.$store.commit('set_pause', true);
 			//更新渲染数据的索引值
 			this.$store.commit('set_renderIndex', nowindex);
-			this.$store.commit('set_pause', true);
 			this.operation();
 		}
 	}
