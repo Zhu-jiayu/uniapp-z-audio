@@ -256,7 +256,7 @@ store/modules/zuadio.js
   -	paused: 返回音频暂停状态
   - renderIndex: 返回`zaudio组件`渲染的索引值
   - audio: 返回`zaudio组件`当前渲染的音频信息
-  
+  - renderIsPlay: 返回判断渲染与播放是否是同一首音频
 
 
 ### 切换后台播放配置
