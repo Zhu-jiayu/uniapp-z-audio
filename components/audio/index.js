@@ -1,8 +1,8 @@
 import zaudio from './zaudio.vue';
-import store from '@/store';
 
 
-const install = function(Vue) {
+
+const install = function(Vue, store) {
 	Vue.component('zaudio', zaudio)
 
 	// #ifndef H5
@@ -13,7 +13,6 @@ const install = function(Vue) {
 	// #endif
 
 	Vue.prototype.$audio = ZAudioCtx;
-
 
 	if(!store) return
 	//////////////////此处为app端 判断电话来电后, 音频意外中断之后的继续播放

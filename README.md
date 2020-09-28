@@ -13,6 +13,10 @@
 <img src="screenshop/../screenshot/3.png" style="width:240px;margin-left: 10px">
 
 ### 更新日志
+
+v0.0.51
+- 拆分store, 调整使用步骤
+
 v0.0.5
 - 修复多次创建监听$audio事件的问题
 - 拆分渲染组件与播放音频的索引值
@@ -48,17 +52,22 @@ v0.0.1
 - 支持小程序, app 后台播放
 - 支持来电中断后续播(app 端)
 
-### 使用步骤
+### 使用步骤 
 
-1. 引入挂载音频对象
-此时会创建zaudio全局组件, 和$audio音频播放对象
+0. 配置vuex属性和方法(必须) 
+直接复制store/zaudioModule即可, 在store/index引入`zaudioModule`并引用
+
+1. 引入挂载音频对象 
+此时会创建zaudio全局组件, 和$audio音频播放对象 
 ```javascript
+import store from './store'
+Vue.prototype.$store = store;
 import ZAudioCtx from 'components/audio/index.js'
-Vue.use(ZAudioCtx)
+Vue.use(ZAudioCtx, store)
 ```
 
 
-2. 小程序或app中引入zaudio局部组件
+2. 小程序或app中引入zaudio局部组件 
 (h5已使用全局组件,无需此步)
 
 ```
@@ -92,7 +101,7 @@ export default {
    this.$refs.zaudio.operation(true);    // 播放或暂停, true为固定值,  zaudio组件添加ref属性
    ```
 
-5. 多个页面共享播放状态:  
+6. 多个页面共享播放状态:  
    例如: 当前列表有A和B两首歌, 当前正在播放A, 跳转B这首歌的详情页,需要渲染B这首歌的信息,之后再返回,需要看到同步当前A歌曲的播放状态
    
    方法1: 指定索引
@@ -117,7 +126,7 @@ export default {
    ```
 	
 
-7. 配置vuex属性和方法(必须, 直接复制store/index即可)
+
 
 ### 组件参数配置
 
@@ -130,8 +139,8 @@ stepShow | Boolean | false | 显示快进按钮 |  默认 `true`, 只作用于`t
 autoplay | Boolean | false | 自动播放 |  默认 `false` 
 continue | Boolean | false | 下一首续播 |  默认 `true` 
 
-### vuex配置
-store/index.js
+### vuex配置 
+store/zaudioModule.js
 
 + state: 
   ```javascript

@@ -8,7 +8,7 @@ App.mpType = 'app'
 
 Vue.prototype.$store = store;
 import ZAudioCtx from 'components/audio/index.js'
-Vue.use(ZAudioCtx)
+Vue.use(ZAudioCtx, store)
 
 
 
