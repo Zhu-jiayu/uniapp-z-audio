@@ -10,6 +10,7 @@
 ### 预览
 <img src="screenshop/../screenshot/1.png" style="width:200px">
 <img src="screenshop/../screenshot/2.png" style="width:240px;margin-left: 10px">
+<img src="screenshop/../screenshot/3.png" style="width:240px;margin-left: 10px">
 
 ### 更新日志
 v0.0.5
