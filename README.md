@@ -13,7 +13,9 @@
 <img src="screenshop/../screenshot/3.png" style="width:240px;margin-left: 10px">
 
 ### 更新日志
-
+v0.0.54
+- 修复H5端切换歌曲报错问题
+- 
 v0.0.53
 - 修复android端切换歌曲报错问题
 

@@ -183,15 +183,12 @@ export default {
 			}
 			this.$audio.onPlay(() => {
 				const { src: renderSrc, title: renderTitle, singer: renderSinger, coverImgUrl: renderCoverImgUrl } = this.audio;
+				// #ifdef APP-PLUS
 				this.$store.commit('set_playinfo', {
-					// src: renderSrc,
-					// title: renderTitle,
-					// singer: renderSinger,
-					// coverImgUrl: renderCoverImgUrl,
 					duration: this.format(this.$audio.duration),
 					duration_value: this.$audio.duration
 				});
-
+				// #endif
 				this.$store.commit('set_pause', false);
 				this.$store.commit('set_n_pause', false);
 			});
@@ -218,12 +215,20 @@ export default {
 				}
 			});
 			this.$audio.onTimeUpdate(() => {
+			
 				if (this.renderIsPlay) {
 					this.$store.commit('set_playinfo', {
 						current: this.format(this.$audio.currentTime),
 						current_value: this.$audio.currentTime,
-						
 					});
+					// #ifndef APP-PLUS
+					if(this.$audio.duration!=this.playinfo.duration_value){
+						this.$store.commit('set_playinfo', {
+							duration: this.format(this.$audio.duration),
+							duration_value: this.$audio.duration
+						});
+					}
+					// #endif
 				}
 			});
 			this.$audio.onError(() => {
