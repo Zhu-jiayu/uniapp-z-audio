@@ -184,10 +184,10 @@ export default {
 			this.$audio.onPlay(() => {
 				const { src: renderSrc, title: renderTitle, singer: renderSinger, coverImgUrl: renderCoverImgUrl } = this.audio;
 				this.$store.commit('set_playinfo', {
-					src: renderSrc,
-					title: renderTitle,
-					singer: renderSinger,
-					coverImgUrl: renderCoverImgUrl,
+					// src: renderSrc,
+					// title: renderTitle,
+					// singer: renderSinger,
+					// coverImgUrl: renderCoverImgUrl,
 					duration: this.format(this.$audio.duration),
 					duration_value: this.$audio.duration
 				});
@@ -222,8 +222,7 @@ export default {
 					this.$store.commit('set_playinfo', {
 						current: this.format(this.$audio.currentTime),
 						current_value: this.$audio.currentTime,
-						duration: this.format(this.$audio.duration),
-						duration_value: this.$audio.duration
+						
 					});
 				}
 			});
