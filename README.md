@@ -13,9 +13,13 @@
 <img src="screenshop/../screenshot/3.png" style="width:240px;margin-left: 10px">
 
 ### 更新日志
+
+v0.0.55
+- set_audiolist方法加入status参数,区分是否记录列表数据
+
 v0.0.54
 - 修复H5端切换歌曲报错问题
-- 
+
 v0.0.53
 - 修复android端切换歌曲报错问题
 
@@ -201,16 +205,20 @@ store/modules/zuadio.js
   - `set_audiolist`: 设置音频列表数据
   
    用法:  
-   更新列表数据(push到audiolist)
+   @params status Boolean  true-> 记录之前的列表数据 false->不记录,仅仅赋值
+   @params data   Array    列表数据
    ```
-   set_audiolist([
-	   {
-	   	src: '',     //地址
-	   	title: '',     //标题
-	   	singer: '',      //作者
-	   	coverImgUrl: ''     //封面
-	   }
-   ])
+   set_audiolist({
+	   data:[
+			   {
+				src: '',     //地址
+				title: '',     //标题
+				singer: '',      //作者
+				coverImgUrl: ''     //封面
+			   }
+		   ],
+		status: true      //记录之前赋值的数据
+   })
    ```
 
   - `set_audio`: 设置`zaudio组件`当前渲染的音频信息, 若音频信息包含在`audiolist`中, 则会更新`renderIndex`
