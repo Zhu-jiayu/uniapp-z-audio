@@ -39,7 +39,10 @@ export default {
 
 	onLoad() {
 		//设置音频列表
-		this.set_audiolist(this.songlist);
+		this.set_audiolist({
+			data: this.songlist,
+			status: false
+		});
 	},
 	onShow() {
 		//渲染当前列表中歌曲的播放的进度
