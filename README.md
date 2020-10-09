@@ -15,20 +15,31 @@
 
 ### 使用步骤 
 
-0. 配置vuex属性和方法(必须) 
-直接复制store/modules/zaudio即可
-
-1. 引入挂载音频对象 
-此时会创建zaudio全局组件, 和$audio音频播放对象 
+1. 引入挂载ZAudio
 ```javascript
-import store from './store'
-Vue.prototype.$store = store;
-import ZAudioCtx from 'components/audio/index.js'
-Vue.use(ZAudioCtx, store)
+import { ZAudio } from 'components/zaudio/index.js'
+Vue.use(ZAudio)
 ```
 
+2. 配置vuex中的ZAudioStore
+```javascript
+import { ZAudioStore } from "@/components/zaudio/index.js";
+const store = new Vuex.Store({
+	modules: {
+		// zaudio数据
+		ZAudioStore,
 
-2. 小程序或app中引入zaudio局部组件 
+		//这是模拟的其他数据
+		other: {
+			state: {
+				a: '123'
+			}
+		}
+	}
+})
+```
+
+3. 小程序或app中引入zaudio局部组件 
 (h5已使用全局组件,无需此步)
 
 ```
@@ -40,51 +51,54 @@ export default {
 ```
 
 
-3. 使用组件 (详见示例和参数配置) 
+4. 使用组件 
   - `<zaudio theme="theme3" :autoplay="false" :continue="true" ref="zaudio"></zaudio>`
-  - 配置`mapMutations`和`mapGetters`
+  - 配置`mapMutations`和`mapGetters` (详见下面文档和示例)
 
-4. 设置音频列表: 
+5. 设置音频列表: 
    此步必须在设置set_renderIndex之前
    ```
-   this.set_audiolist(this.songlist);
+   this.set_audiolist([{
+					src: '',
+					title: '',
+					singer: '',
+					coverImgUrl: ''
+				}]);
    ```
  
-5. 手动指定播放:  
-   方法1: 指定索引
+6. 指定zaudio渲染:  
+   + 方法1: 指定索引
    ```
-   this.set_renderIndex(key);   //渲染指定索引
-   this.$refs.zaudio.operation(true);    // 播放或暂停音频, true为固定值, zaudio组件添加ref属性
+   this.set_renderIndex(key);  
+  
    ```
-   方法2:  指定播放信息
+   + 方法2:  指定播放信息
    ```
-   this.set_audio(this.audiolist[key]);   //染播放信息
-   this.$refs.zaudio.operation(true);    // 播放或暂停, true为固定值,  zaudio组件添加ref属性
+   this.set_audio(this.audiolist[key]);  
    ```
-
-6. 多个页面共享播放状态:  
-   例如: 当前列表有A和B两首歌, 当前正在播放A, 跳转B这首歌的详情页,需要渲染B这首歌的信息,之后再返回,需要看到同步当前A歌曲的播放状态
-   
-   方法1: 指定索引
-	```
-	this.set_renderIndex(key);   //渲染指定索引
-	uni.navigateTo({      //跳转页面后看到渲染信息已改变
-		url: '/pages/detail/index'
-	});
-	```
-   方法2:  指定播放信息
-	```
-	this.set_audio(this.audiolist[key]);   //染播放信息
-	uni.navigateTo({      //跳转页面后看到渲染信息已改变
-		url: '/pages/detail/index'
-	});
+7. 指定zaudio播放或暂停
+  + 需放在`set_renderIndex` 或 `set_audio`之后使用
+	+ 播放或暂停当前渲染的音频
+  + 播放暂停会自动判断
+	+ true为固定值
+  ```
+	 this.$refs.zaudio.operation(true);    
 	```
 	
-	之后返回页面需要同步当前播放信息,
-	因为`renderIndex`会变动,所以需要在onShow中再次更新当前的播放索引(此步必须放onShow中)
-   ```
-   this.set_renderIndex(this.playIndex);
-   ```
+7. 获取并渲染当前音频播放状态:  
+   例如: <br/>
+	 audiolist中有A和B两首歌, <br/>
+	 当前处于列表页,列表页中zaudio渲染且播放歌曲A, <br/>
+	 这时跳转详情页面,zaudio组件渲染歌曲B的信息,但未播放,<br/>
+	 返回列表页需要看到当前A歌曲的播放状态.
+
+		```javascript
+		...mapGetters(['playIndex'])  //当前播放音频的索引值
+		this.set_renderIndex(this.playIndex);  //渲染当前播放音频的状态
+		```
+
+	
+	
 	
 
 
@@ -93,7 +107,7 @@ export default {
 
 参数 | 类型 | 必填 | 描述 | 其他
 -|-|-|-|-
-default_cover | String | false | 默认音频封面 | 默认`/static/logo.png`
+default_cover | String | false | 默认音频封面 | 
 theme | String | false | 皮肤 | `theme2` or `theme1` or `theme3`;   默认`theme1`
 themeColor | String | false | 进度条颜色 |  默认 `#42b983`
 stepShow | Boolean | false | 显示快进按钮 |  默认 `true`, 只作用于`theme1`
@@ -101,7 +115,7 @@ autoplay | Boolean | false | 自动播放 |  默认 `false`
 continue | Boolean | false | 下一首续播 |  默认 `true` 
 
 ### vuex配置 
-store/modules/zuadio.js
+
 
 + state: 
   ```javascript

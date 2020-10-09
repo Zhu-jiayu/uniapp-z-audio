@@ -1,4 +1,4 @@
-const store = {
+export default {
 	namespaced: false,
 	state: {
 		renderIndex: 0, // 组件渲染的索引值
@@ -37,7 +37,10 @@ const store = {
 		// @params status Boolean  true-> 记录之前的列表数据 false->不记录,仅仅赋值
 		// @params data   Array    列表数据
 		set_audiolist(state, payload) {
-			let {data, status} = payload
+			let {
+				data,
+				status
+			} = payload
 			if (status) {
 				state.audiolist.push(...data)
 			} else {
@@ -129,4 +132,3 @@ const store = {
 		}
 	}
 }
-export default store

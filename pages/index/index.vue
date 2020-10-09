@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import zaudio from '@/components/audio/zaudio.vue';
+import zaudio from '@/components/zaudio/zaudio.vue';
 import { mapGetters, mapMutations } from 'vuex';
 export default {
 	data() {
@@ -21,13 +21,13 @@ export default {
 					src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2015kNov/25X/25m_XiaoQ/03.mp3',
 					title: '好运来',
 					singer: '作者1111',
-					coverImgUrl: '/static/logo.png'
+					coverImgUrl: 'https://img.1ting.com/images/special/429/s100_9987ee853daa09f92bb890ed5eec804a.jpg'
 				},
 				{
 					src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2016aJan/18X/18d_DeH/01.mp3',
 					title: '恭喜发财',
 					singer: '刘德华',
-					coverImgUrl: '/static/logo.png'
+					coverImgUrl: 'https://img.1ting.com/images/special/429/s100_872bbccaf6e0a1d3445c8f77b2bb0986.jpg'
 				}
 			]
 		};

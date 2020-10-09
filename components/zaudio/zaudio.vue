@@ -16,8 +16,8 @@
 				<view class="audio-control-wrapper">
 					<image :src="renderData('coverImgUrl')" mode="aspectFit" class="cover" :class="{ on: !renderData('paused') }"></image>
 
-					<image src="/static/playbtn.png" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
-					<image src="/static/pausebtn.png" alt="" @click="operation" class="play" v-else></image>
+					<image src="./static/playbtn.png" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
+					<image src="./static/pausebtn.png" alt="" @click="operation" class="play" v-else></image>
 				</view>
 			</view>
 			<view class="audio-wrapper">
@@ -41,8 +41,8 @@
 				<view class="audio-control-wrapper">
 					<image :src="renderData('coverImgUrl')" mode="aspectFit" class="cover" :class="{ on: !renderData('paused') }"></image>
 					<template>
-						<image src="/static/playbtn.png" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
-						<image src="/static/pausebtn.png" alt="" @click="operation" class="play" v-else></image>
+						<image src="./static/playbtn.png" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
+						<image src="./static/pausebtn.png" alt="" @click="operation" class="play" v-else></image>
 					</template>
 				</view>
 
@@ -93,30 +93,29 @@
 
 			<view class="audio-button-box">
 				<!-- 块退15s -->
-				<image src="/static/prev.png" class="prevbtn" @click="step(0)" mode="widthFix" v-if="stepShow"></image>
+				<image src="./static/prev.png" class="prevbtn" @click="step(0)" mode="widthFix" v-if="stepShow"></image>
 				<!-- 上一首 -->
-				<image src="/static/go.png" class="prevplay" @click="changeplay(-1)" mode="widthFix"></image>
+				<image src="./static/go.png" class="prevplay" @click="changeplay(-1)" mode="widthFix"></image>
 				<!-- 播放 -->
-				<image src="/static/playbtn2.png" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
+				<image src="./static/playbtn2.png" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
 				<!-- 暂停 -->
-				<image src="/static/pausebtn2.png" alt="" @click="operation" class="pause" v-else></image>
+				<image src="./static/pausebtn2.png" alt="" @click="operation" class="pause" v-else></image>
 				<!-- 下一首 -->
-				<image src="/static/go.png" class="nextplay" @click="changeplay(1)" mode="widthFix"></image>
+				<image src="./static/go.png" class="nextplay" @click="changeplay(1)" mode="widthFix"></image>
 				<!-- 快进15s -->
-				<image src="/static/next.png" class="nextbtn" @click="step(1)" mode="widthFix" v-if="stepShow"></image>
+				<image src="./static/next.png" class="nextbtn" @click="step(1)" mode="widthFix" v-if="stepShow"></image>
 			</view>
 		</template>
 	</view>
 </template>
 
 <script>
-import { format } from "./play.js";
-import { mapGetters, mapMutations } from "vuex";
+import { formatSeconds } from './util.js';
+import { mapGetters, mapMutations } from 'vuex';
 export default {
 	props: {
 		default_cover: {
-			type: String,
-			default: '/static/logo.png' //默认海报
+			type: String //默认海报
 		},
 		//自动续播下一首
 		continue: {
@@ -146,12 +145,11 @@ export default {
 
 	computed: {
 		format() {
-			return num => format(num);
+			return num => formatSeconds(num);
 		},
 		...mapGetters(['audiolist', 'playinfo', 'n_pause', 'paused', 'renderIndex', 'audio', 'playIndex', 'renderIsPlay']),
 		renderData() {
 			return name => {
-
 				if (!this.renderIsPlay) {
 					if (name == 'paused') {
 						return true;
@@ -164,14 +162,14 @@ export default {
 					return this.playinfo[name];
 				}
 			};
-		},
-	
+		}
 	},
 
 	created() {
 		this.audioInit();
 	},
 	methods: {
+		...mapMutations(['set_audio', 'set_playinfo', 'set_pause', 'set_n_pause', 'set_renderIndex']),
 		audioInit() {
 			if (this.$audio.started) return;
 			this.$audio.started = true;
@@ -184,27 +182,27 @@ export default {
 			this.$audio.onPlay(() => {
 				const { src: renderSrc, title: renderTitle, singer: renderSinger, coverImgUrl: renderCoverImgUrl } = this.audio;
 				// #ifdef APP-PLUS
-				this.$store.commit('set_playinfo', {
+				this.set_playinfo({
 					duration: this.format(this.$audio.duration),
 					duration_value: this.$audio.duration
 				});
 				// #endif
-				this.$store.commit('set_pause', false);
-				this.$store.commit('set_n_pause', false);
+				this.set_pause(false);
+				this.set_n_pause(false);
 			});
 
 			this.$audio.onPause(() => {
-				this.$store.commit('set_pause', true);
+				this.set_pause(true);
 			});
 
 			this.$audio.onStop(() => {
-				this.$store.commit('set_pause', true);
+				this.set_pause(true);
 			});
 			this.$audio.onEnded(() => {
-				this.$store.commit('set_pause', true);
+				this.set_pause(true);
 				this.$audio.startTime = 0;
 
-				this.$store.commit('set_playinfo', {
+				this.set_playinfo({
 					current: this.format('0'),
 					current_value: '0'
 				});
@@ -215,15 +213,14 @@ export default {
 				}
 			});
 			this.$audio.onTimeUpdate(() => {
-			
 				if (this.renderIsPlay) {
-					this.$store.commit('set_playinfo', {
+					this.set_playinfo({
 						current: this.format(this.$audio.currentTime),
-						current_value: this.$audio.currentTime,
+						current_value: this.$audio.currentTime
 					});
 					// #ifndef APP-PLUS
-					if(this.$audio.duration!=this.playinfo.duration_value){
-						this.$store.commit('set_playinfo', {
+					if (this.$audio.duration != this.playinfo.duration_value) {
+						this.set_playinfo({
 							duration: this.format(this.$audio.duration),
 							duration_value: this.$audio.duration
 						});
@@ -232,7 +229,7 @@ export default {
 				}
 			});
 			this.$audio.onError(() => {
-				this.$store.commit('set_pause', true);
+				this.set_pause(true);
 
 				uni.showToast({
 					title: '音频播放错误',
@@ -242,13 +239,13 @@ export default {
 					position: 'center'
 				});
 
-				this.$store.commit('set_audio', {
+				this.set_audio({
 					src: '',
 					title: '',
 					singer: '',
 					coverImgUrl: ''
 				});
-				this.$store.commit('set_playinfo', {
+				this.set_playinfo({
 					current: 0,
 					current_value: 0,
 					duration: 0,
@@ -260,7 +257,7 @@ export default {
 		},
 
 		changing(event) {
-			this.$store.commit('set_playinfo', {
+			this.set_playinfo({
 				current: this.format(event.detail.value),
 				current_value: event.detail.value
 			});
@@ -285,9 +282,9 @@ export default {
 
 					this.$audio.play();
 
-					this.$store.commit('set_pause', false);
+					this.set_pause(false);
 
-					this.$store.commit('set_playinfo', {
+					this.set_playinfo({
 						src: renderSrc,
 						title: renderTitle,
 						singer: renderSinger,
@@ -296,8 +293,8 @@ export default {
 				} else {
 					//暂停
 					this.$audio.pause();
-					this.$store.commit('set_pause', true);
-					this.$store.commit('set_n_pause', true);
+					this.set_pause(true);
+					this.set_n_pause(true);
 				}
 			} else {
 				//渲染与播放地址相同
@@ -307,9 +304,9 @@ export default {
 					this.$audio.startTime = parseFloat(current_value);
 					this.$audio.seek(parseFloat(current_value));
 
-					this.$store.commit('set_pause', false);
+					this.set_pause(false);
 
-					this.$store.commit('set_playinfo', {
+					this.set_playinfo({
 						src: renderSrc,
 						title: renderTitle,
 						singer: renderSinger,
@@ -317,21 +314,20 @@ export default {
 					});
 				} else {
 					this.$audio.pause();
-					this.$store.commit('set_pause', true);
-					this.$store.commit('set_n_pause', true);
+					this.set_pause(true);
+					this.set_n_pause(true);
 				}
 			}
 		},
 		//拖动
 		change(e) {
-
-			if(this.renderIsPlay){
+			if (this.renderIsPlay) {
 				this.$audio.seek(e.detail.value);
 			}
 		},
 		//快进
 		step(type) {
-			if(this.renderIsPlay){
+			if (this.renderIsPlay) {
 				var pos = !type ? this.playinfo.current_value - 15 : this.playinfo.current_value + 15;
 				this.$audio.seek(pos);
 			}
@@ -341,9 +337,9 @@ export default {
 			var nowindex = this.renderIndex;
 			nowindex += count;
 			nowindex = nowindex < 0 ? this.audiolist.length - 1 : nowindex > this.audiolist.length - 1 ? 0 : nowindex;
-			this.$store.commit('set_pause', true);
+			this.set_pause(true);
 			//更新渲染数据的索引值
-			this.$store.commit('set_renderIndex', nowindex);
+			this.set_renderIndex(nowindex);
 			this.operation();
 		}
 	}
@@ -351,10 +347,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "./index.scss";
+@import './index.scss';
 //  #ifdef MP-WEIXIN
 .theme3 .audio-slider {
-  margin-top: -8px !important;
+	margin-top: -8px !important;
 }
 // #endif
 </style>
