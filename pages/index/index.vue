@@ -81,12 +81,15 @@ export default {
 .list {
 	line-height: 40px;
 	border: 1px solid #999;
-
+	padding: 0 10px;
+	
 	&:nth-child(2) {
 		margin-top: 40px;
 	}
 	button {
 		float: right;
+		margin-top: 5px;
+		margin-left: 5px
 	}
 }
 </style>

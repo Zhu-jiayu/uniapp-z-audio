@@ -760,7 +760,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -7122,7 +7122,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -7143,14 +7143,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -7235,7 +7235,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -7823,22 +7823,27 @@ function normalizeComponent (
 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));
-var _vuex = _interopRequireDefault(__webpack_require__(/*! vuex */ 12));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+var _vuex = _interopRequireDefault(__webpack_require__(/*! vuex */ 12));
+var _index = __webpack_require__(/*! @/components/zaudio/index.js */ 13);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+
 
 _vue.default.use(_vuex.default);
 
 
-var modulesFiles = __webpack_require__(13);
-var modules = modulesFiles.keys().reduce(function (modules, modulePath) {
-  var moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, '$1');
-  var value = modulesFiles(modulePath);
-
-  modules[moduleName] = value.default;
-  return modules;
-}, {});
 
 var store = new _vuex.default.Store({
-  modules: modules });var _default =
+  modules: {
+    // zaudio组件状态数据
+    ZAudioStore: _index.ZAudioStore,
+
+    //这是其他数据
+    other: {
+      state: {
+        a: '123' } } } });var _default =
+
+
+
+
 
 
 store;exports.default = _default;
@@ -8957,61 +8962,138 @@ var index = {
 
 /***/ }),
 /* 13 */
-/*!*********************************************************************************!*\
-  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/store/modules sync \.js$ ***!
-  \*********************************************************************************/
+/*!***********************************************************************************!*\
+  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/zaudio/index.js ***!
+  \***********************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var map = {
-	"./other.js": 14,
-	"./zaudio.js": 15
-};
-
-
-function webpackContext(req) {
-	var id = webpackContextResolve(req);
-	return __webpack_require__(id);
-}
-function webpackContextResolve(req) {
-	if(!__webpack_require__.o(map, req)) {
-		var e = new Error("Cannot find module '" + req + "'");
-		e.code = 'MODULE_NOT_FOUND';
-		throw e;
-	}
-	return map[req];
-}
-webpackContext.keys = function webpackContextKeys() {
-	return Object.keys(map);
-};
-webpackContext.resolve = webpackContextResolve;
-module.exports = webpackContext;
-webpackContext.id = 13;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });Object.defineProperty(exports, "ZAudio", { enumerable: true, get: function get() {return _manager.default;} });Object.defineProperty(exports, "ZAudioStore", { enumerable: true, get: function get() {return _store.default;} });var _manager = _interopRequireDefault(__webpack_require__(/*! ./manager.js */ 14));
+var _store = _interopRequireDefault(__webpack_require__(/*! ./store.js */ 23));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 
 /***/ }),
 /* 14 */
-/*!*******************************************************************************!*\
-  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/store/modules/other.js ***!
-  \*******************************************************************************/
+/*!*************************************************************************************!*\
+  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/zaudio/manager.js ***!
+  \*************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = {
-  state: {
-    a: 1 } };exports.default = _default;
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _zaudio = _interopRequireDefault(__webpack_require__(/*! ./zaudio.vue */ 15));
+var _store = _interopRequireDefault(__webpack_require__(/*! ./store.js */ 23));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+{
+  install: function install(Vue) {
+
+
+    var ZAudioCtx = uni.getBackgroundAudioManager();
+
+
+
+
+
+
+    Vue.prototype.$audio = ZAudioCtx;
+
+    if (!_store.default) {
+      return;
+    }
+    //////////////////此处为app端 判断电话来电后, 音频意外中断之后的继续播放
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
-/* 15 */
-/*!********************************************************************************!*\
-  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/store/modules/zaudio.js ***!
-  \********************************************************************************/
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */
+/*!**********************************************************************************!*\
+  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/zaudio/util.js ***!
+  \**********************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return _arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);}function _iterableToArray(iter) {if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) return _arrayLikeToArray(arr);}function _arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}
-var store = {
+Object.defineProperty(exports, "__esModule", { value: true });exports.formatSeconds = void 0;var formatSeconds = function formatSeconds(seconds) {
+  if (isNaN(seconds)) return;
+  var result = parseInt(seconds);
+  var h = Math.floor(result / 3600) < 10 ? '0' + Math.floor(result / 3600) : Math.floor(result / 3600);
+  var m = Math.floor(result / 60 % 60) < 10 ? '0' + Math.floor(result / 60 % 60) : Math.floor(result / 60 % 60) +
+  h * 60;
+  var s = Math.floor(result % 60) < 10 ? '0' + Math.floor(result % 60) : Math.floor(result % 60);
+  return "".concat(m, ":").concat(s);
+};exports.formatSeconds = formatSeconds;
+
+/***/ }),
+/* 21 */,
+/* 22 */,
+/* 23 */
+/*!***********************************************************************************!*\
+  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/zaudio/store.js ***!
+  \***********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return _arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);}function _iterableToArray(iter) {if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) return _arrayLikeToArray(arr);}function _arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}var _default = {
   namespaced: false,
   state: {
     renderIndex: 0, // 组件渲染的索引值
@@ -9046,10 +9128,20 @@ var store = {
 
   mutations: {
 
-    //设置音频列表数据
-    set_audiolist: function set_audiolist(state, data) {var _state$audiolist;
-      (_state$audiolist = state.audiolist).push.apply(_state$audiolist, _toConsumableArray(data));
-      return Promise.resolve(state.audiolist);
+    //设置音频列表数据 
+    // @params status Boolean  true-> 记录之前的列表数据 false->不记录,仅仅赋值
+    // @params data   Array    列表数据
+    set_audiolist: function set_audiolist(state, payload) {var
+
+      data =
+
+      payload.data,status = payload.status;
+      if (status) {var _state$audiolist;
+        (_state$audiolist = state.audiolist).push.apply(_state$audiolist, _toConsumableArray(data));
+      } else {
+        state.audiolist = _toConsumableArray(data);
+      }
+
     },
     //设置zaudio组件当前渲染的音频信息
     set_audio: function set_audio(state, data) {
@@ -9132,129 +9224,7 @@ var store = {
     },
     renderIsPlay: function renderIsPlay(state) {
       return state.audio.src == state.playinfo.src;
-    } } };var _default =
-
-
-store;exports.default = _default;
-
-/***/ }),
-/* 16 */
-/*!**********************************************************************************!*\
-  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/audio/index.js ***!
-  \**********************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _zaudio = _interopRequireDefault(__webpack_require__(/*! ./zaudio.vue */ 17));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
-
-
-
-var install = function install(Vue, store) {
-  Vue.component('zaudio', _zaudio.default);
-
-
-  var ZAudioCtx = uni.getBackgroundAudioManager();
-
-
-
-
-
-  Vue.prototype.$audio = ZAudioCtx;
-
-  if (!store) return;
-  //////////////////此处为app端 判断电话来电后, 音频意外中断之后的继续播放
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-};
-var ZAudioCtx = {
-  install: install };var _default =
-
-
-ZAudioCtx;exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
-
-/***/ }),
-/* 17 */,
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */
-/*!*********************************************************************************!*\
-  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/audio/play.js ***!
-  \*********************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.format = void 0;var format = function format(num) {
-  if (isNaN(num)) return;
-  try {
-    return (
-      '0'.repeat(2 - String(Math.floor(num / 60)).length) + Math.floor(num / 60) + ':' + '0'.repeat(2 - String(Math.floor(
-      num % 60)).length) + Math.floor(num % 60));
-
-  } catch (e) {
-    return (
-      '0'.repeat(3 - String(Math.floor(num / 60)).length) + Math.floor(num / 60) + ':' + '0'.repeat(2 - String(Math.floor(
-      num % 60)).length) + Math.floor(num % 60));
-
-  }
-};exports.format = format;
+    } } };exports.default = _default;
 
 /***/ })
 ]]);

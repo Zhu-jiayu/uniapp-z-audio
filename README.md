@@ -1,19 +1,19 @@
-### uniapp 音频后台播放组件
+## uniapp 音频后台播放组件
 
 ---
-### 特性
+## 特性
 + 支持H5, app, 微信小程序播放
 + 支持切换后台播放
 + 支持来电中断后续播
 + 支持全局多页面同步播放状态
 
-### 预览
+## 预览
 <img src="screenshot/1.png" style="width:200px">
 <img src="screenshot/2.png" style="width:240px;margin-left: 10px">
 <img src="screenshot/3.png" style="width:240px;margin-left: 10px">
 
 
-### 使用步骤 
+## 使用步骤 
 
 1. 引入挂载ZAudio
 ```javascript
@@ -56,46 +56,57 @@ export default {
   - 配置`mapMutations`和`mapGetters` (详见下面文档和示例)
 
 5. 设置音频列表: 
-   此步必须在设置set_renderIndex之前
+   参数为数组
    ```
-   this.set_audiolist([{
-					src: '',
-					title: '',
-					singer: '',
-					coverImgUrl: ''
-				}]);
+   this.set_audiolist(
+						[  //音频数组
+							{
+								src: '',  //音频地址
+								title: '', // 标题
+								singer: '', //音频作者
+								coverImgUrl: '' //音频封面
+							}
+						]
+				);
    ```
  
-6. 指定zaudio渲染:  
+## 常用方法
+
+1. 指定zaudio渲染某首音频:  
    + 方法1: 指定索引
+   key为audiolist数组中某个索引值
    ```
    this.set_renderIndex(key);  
-  
    ```
+   
    + 方法2:  指定播放信息
+   参数为audiolist数组中某条数据
    ```
    this.set_audio(this.audiolist[key]);  
    ```
-7. 指定zaudio播放或暂停
-  + 需放在`set_renderIndex` 或 `set_audio`之后使用
-	+ 播放或暂停当前渲染的音频
-  + 播放暂停会自动判断
-	+ true为固定值
-  ```
+   
+2. 指定zaudio播放或暂停
+   + 播放或暂停当前`渲染`的音频
+   + 需放在`set_renderIndex` 或 `set_audio`之后使用
+   + 播放暂停会自动判断
+   + 参数true为固定值
+   
+    ```
+	 <zaudio ref="zaudio"></zaudio>
 	 this.$refs.zaudio.operation(true);    
 	```
 	
-7. 获取并渲染当前音频播放状态:  
+3. 同步渲染当前播放状态:  
    例如: <br/>
 	 audiolist中有A和B两首歌, <br/>
 	 当前处于列表页,列表页中zaudio渲染且播放歌曲A, <br/>
 	 这时跳转详情页面,zaudio组件渲染歌曲B的信息,但未播放,<br/>
 	 返回列表页需要看到当前A歌曲的播放状态.
 
-		```javascript
-		...mapGetters(['playIndex'])  //当前播放音频的索引值
-		this.set_renderIndex(this.playIndex);  //渲染当前播放音频的状态
-		```
+	```javascript
+	...mapGetters(['playIndex'])  //获取当前播放音频的索引值
+	this.set_renderIndex(this.playIndex);  //渲染当前播放音频的状态
+	```
 
 	
 	
@@ -103,7 +114,7 @@ export default {
 
 
 
-### 组件参数配置
+## 组件参数配置
 
 参数 | 类型 | 必填 | 描述 | 其他
 -|-|-|-|-
@@ -114,48 +125,9 @@ stepShow | Boolean | false | 显示快进按钮 |  默认 `true`, 只作用于`t
 autoplay | Boolean | false | 自动播放 |  默认 `false` 
 continue | Boolean | false | 下一首续播 |  默认 `true` 
 
-### vuex配置 
+## mapMutations与 mapGetters
 
-
-+ state: 
-  ```javascript
-  state: {
-	  renderIndex: 0, // 组件渲染的索引值
-	  audiolist: [      //音频列表
-		  {
-		  	src: '',     //地址
-		  	title: '',     //标题
-		  	singer: '',      //作者
-		  	coverImgUrl: ''     //封面
-		  }
-	  ],
-	  audio: { 		 //zaudio组件-当前渲染的音频数据
-		current: 0,  		//当前时间
-		duration: 0, 		//总时间
-		duration_value: 0,  //总长度
-		current_value: 0,   //当前长度
-		src: '',     		//当前音频地址
-		title: '',	 		//当前音频标题
-		singer: '',  		//当前音频作者
-		coverImgUrl: '',    //当前音频封面
-	  },
-	  playinfo: {      //$audio对象-当前播放的音频数据
-		current: 0,   		//当前时间
-		duration: 0, 		//总时间
-		duration_value: 0,  //总长度
-		current_value: 0,   //当前长度
-		src: "",			//当前音频地址	
-		title: '',			//当前音频标题
-		singer: '',			//当前音频作者
-		coverImgUrl: ''		//当前音频封面
-	  },
-	  paused: true, //$audio对象当前播放音频的暂停状态
-	  
-	  n_pause: false, //$audio对象当前播放音频的意外中断的状态
-  }
-  ```
-
-+ mutations: 
++ mapMutations: 
   - `set_renderIndex`: 设置`zaudio组件`渲染的索引值和渲染信息
 
   用法:  
@@ -227,7 +199,7 @@ continue | Boolean | false | 下一首续播 |  默认 `true`
   set_n_pause(false);
   ```
   
-+ getters:
++ mapGetters:
   - audiolist: 返回音频列表数据
   - playinfo: 返回当前`正在播放`的数据
   - playIndex: 返回当前`正在播放`的数据索引值
@@ -238,7 +210,7 @@ continue | Boolean | false | 下一首续播 |  默认 `true`
   - renderIsPlay: 返回判断渲染与播放是否是同一首音频
 
 
-### 切换后台播放配置
+## 切换后台播放配置
 
 在manifest.json中配置
 小程序
@@ -262,7 +234,9 @@ iOS
 }
 ```
 
-### 更新日志
+## 更新日志
+v1.0.0
+- 简化使用方式
 
 v0.0.55
 - set_audiolist方法加入status参数,区分是否记录列表数据
@@ -315,4 +289,4 @@ v0.0.1
 - 支持小程序, app 后台播放
 - 支持来电中断后续播(app 端)
 
-### 如果你觉得这个项目不错, 欢迎[STAR!](https://github.com/P3T3R-Z/uniapp-z-audio.git)
+## 如果你觉得这个项目不错, 欢迎[STAR!](https://github.com/P3T3R-Z/uniapp-z-audio.git)
