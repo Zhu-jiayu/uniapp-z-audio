@@ -14,32 +14,33 @@
 ## 简要说明
 + 为了支持音频多页面状态同步, zaudio所有属性依赖vuex管理
 + 音频对象基于`uni.getBackgroundAudioManager`和`uni.createInnerAudioContext`创建
++ 具体使用方式,请下载示例
 
 ## 使用步骤 
 
-0. 下载components或者`npm install uniapp-zaudio`
+0. 项目根目录引入zaudio插件 or `npm install uniapp-zaudio`
 
-1. 挂载ZAudio和store
+1. 挂载ZAudio (main.js中)
 
 ```javascript
 import store from './store'
 Vue.prototype.$store = store;
 
-// npm下载后引入方式
+// npm包引入方式
 //import { ZAudio } from 'uniapp-zaudio/zaudio/index.js'
 
-//组件引入
-import { ZAudio } from 'components/zaudio/index.js'
+//zaudio插件方式
+import { ZAudio } from 'zaudio/index.js'
 Vue.use(ZAudio)
 ```
 
-2. 配置vuex中的ZAudioStore
+2. 配置ZAudioStore (store/index.js中)
 
 ```javascript
-// npm下载后引入方式
+// npm包引入方式
 //import { ZAudioStore } from 'uniapp-zaudio/zaudio/index.js'
 
-import { ZAudioStore } from "@/components/zaudio/index.js";
+import { ZAudioStore } from "@/zaudio/index.js";
 const store = new Vuex.Store({
 	modules: {
 		// zaudio数据
@@ -55,14 +56,14 @@ const store = new Vuex.Store({
 })
 ```
 
-3. 小程序或app中引入zaudio局部组件 
-(h5已使用全局组件,无需此步)
+3. 引入局部组件 
+(用于小程序或app; h5已使用全局组件,无需此步)
 
 ```
-// npm下载后引入方式
+// npm包引入方式
 //import zaudio from 'uniapp-zaudio/zaudio/zaudio.vue';
 
-import zaudio from '@/components/audio/zaudio.vue';
+import zaudio from '@/audio/zaudio.vue';
 //...省略
 export default {
 	components:{zaudio},
@@ -163,17 +164,21 @@ continue | Boolean | false | 下一首续播 |  默认 `true`
   - `set_renderIndex`: 设置`zaudio组件`渲染的索引值和渲染信息
 
   用法:  
-  渲染列表索引为2的数据
+  
   ```
-  set_renderIndex(2)
+  set_renderIndex(2)   //渲染列表索引为2的数据
   ```
   
   - `set_audiolist`: 设置音频列表数据
   
    用法:  
-   @params status Boolean  true->更新audiolist false->覆盖audiolist
-   @params data   Array    列表数据
+   
    ```
+	 /**
+	 * @params status Boolean  true->更新audiolist false->覆盖audiolist
+	 * @params data   Array    列表数据
+	 **/
+	 
    set_audiolist({
 	   data:[
 			   {
@@ -190,7 +195,6 @@ continue | Boolean | false | 下一首续播 |  默认 `true`
   - `set_audio`: 设置`zaudio组件`当前渲染的音频信息, 若音频信息包含在`audiolist`中, 则会更新`renderIndex`
 
   用法:
-  更新zaudio展示的数据
   ```
   set_audio({
 	   	src: '',     //地址
@@ -200,10 +204,10 @@ continue | Boolean | false | 下一首续播 |  默认 `true`
 	   });
   ```
 
-  - `set_playinfo`: 设置当前音频播放信息(具体开发时不需要用到)
+  - `set_playinfo`: 设置当前音频播放信息`(具体开发时不需要用到)`
 
   用法:
-  更新当前正在播放的数据, 不会影响zaudio的展示
+	
   ```
   set_playinfo({
 		src: '',
@@ -215,18 +219,18 @@ continue | Boolean | false | 下一首续播 |  默认 `true`
 	});
   ```
 
-  - `set_pause`: 设置当前音频暂停状态(具体开发时不需要用到)
+  - `set_pause`: 设置当前音频暂停状态`(具体开发时不需要用到)`
   
   用法:
-  更新为意外中断状态, 不会直接暂停音频,只是记录状态
+	
   ```
   set_pause(true);
   ```
   
-  - `set_n_pause`: 设置当前音频意外中断状态(具体开发时不需要用到)
+  - `set_n_pause`: 设置当前音频意外中断状态`(具体开发时不需要用到)`
   
   用法:
-  更新为播放状态, 不会直接暂停音频,只是记录状态
+	
   ```
   set_n_pause(false);
   ```
