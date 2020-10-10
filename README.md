@@ -118,7 +118,7 @@ methods:{
    this.set_audio(this.audiolist[key]);  
    ```
    
-3. 指定zaudio播放或暂停
+3. 指定zaudio播放或暂停(切歌播放或暂停)
    + 播放或暂停当前`渲染`的音频
    + 需放在`set_renderIndex` 或 `set_audio`之后使用
    + 播放暂停会自动判断
