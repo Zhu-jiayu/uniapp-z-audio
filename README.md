@@ -56,18 +56,18 @@ export default {
   - 配置`mapMutations`和`mapGetters` (详见下面文档和示例)
 
 5. 设置音频列表: 
-   参数为数组
    ```
-   this.set_audiolist(
-						[  //音频数组
-							{
-								src: '',  //音频地址
-								title: '', // 标题
-								singer: '', //音频作者
-								coverImgUrl: '' //音频封面
-							}
-						]
-				);
+   set_audiolist({
+     data:[
+   			   {
+   				src: '',     //地址
+   				title: '',     //标题
+   				singer: '',      //作者
+   				coverImgUrl: ''     //封面
+   			   }
+   		   ],
+   		status: true      //true->更新audiolist false->覆盖audiolist
+   })
    ```
  
 ## 常用方法
@@ -139,7 +139,7 @@ continue | Boolean | false | 下一首续播 |  默认 `true`
   - `set_audiolist`: 设置音频列表数据
   
    用法:  
-   @params status Boolean  true-> 记录之前的列表数据 false->不记录,仅仅赋值
+   @params status Boolean  true->更新audiolist false->覆盖audiolist
    @params data   Array    列表数据
    ```
    set_audiolist({
@@ -151,7 +151,7 @@ continue | Boolean | false | 下一首续播 |  默认 `true`
 				coverImgUrl: ''     //封面
 			   }
 		   ],
-		status: true      //记录之前赋值的数据
+		status: true       //true->更新audiolist false->覆盖audiolist
    })
    ```
 
