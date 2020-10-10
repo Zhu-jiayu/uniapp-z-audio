@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import zaudio from '@/components/zaudio/zaudio.vue';
+import zaudio from '@/zaudio/zaudio.vue';
 import { mapGetters, mapMutations } from 'vuex';
 export default {
 	data() {

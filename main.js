@@ -10,10 +10,10 @@ App.mpType = 'app'
 
 
 //组件引用方式
-// import { ZAudio } from 'components/zaudio/index.js'
+import { ZAudio } from 'zaudio/index.js'
 
 // npm引用方式
-import { ZAudio } from 'zaudio/index.js'
+// import { ZAudio } from 'uniapp-zaudio/zaudio/index.js'
 
 
 Vue.use(ZAudio)

@@ -1,6 +1,5 @@
-## uniapp 音频后台播放组件
+# uniapp 音频后台播放组件
 
----
 ## 特性
 + 支持H5, app, 微信小程序播放
 + 支持切换后台播放
@@ -8,21 +7,38 @@
 + 支持全局多页面同步播放状态
 
 ## 预览
-<img src="./screenshot/1.png" style="width:200px">
-<img src="./screenshot/2.png" style="width:240px;margin-left: 10px">
-<img src="./screenshot/3.png" style="width:240px;margin-left: 10px">
+<img src="https://jingangtui.gitee.io/static/1.png" style="width:200px">
+<img src="https://jingangtui.gitee.io/static/2.png" style="width:240px;margin-left: 10px">
+<img src="https://jingangtui.gitee.io/static/3.png" style="width:240px;margin-left: 10px">
 
+## 简要说明
++ 为了支持音频多页面状态同步, zaudio所有属性依赖vuex管理
++ 音频对象基于`uni.getBackgroundAudioManager`和`uni.createInnerAudioContext`创建
 
 ## 使用步骤 
 
-1. 引入挂载ZAudio
+0. 下载components或者`npm install uniapp-zaudio`
+
+1. 挂载ZAudio和store
+
 ```javascript
+import store from './store'
+Vue.prototype.$store = store;
+
+// npm下载后引入方式
+//import { ZAudio } from 'uniapp-zaudio/zaudio/index.js'
+
+//组件引入
 import { ZAudio } from 'components/zaudio/index.js'
 Vue.use(ZAudio)
 ```
 
 2. 配置vuex中的ZAudioStore
+
 ```javascript
+// npm下载后引入方式
+//import { ZAudioStore } from 'uniapp-zaudio/zaudio/index.js'
+
 import { ZAudioStore } from "@/components/zaudio/index.js";
 const store = new Vuex.Store({
 	modules: {
@@ -43,6 +59,9 @@ const store = new Vuex.Store({
 (h5已使用全局组件,无需此步)
 
 ```
+// npm下载后引入方式
+//import zaudio from 'uniapp-zaudio/zaudio/zaudio.vue';
+
 import zaudio from '@/components/audio/zaudio.vue';
 //...省略
 export default {
@@ -52,10 +71,25 @@ export default {
 
 
 4. 使用组件 
-  - `<zaudio theme="theme3" :autoplay="false" :continue="true" ref="zaudio"></zaudio>`
-  - 配置`mapMutations`和`mapGetters` (详见下面文档和示例)
 
-5. 设置音频列表: 
+```
+<zaudio theme="theme3" :autoplay="false" :continue="true" ref="zaudio"></zaudio>
+```
+	
+5. 配置`mapMutations`和`mapGetters` (详见下面文档和示例)
+
+```
+computed: {
+		...mapGetters(['audiolist', 'playIndex', 'playinfo', 'paused'])
+	},
+methods:{
+	...mapMutations(['set_renderIndex', 'set_audiolist', 'set_audio']),
+}
+```
+
+## 常用方法
+1. 设置音频列表: 
+
    ```
    set_audiolist({
      data:[
@@ -69,10 +103,8 @@ export default {
    		status: true      //true->更新audiolist false->覆盖audiolist
    })
    ```
- 
-## 常用方法
-
-1. 指定zaudio渲染某首音频:  
+	 
+2. 指定zaudio渲染某首音频:  
    + 方法1: 指定索引
    key为audiolist数组中某个索引值
    ```
@@ -85,7 +117,7 @@ export default {
    this.set_audio(this.audiolist[key]);  
    ```
    
-2. 指定zaudio播放或暂停
+3. 指定zaudio播放或暂停
    + 播放或暂停当前`渲染`的音频
    + 需放在`set_renderIndex` 或 `set_audio`之后使用
    + 播放暂停会自动判断
@@ -96,7 +128,7 @@ export default {
 	 this.$refs.zaudio.operation(true);    
 	```
 	
-3. 同步渲染当前播放状态:  
+4. 同步渲染当前播放状态:  
    例如: <br/>
 	 audiolist中有A和B两首歌, <br/>
 	 当前处于列表页,列表页中zaudio渲染且播放歌曲A, <br/>
@@ -235,6 +267,10 @@ iOS
 ```
 
 ## 更新日志
+
+v1.0.14
+- 增加npm包引入
+
 v1.0.0
 - 简化使用方式
 

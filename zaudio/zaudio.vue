@@ -16,8 +16,8 @@
 				<view class="audio-control-wrapper">
 					<image :src="renderData('coverImgUrl')" mode="aspectFit" class="cover" :class="{ on: !renderData('paused') }"></image>
 
-					<image src="/static/playbtn.png" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
-					<image src="/static/pausebtn.png" alt="" @click="operation" class="play" v-else></image>
+					<image :src="require('./static/playbtn.png')" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
+					<image :src="require('./static/pausebtn.png')" alt="" @click="operation" class="play" v-else></image>
 				</view>
 			</view>
 			<view class="audio-wrapper">
@@ -41,8 +41,8 @@
 				<view class="audio-control-wrapper">
 					<image :src="renderData('coverImgUrl')" mode="aspectFit" class="cover" :class="{ on: !renderData('paused') }"></image>
 					<template>
-						<image src="/static/playbtn.png" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
-						<image src="/static/pausebtn.png" alt="" @click="operation" class="play" v-else></image>
+						<image :src="require('./static/playbtn.png')" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
+						<image :src="require('./static/pausebtn.png')" alt="" @click="operation" class="play" v-else></image>
 					</template>
 				</view>
 
@@ -93,17 +93,17 @@
 
 			<view class="audio-button-box">
 				<!-- 块退15s -->
-				<image src="/static/prev.png" class="prevbtn" @click="step(0)" mode="widthFix" v-if="stepShow"></image>
+				<image :src="require('./static/prev.png')" class="prevbtn" @click="step(0)" mode="widthFix" v-if="stepShow"></image>
 				<!-- 上一首 -->
-				<image src="/static/go.png" class="prevplay" @click="changeplay(-1)" mode="widthFix"></image>
+				<image :src="require('./static/go.png')" class="prevplay" @click="changeplay(-1)" mode="widthFix"></image>
 				<!-- 播放 -->
-				<image src="/static/playbtn2.png" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
+				<image :src="require('./static/playbtn2.png')" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
 				<!-- 暂停 -->
-				<image src="/static/pausebtn2.png" alt="" @click="operation" class="pause" v-else></image>
+				<image :src="require('./static/pausebtn2.png')" alt="" @click="operation" class="pause" v-else></image>
 				<!-- 下一首 -->
-				<image src="/static/go.png" class="nextplay" @click="changeplay(1)" mode="widthFix"></image>
+				<image :src="require('./static/go.png')" class="nextplay" @click="changeplay(1)" mode="widthFix"></image>
 				<!-- 快进15s -->
-				<image src="/static/next.png" class="nextbtn" @click="step(1)" mode="widthFix" v-if="stepShow"></image>
+				<image :src="require('./static/next.png')" class="nextbtn" @click="step(1)" mode="widthFix" v-if="stepShow"></image>
 			</view>
 		</template>
 	</view>
