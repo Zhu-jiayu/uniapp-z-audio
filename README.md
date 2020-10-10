@@ -8,9 +8,9 @@
 + 支持全局多页面同步播放状态
 
 ## 预览
-<img src="screenshot/1.png" style="width:200px">
-<img src="screenshot/2.png" style="width:240px;margin-left: 10px">
-<img src="screenshot/3.png" style="width:240px;margin-left: 10px">
+<img src="./screenshot/1.png" style="width:200px">
+<img src="./screenshot/2.png" style="width:240px;margin-left: 10px">
+<img src="./screenshot/3.png" style="width:240px;margin-left: 10px">
 
 
 ## 使用步骤 

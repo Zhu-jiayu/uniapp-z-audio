@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitee.com:jingangtui/uniapp-z-audio.git"
+    "url": "https://github.com/P3T3R-Z/uniapp-z-audio.git"
   },
   "keywords": [
     "audio",
@@ -16,5 +16,8 @@
     "uniapp"
   ],
   "author": "jgt012345",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "vuex": "^3.5.1"
+  }
 }
