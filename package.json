@@ -1,0 +1,20 @@
+{
+  "name": "uniapp-zaudio",
+  "version": "1.0.0",
+  "description": "audio manager for uniapp",
+  "main": "zaudio/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitee.com:jingangtui/uniapp-z-audio.git"
+  },
+  "keywords": [
+    "audio",
+    "manager",
+    "uniapp"
+  ],
+  "author": "jgt012345",
+  "license": "ISC"
+}
