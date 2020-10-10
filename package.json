@@ -17,7 +17,5 @@
   ],
   "author": "jgt012345",
   "license": "ISC",
-  "dependencies": {
-    "vuex": "^3.5.1"
-  }
+  "dependencies": {}
 }
