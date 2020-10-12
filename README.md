@@ -18,9 +18,9 @@
 
 ## 使用步骤 
 
-0. 项目根目录引入zaudio插件 or `npm install uniapp-zaudio`
+0. <a href="javascript:void(0)">下载zaudio插件</a> or `npm install uniapp-zaudio`
 
-1. 挂载ZAudio (main.js中)
+1. 引入挂载ZAudio (main.js中)
 
 ```javascript
 import store from './store'
