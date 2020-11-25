@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="content">
 		<zaudio theme="theme3" :autoplay="false" :continue="true" ref="zaudio"></zaudio>
 
 		<view v-for="(i, k) in audiolist" :key="k" class="list">
@@ -17,17 +17,18 @@ export default {
 	data() {
 		return {
 			songlist: [
-				{
-					src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2015kNov/25X/25m_XiaoQ/03.mp3',
-					title: '好运来',
-					singer: '作者1111',
-					coverImgUrl: 'https://img.1ting.com/images/special/429/s100_9987ee853daa09f92bb890ed5eec804a.jpg'
-				},
+				
 				{
 					src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2016aJan/18X/18d_DeH/01.mp3',
 					title: '恭喜发财',
 					singer: '刘德华',
-					coverImgUrl: 'https://img.1ting.com/images/special/429/s100_872bbccaf6e0a1d3445c8f77b2bb0986.jpg'
+					coverImgUrl: 'https://gitee.com/jingangtui/static/raw/master/src/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg'
+				},
+				{
+					src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2015kNov/25X/25m_XiaoQ/03.mp3',
+					title: '好运来',
+					singer: '作者1111',
+					coverImgUrl: 'https://gitee.com/jingangtui/static/raw/master/src/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg'
 				}
 			]
 		};
@@ -77,14 +78,17 @@ export default {
 };
 </script>
 
+
+
 <style scoped lang="scss">
+ 
 .list {
 	line-height: 40px;
-	border: 1px solid #999;
+	border-top: 1px solid #ccc;
 	padding: 0 10px;
 	
-	&:nth-child(2) {
-		margin-top: 40px;
+	&:last-child { 
+		border-bottom: 1px solid #ccc;
 	}
 	button {
 		float: right;

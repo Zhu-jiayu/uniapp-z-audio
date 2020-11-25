@@ -7,14 +7,14 @@
 		{
 			"path": "pages/detail/index",
 			"style": {
-				"navigationBarTitleText": "uniapp-z-audio"
+				"navigationBarTitleText": "uniapp-zaudio"
 			}
 		}
 	    
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uniapp-z-audio",
+		"navigationBarTitleText": "uniapp-zaudio",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	}

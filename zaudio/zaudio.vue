@@ -1,5 +1,5 @@
 <template>
-	<view class="imt-audio" :class="[`${theme}`]" v-if="audiolist.length > 0">
+	<view class="imt-audio" :class="[`${theme}`]" v-if="audiolist.length > 0" >
 		<template v-if="theme == 'theme3'">
 			<slider
 				class="audio-slider"
@@ -12,9 +12,9 @@
 				:disabled="!renderIsPlay"
 			></slider>
 
-			<view class="top">
+			<view class="top" >
 				<view class="audio-control-wrapper">
-					<image :src="renderData('coverImgUrl')" mode="aspectFit" class="cover" :class="{ on: !renderData('paused') }"></image>
+					<image :src="renderData('coverImgUrl')" mode="aspectFill" class="cover" :class="{ on: !renderData('paused') }"></image>
 
 					<image :src="require('./static/playbtn.png')" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
 					<image :src="require('./static/pausebtn.png')" alt="" @click="operation" class="play" v-else></image>
@@ -39,7 +39,7 @@
 		<template v-if="theme == 'theme2'">
 			<view class="top">
 				<view class="audio-control-wrapper">
-					<image :src="renderData('coverImgUrl')" mode="aspectFit" class="cover" :class="{ on: !renderData('paused') }"></image>
+					<image :src="renderData('coverImgUrl')" mode="aspectFill" class="cover" :class="{ on: !renderData('paused') }"></image>
 					<template>
 						<image :src="require('./static/playbtn.png')" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
 						<image :src="require('./static/pausebtn.png')" alt="" @click="operation" class="play" v-else></image>
