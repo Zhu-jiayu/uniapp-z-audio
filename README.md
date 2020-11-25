@@ -7,9 +7,7 @@
 + 支持全局多页面同步播放状态
 
 ## 预览
-<img src="https://jingangtui.gitee.io/static/1.png" style="width:200px">
-<img src="https://jingangtui.gitee.io/static/2.png" style="width:240px;margin-left: 10px">
-<img src="https://jingangtui.gitee.io/static/3.png" style="width:240px;margin-left: 10px">
+[http://jingangtui.gitee.io/uniapp-z-audio/#/](http://jingangtui.gitee.io/uniapp-z-audio/#/)
 
 ## 简要说明
 + 为了支持音频多页面状态同步, zaudio所有属性依赖vuex管理
