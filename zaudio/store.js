@@ -1,6 +1,7 @@
 export default {
 	namespaced: false,
 	state: {
+		version: '1.5',
 		renderIndex: 0, // 组件渲染的索引值
 		audiolist: [], //音频列表
 
@@ -34,7 +35,7 @@ export default {
 	mutations: {
 
 		//设置音频列表数据 
-		// @params status Boolean  true-> 记录之前的列表数据 false->不记录,仅仅赋值
+		// @params status Boolean  true: 插入新的数据 false: 覆盖数据
 		// @params data   Array    列表数据
 		set_audiolist(state, payload) {
 			let {

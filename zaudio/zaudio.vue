@@ -262,14 +262,18 @@ export default {
 				current_value: event.detail.value
 			});
 		},
+		//手动播放或者暂停
+		operate(){
+			this.operation(true)
+		},
 		//播放or暂停
-		operation(status) {
+		operation(autocheck = false) {
 			const { duration, current, duration_value, current_value, src } = this.playinfo;
 			const { src: renderSrc, title: renderTitle, singer: renderSinger, coverImgUrl: renderCoverImgUrl } = this.audio;
 
 			//渲染与播放地址 不同
 			if (!this.renderIsPlay) {
-				if (this.paused || status) {
+				if (this.paused || autocheck) {
 					// 播放 渲染的数据
 
 					this.$audio.src = renderSrc;
