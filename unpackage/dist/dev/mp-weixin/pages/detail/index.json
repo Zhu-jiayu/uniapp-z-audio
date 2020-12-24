@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "uniapp-z-audio",
+  "usingComponents": {
+    "zaudio": "/components/zaudio/zaudio"
+  }
+}

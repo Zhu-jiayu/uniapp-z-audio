@@ -16,7 +16,10 @@ import { ZAudio } from 'zaudio/index.js'
 // import { ZAudio } from 'uniapp-zaudio/zaudio/index.js'
 
 
-Vue.use(ZAudio)
+Vue.use(ZAudio,{
+	continuePlay: true,
+	autoPlay: true
+})
 
 
 
