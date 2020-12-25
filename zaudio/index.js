@@ -1,4 +1,4 @@
-import ZAudio from "./core.js"
+import ZAudio from "./ZAudio.js"
 import ZAudioStore from "./store.js"
 export {
 	ZAudio,

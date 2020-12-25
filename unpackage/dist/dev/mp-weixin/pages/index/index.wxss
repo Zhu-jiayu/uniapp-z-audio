@@ -24,17 +24,24 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-.list.data-v-57280228 {
+.listbox.data-v-57280228 {
+  margin: 20px 10px 10px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+.listbox .list.data-v-57280228 {
   line-height: 40px;
-  border: 1px solid #999;
+  border-top: 1px solid #ccc;
   padding: 0 10px;
 }
-.list.data-v-57280228:nth-child(2) {
-  margin-top: 40px;
-}
-.list button.data-v-57280228 {
+.listbox .list button.data-v-57280228 {
   float: right;
   margin-top: 5px;
   margin-left: 5px;
+}
+.demo.data-v-57280228 {
+  margin-top: 30px;
+}
+.demo button.data-v-57280228 {
+  margin: 5px;
 }
 

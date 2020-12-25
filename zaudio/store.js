@@ -16,7 +16,7 @@ export default {
 			singer: '', //当前音频作者
 			coverImgUrl: '', //当前音频封面
 		},
-		playinfo: { //$audio对象-当前播放的音频数据
+		playinfo: { //$zaudio对象-当前播放的音频数据
 			current: 0, //当前时间
 			duration: 0, //总时间
 			duration_value: 0, //总长度
@@ -26,39 +26,22 @@ export default {
 			singer: '', //当前音频作者
 			coverImgUrl: '' //当前音频封面
 		},
-		paused: true, //$audio对象当前播放音频的暂停状态
+		paused: true, //$zaudio对象当前播放音频的暂停状态
 
-		n_pause: false, //$audio对象当前播放音频的意外中断的状态
+		n_pause: false, //$zaudio对象当前播放音频的意外中断的状态
 
 
 	},
 	mutations: {
-
-		//设置音频列表数据 
-		// @params status Boolean  true: 插入新的数据 false: 覆盖数据
-		// @params data   Array    列表数据
-		set_audiolist(state, payload) {
-			let {
-				data,
-				status
-			} = payload
-			if (status) {
-				state.audiolist.push(...data)
-			} else {
-				state.audiolist = [...data]
-			}
-
+		//覆盖音频
+		set_audiolist(state, data) {
+			state.audiolist = [...data]
 		},
-		//设置zaudio组件当前渲染的音频信息
-		set_audio(state, data) {
-			state.audio = data;
-			let renderIndex = state.audiolist.findIndex(i => i.src == data.src);
-
-			if (renderIndex >= 0) {
-				this.commit('set_renderIndex', renderIndex)
-			}
-
+		//添加音频
+		updata_audiolist(state, data) {
+			state.audiolist.push(...data)
 		},
+
 		//设置当前播放信息
 		set_playinfo(state, data) {
 
@@ -101,20 +84,30 @@ export default {
 		},
 
 		//设置渲染索引 和 渲染信息
-		set_renderIndex(state, data) {
-			state.renderIndex = data;
+		set_render(state, data) {
 			if (state.audiolist.length == 0) return
-			state.audio = {
-				src: state.audiolist[data].src,
-				title: state.audiolist[data].title,
-				singer: state.audiolist[data].singer,
-				coverImgUrl: state.audiolist[data].coverImgUrl,
-				current: '00:00',
-				duration: '00:00',
-				current_value: 0,
-				duration_value: 100
+
+			if (typeof data === 'number' || typeof data === 'string') {
+				state.renderIndex = data * 1;
+				state.audio = {
+					src: state.audiolist[data].src,
+					title: state.audiolist[data].title,
+					singer: state.audiolist[data].singer,
+					coverImgUrl: state.audiolist[data].coverImgUrl,
+					current: '00:00',
+					duration: '00:00',
+					current_value: 0,
+					duration_value: 100
+				}
+			} else {
+				state.audio = data;
+				let renderIndex = state.audiolist.findIndex(i => i.src == data.src);
+				if (renderIndex >= 0) {
+					state.renderIndex = renderIndex;
+				}
+
 			}
-		}
+		},
 
 	},
 	getters: {

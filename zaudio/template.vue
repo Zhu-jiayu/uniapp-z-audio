@@ -7,7 +7,6 @@
 				block-size="0"
 				:value="renderData('current_value')"
 				:max="renderData('duration_value')"
-				@changing="changing"
 				@change="change"
 				:disabled="!renderIsPlay"
 			></slider>
@@ -16,8 +15,8 @@
 				<view class="audio-control-wrapper">
 					<image :src="renderData('coverImgUrl')" mode="aspectFill" class="cover" :class="{ on: !renderData('paused') }"></image>
 
-					<image :src="require('./static/playbtn.png')" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
-					<image :src="require('./static/pausebtn.png')" alt="" @click="operation" class="play" v-else></image>
+					<image :src="require('./static/playbtn.png')" alt="" @click="operate" class="play" v-if="renderData('paused')"></image>
+					<image :src="require('./static/pausebtn.png')" alt="" @click="operate" class="play" v-else></image>
 				</view>
 			</view>
 			<view class="audio-wrapper">
@@ -41,8 +40,8 @@
 				<view class="audio-control-wrapper">
 					<image :src="renderData('coverImgUrl')" mode="aspectFill" class="cover" :class="{ on: !renderData('paused') }"></image>
 					<template>
-						<image :src="require('./static/playbtn.png')" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
-						<image :src="require('./static/pausebtn.png')" alt="" @click="operation" class="play" v-else></image>
+						<image :src="require('./static/playbtn.png')" alt="" @click="operate" class="play" v-if="renderData('paused')"></image>
+						<image :src="require('./static/pausebtn.png')" alt="" @click="operate" class="play" v-else></image>
 					</template>
 				</view>
 
@@ -59,7 +58,6 @@
 					block-size="16"
 					:value="renderData('current_value')"
 					:max="renderData('duration_value')"
-					@changing="changing"
 					@change="change"
 					:disabled="!renderIsPlay"
 				></slider>
@@ -84,7 +82,6 @@
 					block-size="16"
 					:value="renderData('current_value')"
 					:max="renderData('duration_value')"
-					@changing="changing"
 					@change="change"
 					:disabled="!renderIsPlay"
 				></slider>
@@ -97,9 +94,9 @@
 				<!-- 上一首 -->
 				<image :src="require('./static/go.png')" class="prevplay" @click="changeplay(-1)" mode="widthFix"></image>
 				<!-- 播放 -->
-				<image :src="require('./static/playbtn2.png')" alt="" @click="operation" class="play" v-if="renderData('paused')"></image>
+				<image :src="require('./static/playbtn2.png')" alt="" @click="operate" class="play" v-if="renderData('paused')"></image>
 				<!-- 暂停 -->
-				<image :src="require('./static/pausebtn2.png')" alt="" @click="operation" class="pause" v-else></image>
+				<image :src="require('./static/pausebtn2.png')" alt="" @click="operate" class="pause" v-else></image>
 				<!-- 下一首 -->
 				<image :src="require('./static/go.png')" class="nextplay" @click="changeplay(1)" mode="widthFix"></image>
 				<!-- 快进15s -->
@@ -145,30 +142,27 @@ export default {
 
 	created() {},
 	methods: {
-		changing(event) {
-			this.$audio.set_playinfo({
-				current: formatSeconds(event.detail.value),
-				current_value: event.detail.value
-			});
-		},
-
 		//播放or暂停
-		operation() {
-			this.$audio.operation();
+		operate() {
+			this.$zaudio.operate();
 		},
-		//拖动
-		change(e) {
+		//进度拖到
+		change(event) {
 			if (this.renderIsPlay) {
-				this.$audio.seek(e.detail.value);
+				this.$zaudio.seek(event.detail.value);
+				this.$zaudio.commitStore('set_playinfo', {
+					current: formatSeconds(event.detail.value),
+					current_value: event.detail.value
+				});
 			}
 		},
 		//快进
 		stepPlay(value) {
-			this.$audio.stepPlay(value);
+			this.$zaudio.stepPlay(value);
 		},
 		//切歌
 		changeplay(count) {
-			this.$audio.changeplay(count);
+			this.$zaudio.changeplay(count);
 		}
 	}
 };

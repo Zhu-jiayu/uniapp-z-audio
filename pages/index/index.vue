@@ -1,9 +1,9 @@
 <template>
 	<view class="content">
-		<zaudio theme="theme3" :autoplay="false" :continue="true" ref="zaudio"></zaudio>
+		<zaudio theme="theme3"></zaudio>
 
 		<view class="listbox">
-			音频:
+			<view style="padding:10px">音频列表:</view>
 			<view v-for="(i, k) in audiolist" :key="k" class="list">
 				{{ i.title }}
 				<button size="mini" @click="go(k)">查看详情</button>
@@ -11,92 +11,100 @@
 			</view>
 		</view>
 
-		<div>
-			<button @click="reset" size="mini">覆盖音频</button>
-			<button @click="update" size="mini">添加音频</button>
+		<div class="demo">
+			<button @click="reset" size="mini" type="primary">覆盖音频列表</button>
+			<button @click="add" size="mini" type="primary">添加音频列表</button>
+			<button @click="willStop" size="mini" type="primary">限制播放5s后暂停</button>
+			<button @click="removeStop" size="mini" type="primary">去除播放限制,并继续播放</button>
 		</div>
 	</view>
 </template>
 
 <script>
-import zaudio from '@/zaudio/zaudio.vue';
-import { mapGetters, mapMutations } from 'vuex';
+import ZAudioTemplate from '@/zaudio/template';
+//import { ZAudioTemplate } from 'uniapp-zaudio/zaudio/template'
 export default {
 	data() {
-		return {
-			songlist: [
-				{
-					src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2016aJan/18X/18d_DeH/01.mp3',
-					title: '恭喜发财',
-					singer: '刘德华',
-					coverImgUrl: 'https://gitee.com/jingangtui/static/raw/master/src/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg'
-				},
-				{
-					src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2015kNov/25X/25m_XiaoQ/03.mp3',
-					title: '好运来',
-					singer: '作者1111',
-					coverImgUrl: 'https://gitee.com/jingangtui/static/raw/master/src/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg'
-				}
-			],
-
-			songlist2: [
-				{
-					src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2015kNov/25X/25m_XiaoQ/03.mp3',
-					title: '好运来',
-					singer: '作者1111',
-					coverImgUrl: 'https://gitee.com/jingangtui/static/raw/master/src/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg'
-				}
-			]
-		};
+		return {};
 	},
-	components: { zaudio },
+	components: { zaudio: ZAudioTemplate },
 	computed: {
-		...mapGetters(['audiolist', 'playIndex', 'playinfo', 'paused'])
+		paused() {
+			return this.$zaudio.paused; //当前是否暂停
+		},
+		playIndex() {
+			return this.$zaudio.playIndex; //当前播放的索引
+		},
+		audiolist() {
+			return this.$zaudio.audiolist; //当前音频列表
+		},
+		playinfo() {
+			return this.$zaudio.playinfo; //当前播放的信息
+		}
 	},
-
-	onLoad() {
-		//设置音频列表
-		this.reset();
-	},
+	onLoad() {},
 	onShow() {
-		//渲染当前列表中歌曲的播放的进度
-		//必须放在onShow中
-		this.set_renderIndex(this.playIndex);
+		//进入其他页面, zaudio渲染了其他数据
+		//每次页面onshow时同步当前的播放状态
+		this.$zaudio.syncRender();
 	},
 	methods: {
-		...mapMutations(['set_renderIndex', 'set_audiolist', 'set_audio']),
- 
 		play(key) {
-			//通过索引去渲染需要播放的音频, 方法1:
-			this.set_renderIndex(key);
-
-			// 指定列表中具体信息,去渲染需要播放的音频 方法2:
-			// this.set_audio(this.audiolist[key]);
-
-			//播放或暂停, 会自动取反判断
-			this.$refs.zaudio.operate();
+			//播放或暂停
+			this.$zaudio.operate(key);
 		},
-	
+
 		go(key) {
 			uni.navigateTo({
-				url: '/pages/detail/index?key='+key,
+				url: '/pages/detail/index?key=' + key
 			});
 		},
-
-		//覆盖音频
 		reset() {
-			this.set_audiolist({
-				data: this.songlist,
-				status: false
-			});
+			let data = [
+				{
+					src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/2020/08/21/21a_zj/01.mp3',
+					title: '二人转',
+					singer: '作者333',
+					coverImgUrl: 'https://img.1ting.com/images/special/374/s300_2f06b17427718e01e54be1cfe462f3e0.jpg'
+				}
+			];
+			this.$zaudio.setAudio(data);
+		},
+		add() {
+			let data = [
+				{
+					src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/jn/12.jlhg/8.zhg/2.mp3',
+					title: '天边',
+					singer: '作者222',
+					coverImgUrl: 'https://img.1ting.com/images/special/377/s300_4631dc844ab6429b6bc6fe4ccdc6ed6f.jpg'
+				}
+			];
+			this.$zaudio.updateAudio(data);
 		},
 
-		//添加音频
-		update() {
-			this.set_audiolist({
-				data: this.songlist2,
-				status: true
-			});
+		willStop() {
+			this.$zaudio.onPlaying = info => {
+				if (info.current_value > 5) {
+					this.$zaudio.stop();
+
+					uni.showModal({
+						title: '打钱后才可以听',
+						content: '打钱后才可以听',
+						success: function(res) {
+							if (res.confirm) {
+								console.log('用户点击确定');
+							} else if (res.cancel) {
+								console.log('用户点击取消');
+							}
+						}
+					});
+				}
+			};
+		},
+
+		removeStop() {
+			this.$zaudio.onPlaying = null;
+			this.$zaudio.operate();
 		}
 	}
 };
@@ -105,19 +113,24 @@ export default {
 <style scoped lang="scss">
 .listbox {
 	margin: 20px 10px 10px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	border: 1px solid rgba(0, 0, 0, 0.2);
 	.list {
 		line-height: 40px;
 		border-top: 1px solid #ccc;
 		padding: 0 10px;
-		&:last-child {
-			border-bottom: 1px solid #ccc;
-		}
+
 		button {
 			float: right;
 			margin-top: 5px;
 			margin-left: 5px;
 		}
+	}
+}
+
+.demo {
+	margin-top: 30px;
+	button {
+		margin: 5px;
 	}
 }
 </style>

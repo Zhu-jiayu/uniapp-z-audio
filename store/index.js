@@ -4,8 +4,6 @@ import Vuex from 'vuex'
 // npm引用方式
 // import { ZAudio } from 'uniapp-zaudio/zaudio/index.js'
 
-
-//组件引用方式
 import {
 	ZAudioStore
 } from "@/zaudio/index.js";

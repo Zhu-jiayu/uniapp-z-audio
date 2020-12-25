@@ -16,23 +16,8 @@
 
 ## 使用步骤 
 
-0. <a href="javascript:void(0)">下载zaudio插件</a> or `npm install uniapp-zaudio`
-
-1. 引入挂载ZAudio (main.js中)
-
-```javascript
-import store from './store'
-Vue.prototype.$store = store;
-
-// npm包引入方式
-//import { ZAudio } from 'uniapp-zaudio/zaudio/index.js'
-
-//zaudio插件方式
-import { ZAudio } from 'zaudio/index.js'
-Vue.use(ZAudio)
-```
-
-2. 配置ZAudioStore (store/index.js中)
+0. <a href="https://ext.dcloud.net.cn/plugin?id=1888">插件市场下载</a> or `npm install uniapp-zaudio`
+1. 配置ZAudioStore (store/index.js)
 
 ```javascript
 // npm包引入方式
@@ -53,196 +38,83 @@ const store = new Vuex.Store({
 	}
 })
 ```
+2. 实例化ZAudio并挂载 (main.js)
 
-3. 引入局部组件 
-(用于小程序或app; h5已使用全局组件,无需此步)
-
-```
+```javascript
+import store from './store' 
 // npm包引入方式
-//import zaudio from 'uniapp-zaudio/zaudio/zaudio.vue';
+//import { ZAudio } from 'uniapp-zaudio/zaudio/index.js'
+import {ZAudio} from '@/zaudio'
+let zaudio = new ZAudio({
+	store: store, //此处的store必须为实例化vuex的store
+	continuePlay: true, //续播
+	autoPlay: true, //自动播放 部分浏览器不支持
+})
+Vue.prototype.$zaudio = zaudio;
 
-import zaudio from '@/audio/zaudio.vue';
-//...省略
-export default {
-	components:{zaudio},
-}
-```
-
-
-4. 使用组件 
-
-```
-<zaudio theme="theme3" :autoplay="false" :continue="true" ref="zaudio"></zaudio>
-```
-	
-5. 配置`mapMutations`和`mapGetters` (详见下面文档和示例)
-
-```
-computed: {
-		...mapGetters(['audiolist', 'playIndex', 'playinfo', 'paused'])
+//模拟音频初始数据
+var data = [{
+		src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2016aJan/18X/18d_DeH/01.mp3',
+		title: '恭喜发财',
+		singer: '刘德华',
+		coverImgUrl: 'https://img.1ting.com/images/special/75/s150_f84ef5082b0420f74cd2546b986ab0fc.jpg'
 	},
-methods:{
-	...mapMutations(['set_renderIndex', 'set_audiolist', 'set_audio']),
-}
+	{
+		src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2015kNov/25X/25m_XiaoQ/03.mp3',
+		title: '好运来',
+		singer: '作者1111',
+		coverImgUrl: 'https://img.1ting.com/images/special/204/s150_77254cd4a4da1a33b8faf89c4cbf6e40.jpg'
+	}
+];
+
+zaudio.setAudio(data);
 ```
 
-## 常用方法
-1. 设置音频列表: 
 
-   ```
-   set_audiolist({
-     data:[
-   			   {
-   				src: '',     //地址
-   				title: '',     //标题
-   				singer: '',      //作者
-   				coverImgUrl: ''     //封面
-   			   }
-   		   ],
-   		status: true      //true->更新audiolist false->覆盖audiolist
-   })
-   ```
-	 
-2. 指定zaudio渲染某首音频:  
-   + 方法1: 指定索引
-   key为audiolist数组中某个索引值
-   ```
-   this.set_renderIndex(key);  
-   ```
-   
-   + 方法2:  指定播放信息
-   参数为audiolist数组中某条数据
-   ```
-   this.set_audio(this.audiolist[key]);  
-   ```
-   
-3. 指定zaudio播放或暂停(切歌播放或暂停)
-   + 播放或暂停当前`渲染`的音频
-   + 需放在`set_renderIndex` 或 `set_audio`之后使用
-   + 播放暂停会自动判断
-   + 参数true为固定值
-   
-    ```
-	 <zaudio ref="zaudio"></zaudio>
-	 this.$refs.zaudio.operation(true);    
-	```
-	
-4. 同步渲染当前播放状态:  
-   例如: <br/>
-	 audiolist中有A和B两首歌, <br/>
-	 当前处于列表页,列表页中zaudio渲染且播放歌曲A, <br/>
-	 这时跳转详情页面,zaudio组件渲染歌曲B的信息,但未播放,<br/>
-	 返回列表页需要看到当前A歌曲的播放状态.
 
-	```javascript
-	...mapGetters(['playIndex'])  //获取当前播放音频的索引值
-	this.set_renderIndex(this.playIndex);  //渲染当前播放音频的状态
-	```
+3. 引用组件 
 
-	
-	
-	
+```javascript
+// npm包引入方式
+//import { ZAudioTemplate } from 'uniapp-zaudio/zaudio/template'
+import ZAudioTemplate from '@/zaudio/template';
+export default {
+	components:{zaudio: ZAudioTemplate},
+}
+```
+```html
+<zaudio theme="theme3"></zaudio>
+```
 
 
 
-## 组件参数配置
+## zaudio组件参数配置
 
 参数 | 类型 | 必填 | 描述 | 其他
 -|-|-|-|-
-default_cover | String | false | 默认音频封面 | 
-theme | String | false | 皮肤 | `theme2` or `theme1` or `theme3`;   默认`theme1`
+theme | String | false | 主题 | `theme2` or `theme1` or `theme3`;   默认`theme1`
 themeColor | String | false | 进度条颜色 |  默认 `#42b983`
-stepShow | Boolean | false | 显示快进按钮 |  默认 `true`, 只作用于`theme1`
-autoplay | Boolean | false | 自动播放 |  默认 `false` 
-continue | Boolean | false | 下一首续播 |  默认 `true` 
 
-## mapMutations与 mapGetters
+## ZAudio对象参数和方法
+参数 | 类型 | 必填 | 描述 | 其他
+-|-|-|-|-
+store | Object | true | 实例化vuex的store |
+continuePlay | Boolean | false | 下一首续播 | 默认true
+autoPlay | Boolean | false | 自动播放 部分浏览器不支持 | 默认false
 
-+ mapMutations: 
-  - `set_renderIndex`: 设置`zaudio组件`渲染的索引值和渲染信息
-
-  用法:  
-  
-  ```
-  set_renderIndex(2)   //渲染列表索引为2的数据
-  ```
-  
-  - `set_audiolist`: 设置音频列表数据
-  
-   用法:  
-   
-   ```
-	 /**
-	 * @params status Boolean  true->更新audiolist false->覆盖audiolist
-	 * @params data   Array    列表数据
-	 **/
-	 
-   set_audiolist({
-	   data:[
-			   {
-				src: '',     //地址
-				title: '',     //标题
-				singer: '',      //作者
-				coverImgUrl: ''     //封面
-			   }
-		   ],
-		status: true       //true->更新audiolist false->覆盖audiolist
-   })
-   ```
-
-  - `set_audio`: 设置`zaudio组件`当前渲染的音频信息, 若音频信息包含在`audiolist`中, 则会更新`renderIndex`
-
-  用法:
-  ```
-  set_audio({
-	   	src: '',     //地址
-	   	title: '',     //标题
-	   	singer: '',      //作者
-	   	coverImgUrl: ''     //封面
-	   });
-  ```
-
-  - `set_playinfo`: 设置当前音频播放信息`(具体开发时不需要用到)`
-
-  用法:
-	
-  ```
-  set_playinfo({
-		src: '',
-		title: '',
-		singer: '',
-		coverImgUrl: '',
-		duration: '',
-		duration_value: ''
-	});
-  ```
-
-  - `set_pause`: 设置当前音频暂停状态`(具体开发时不需要用到)`
-  
-  用法:
-	
-  ```
-  set_pause(true);
-  ```
-  
-  - `set_n_pause`: 设置当前音频意外中断状态`(具体开发时不需要用到)`
-  
-  用法:
-	
-  ```
-  set_n_pause(false);
-  ```
-  
-+ mapGetters:
-  - audiolist: 返回音频列表数据
-  - playinfo: 返回当前`正在播放`的数据
-  - playIndex: 返回当前`正在播放`的数据索引值
-  - n_pause: 返回意外中断状态
-  -	paused: 返回音频暂停状态
-  - renderIndex: 返回`zaudio组件`渲染的索引值
-  - audio: 返回`zaudio组件`当前渲染的音频信息
-  - renderIsPlay: 返回判断渲染与播放是否是同一首音频
-
+方法 | 类型 | 必填 | 描述 | 其他
+-|-|-|-|-
+onError | Function | false | 错误播放回调 | 可当做属性传入ZAudio
+onCanplay | Function | false | 点击播放时回调 |  可当做属性传入ZAudio
+onPlaying | Function | false | 播放中回调 | 参数为当前播放的信息, 可当做属性传入ZAudio
+onPause | Function | false | 暂停回调 | 可当做属性传入ZAudio
+onEnded | Function | false | 结束回调 | 可当做属性传入ZAudio
+setRender | Function | false | 指定音频, 渲染到zaudio组件 | 参数number,string,object类型, 见示例
+syncRender | Function | true | 同步并渲染当前的播放状态 | 必须在onshow中, 见示例
+operate | Function | false | 播放或暂停指定索引的音频 | 参数number类型
+setAudio | Function | false | 覆盖设置音频列表 | 赋值数组
+updateAudio | Function | false | 添加音频列表 | push数组
+stop | Function | false | 暂停音频 | 
 
 ## 切换后台播放配置
 
@@ -269,6 +141,10 @@ iOS
 ```
 
 ## 更新日志
+
+v2.0
+- 重构逻辑, 简化使用
+- 增加demo
 
 v1.0.14
 - 增加npm包引入
