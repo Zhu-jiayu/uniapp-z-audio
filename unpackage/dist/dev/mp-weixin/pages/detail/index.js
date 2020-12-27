@@ -139,7 +139,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
-// import { zaudio } from 'uniapp-zaudio'
+// import zaudio from 'uniapp-zaudio/components/z-audio/z-audio.vue'
 var _default = {
   data: function data() {
     return {

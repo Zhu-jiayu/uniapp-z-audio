@@ -154,7 +154,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// import {zaudio} from 'uniapp-zaudio'
+// import zaudio from 'uniapp-zaudio/components/z-audio/z-audio.vue'
 var _default = {
   data: function data() {
     return {};

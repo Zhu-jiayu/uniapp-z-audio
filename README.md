@@ -84,7 +84,7 @@ zaudio.setAudio(data);
 注意大小写zaudio
 ```javascript
 import zaudio from '@/components/z-audio/z-audio';
-// import {zaudio} from 'uniapp-zaudio'
+// import zaudio from 'uniapp-zaudio/components/z-audio/z-audio.vue'
 export default {
 	components:{zaudio: zaudio},
 }
