@@ -42,12 +42,14 @@ const store = new Vuex.Store({
 	}
 })
 ```
+
 3. 实例化ZAudio并挂载 (main.js)
+
 注意大小写ZAudio
+
 ```javascript
 import store from './store' 
 import {ZAudio} from '@/components/z-audio'
-
 // npm引用方式
 // import { ZAudio } from 'uniapp-zaudio'
 let zaudio = new ZAudio({
@@ -59,7 +61,6 @@ let zaudio = new ZAudio({
 	}
 })
 Vue.prototype.$zaudio = zaudio;
-
 //模拟音频初始数据
 var data = [{
 		src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2016aJan/18X/18d_DeH/01.mp3',
@@ -74,7 +75,6 @@ var data = [{
 		coverImgUrl: 'https://img.1ting.com/images/special/204/s150_77254cd4a4da1a33b8faf89c4cbf6e40.jpg'
 	}
 ];
-
 zaudio.setAudio(data);
 ```
 
