@@ -85,11 +85,13 @@ export default class ZAudio {
 		this.audioCtx.onTimeUpdate(this.onTimeUpdateHandle.bind(this))
 		this.audioCtx.onError(this.onErrorHandle.bind(this))
 
+		// #ifndef H5
 		setTimeout(()=>{
 			if (this.autoPlay) {
 				this.operate()
 			}
 		}, 500)
+		// #endif
 
 		this.appCheckReplay(this.audioCtx, this.store)
 	}

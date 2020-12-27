@@ -9206,11 +9206,13 @@ ZAudio = /*#__PURE__*/function () {
       this.audioCtx.onTimeUpdate(this.onTimeUpdateHandle.bind(this));
       this.audioCtx.onError(this.onErrorHandle.bind(this));
 
+
       setTimeout(function () {
         if (_this.autoPlay) {
           _this.operate();
         }
       }, 500);
+
 
       this.appCheckReplay(this.audioCtx, this.store);
     } }, { key: "onCanplayHandle", value: function onCanplayHandle()

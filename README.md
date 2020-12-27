@@ -52,7 +52,7 @@ import {ZAudio} from '@/components/z-audio'
 let zaudio = new ZAudio({
 	store: store, //此处的store必须为实例化vuex的store
 	continuePlay: true, //续播
-	autoPlay: true, //自动播放 部分浏览器不支持
+	autoPlay: true, //自动播放 浏览器不支持
 	onPlaying(info){ //播放中回调函数, 参数为当前播放音频的数据
 		console.log(info)
 	}
@@ -109,7 +109,7 @@ themeColor | String | false | 进度条颜色 |  默认 `#42b983`
 -|-|-|-|-
 store | Object | true | 实例化vuex的store |
 continuePlay | Boolean | false | 下一首续播 | 默认true
-autoPlay | Boolean | false | 自动播放 部分浏览器不支持 | 默认false
+autoPlay | Boolean | false | 自动播放 浏览器不支持 | 默认false
 onError | Function | false | 错误播放回调 | 
 onCanplay | Function | false | 点击播放时回调 |  
 onPlaying | Function | false | 播放中回调 | 回调函数参数:当前播放音频的数据
