@@ -16,7 +16,7 @@ import {
 } from '@/components/z-audio'
 
 // npm引用方式
-// import { ZAudio } from 'uniapp-zaudio/z-audio'
+// import { ZAudio } from 'uniapp-zaudio'
 
 
 let zaudio = new ZAudio({

@@ -24,10 +24,10 @@
 2. 配置ZAudioStore (store/index.js)
 
 ```javascript
-// npm包引入方式
-//import { ZAudioStore } from 'uniapp-zaudio/z-audio/index.js'
+// npm引用方式
+// import { ZAudioStore } from 'uniapp-zaudio'
 
-import { ZAudioStore } from "@components/z-audio/index.js";
+import {AudioStore} from "@/components/z-audio/index.js";
 const store = new Vuex.Store({
 	modules: {
 		// zaudio数据
@@ -43,12 +43,13 @@ const store = new Vuex.Store({
 })
 ```
 3. 实例化ZAudio并挂载 (main.js)
-
+注意大小写ZAudio
 ```javascript
 import store from './store' 
-// npm包引入方式
-//import { ZAudio } from 'uniapp-zaudio/z-audio/index.js'
 import {ZAudio} from '@/components/z-audio'
+
+// npm引用方式
+// import { ZAudio } from 'uniapp-zaudio'
 let zaudio = new ZAudio({
 	store: store, //此处的store必须为实例化vuex的store
 	continuePlay: true, //续播
@@ -80,11 +81,10 @@ zaudio.setAudio(data);
 
 
 4. 引用组件 
-
+注意大小写zaudio
 ```javascript
-// npm包引入方式
-//import { zaudio } from 'uniapp-zaudio/z-audio/template'
-import zaudio from '@/components/z-audio/template';
+import zaudio from '@/components/z-audio/z-audio';
+// import {zaudio} from 'uniapp-zaudio'
 export default {
 	components:{zaudio: zaudio},
 }

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 // npm引用方式
-// import { ZAudio } from 'uniapp-zaudio/z-audio/index.js'
+// import { ZAudioStore } from 'uniapp-zaudio'
 
 import {
 	ZAudioStore

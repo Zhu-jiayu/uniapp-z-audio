@@ -1,4 +1,4 @@
-(global["webpackJsonp"] = global["webpackJsonp"] || []).push([["components/z-audio/z-audio"],{
+(global["webpackJsonp"] = global["webpackJsonp"] || []).push([["components/z-audio/index"],{
 
 /***/ 17:
 /*!***************************************************************************************!*\
@@ -505,13 +505,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=../../../.sourcemap/mp-weixin/components/z-audio/z-audio.js.map
-;(global["webpackJsonp"] = global["webpackJsonp"] || []).push([
-    'components/z-audio/z-audio-create-component',
-    {
-        'components/z-audio/z-audio-create-component':(function(module, exports, __webpack_require__){
-            __webpack_require__('1')['createComponent'](__webpack_require__(17))
-        })
-    },
-    [['components/z-audio/z-audio-create-component']]
-]);
+//# sourceMappingURL=../../../.sourcemap/mp-weixin/components/z-audio/index.js.map

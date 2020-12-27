@@ -7961,7 +7961,7 @@ var _vuex = _interopRequireDefault(__webpack_require__(/*! vuex */ 12));
 
 
 var _index = __webpack_require__(/*! @/components/z-audio/index.js */ 13);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} // npm引用方式
-// import { ZAudio } from 'uniapp-zaudio/z-audio/index.js'
+// import { ZAudioStore } from 'uniapp-zaudio'
 
 
 
@@ -9107,8 +9107,9 @@ var index = {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });Object.defineProperty(exports, "ZAudio", { enumerable: true, get: function get() {return _ZAudio.default;} });Object.defineProperty(exports, "ZAudioStore", { enumerable: true, get: function get() {return _store.default;} });var _ZAudio = _interopRequireDefault(__webpack_require__(/*! ./ZAudio.js */ 14));
-var _store = _interopRequireDefault(__webpack_require__(/*! ./store.js */ 16));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+Object.defineProperty(exports, "__esModule", { value: true });Object.defineProperty(exports, "ZAudio", { enumerable: true, get: function get() {return _ZAudio.default;} });Object.defineProperty(exports, "ZAudioStore", { enumerable: true, get: function get() {return _store.default;} });Object.defineProperty(exports, "zaudio", { enumerable: true, get: function get() {return _zAudio.default;} });var _ZAudio = _interopRequireDefault(__webpack_require__(/*! ./ZAudio.js */ 14));
+var _store = _interopRequireDefault(__webpack_require__(/*! ./store.js */ 16));
+var _zAudio = _interopRequireDefault(__webpack_require__(/*! ./z-audio.vue */ 17));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 
 /***/ }),
 /* 14 */
@@ -9679,23 +9680,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 /* 17 */,
 /* 18 */,
 /* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */,
-/* 25 */,
-/* 26 */,
-/* 27 */,
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */,
-/* 34 */,
-/* 35 */,
-/* 36 */
+/* 20 */
 /*!**********************************************************************************************!*\
   !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/z-audio/static/playbtn.png ***!
   \**********************************************************************************************/
@@ -9705,7 +9690,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAACCCAMAAAC93eDPAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTExIDc5LjE1ODMyNSwgMjAxNS8wOS8xMC0wMToxMDoyMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjMzNzA3QjlBOUNEOTExRUFCNzMyRjYzQ0IxQzI0QjdFIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjMzNzA3QjlCOUNEOTExRUFCNzMyRjYzQ0IxQzI0QjdFIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MzM3MDdCOTg5Q0Q5MTFFQUI3MzJGNjNDQjFDMjRCN0UiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MzM3MDdCOTk5Q0Q5MTFFQUI3MzJGNjNDQjFDMjRCN0UiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6v/3sSAAAAclBMVEX////p4fD9/f7p4vHw6vX59/vq4/H+/v707/j+/v/s5fLq4vHp4vDy7/f49vr18fjo4vH9/P7u6PPs5vL8+v3v6fT8+/36+fzw7PX28vjs5PL7+fz29Pnr5PH6+Pzu6fTw6/X//v/39fr28/nr4/H///874LjBAAAAJnRSTlP/////////////////////////////////////////////////AKd6gbwAAAEASURBVHja7NhZTgJhFEThKmhFccIJBWeU/W/RZgkmnRyjp1bwPfzDvZU9nkiQIEGCBAkSJEiQIEGCBAkSJEiQIEGChEM6Bia8JbOvkoTmkF1xQnJTnJC789KE5KI4IYttaUJyWZyQ3BcnZH1WmpCcFCfkdFmakBytcEIyFCfkel6akFwVJ+TjtjRhPJZznJC8FydkdlyakGyKE/JUnBAJYx5wwmf//aV8pJ+mV/yBxr8p/LPmRxZ8cMPHV36Ix1cZfqHD11p8uV+80BUHXvTwdRde+j2T1ed++PFgNDnhF9TgE0eCBAkSJEiQIEGCBAkSJEiQIEGCBAkS/iDhW4ABACRE+Q8Qp4YAAAAAAElFTkSuQmCC"
 
 /***/ }),
-/* 37 */
+/* 21 */
 /*!***********************************************************************************************!*\
   !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/z-audio/static/pausebtn.png ***!
   \***********************************************************************************************/
@@ -9715,7 +9700,7 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAACCCAMAAAC9
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAAB7CAMAAACPQKgeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTExIDc5LjE1ODMyNSwgMjAxNS8wOS8xMC0wMToxMDoyMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjYyMkY4Q0Y0OUNEOTExRUE4RUExOThDMTY4QkU5NTk5IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjYyMkY4Q0Y1OUNEOTExRUE4RUExOThDMTY4QkU5NTk5Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NjIyRjhDRjI5Q0Q5MTFFQThFQTE5OEMxNjhCRTk1OTkiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NjIyRjhDRjM5Q0Q5MTFFQThFQTE5OEMxNjhCRTk1OTkiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5rpqiWAAAAIVBMVEX////+/v///v/9/P7v6vT8/P3u6fT9/P3x7Pb+/v7///9/DQrdAAAAC3RSTlP/////////////AEpPAfIAAACrSURBVHja7NhBCoMwFATQn0atev8Dt9CaRag7Y1J4sx3Cf5DdxN49gYCAgICAgICAgICAgICAgICAgNCVkHNEzL+a+V3k3J6wxCdrXUzfYmlNOA5F/fBRiqkxIZVL1V88S5EaE8qh2M5scRshnX0EAgICAgICAgICAgICAgICAsJ/EbptTQMsbgPsjgOsryNs0NcHAQEBAQEBAQEBAQEBAQEBAQEB4cq8BBgAzipMRAS48a0AAAAASUVORK5CYII="
 
 /***/ }),
-/* 38 */
+/* 22 */
 /*!*******************************************************************************************!*\
   !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/z-audio/static/prev.png ***!
   \*******************************************************************************************/
@@ -9725,7 +9710,7 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAAB7CAMAAACP
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAsBAMAAADROCZUAAAAJ1BMVEVHcEyZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmampqZmZmZmZmZmZk8UCKAAAAADHRSTlMA9rdB5dGIJ3FUEKPBidVOAAABlUlEQVQ4y3WUvU/CQBTAnyAfrVOj0SgMEIODYeikS4e638QG6WDiygAhcWIAJ2IYNDFODF3UQQY/FmK6UFqE+P4or1/Xa9N7wyV3v3fv3fs6gEjk54Zy0LoxISVSHX2pqKlzgui0GnR1H/jzkoGuZ0W+IGj3ODDGv3Cbb+JxfL6HLlPLG3jNQHM5irWKuI4v7PMOH9mV6bKXeGF1G1pNXgCYhYoFHCVBEWuBJTudBsO3JZOjNNBcby1z7w4lh6rvopcGefyg6zBw8aLDjqIov/6GnEAJppsgvTrMF5PJvQ+6KzBGlq9EvnQYslpoayArQ3//AfjO6aAxZ3MbNKd6SrxnUzAzByHadWmUSLATgPFTVKWCQ6PEIM0UdNtv404QyBKgj44agjsTpA0DEp5DCDypMFOwAB60IudxfnQ4YzfmdgLUTShvowB50G8PrFqUEh7QtjuEKIkJkS/5tMOtml0osASlFTaDuH2EDQdTR81sUXFTg8V7eY3HQDw43qipWaMmHk6QjOxxpuQz+wPwv4wr7sv4B7GTnR8KwKnlAAAAAElFTkSuQmCC"
 
 /***/ }),
-/* 39 */
+/* 23 */
 /*!*****************************************************************************************!*\
   !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/z-audio/static/go.png ***!
   \*****************************************************************************************/
@@ -9735,7 +9720,7 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAsBAMAAADR
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAACW0lEQVRoQ+2awVHrMBCGVzrIbVACHfCoBHKJ7NOzO3AqwDnFygXSAVTwoANeBUAH0ICWkUdiTMZGji3Z0gy+ZDyOkv/bXe2uZBHQlxDiBgBydYuId0mSFKvV6t08D+Fzv9+fI+ItAJwDQMU5L4gSVtf1LSHk+kjkOyKWaZpuQxCvNAgh7gDgyuiRUl6S3W53Ril96ROJiI+U0mK9Xj8vDSKEeASAi2OAP5TSfwPEVYyxzZJhNRVAzY1XQkjBOb8fAOz8K5MBWorupZRFlmWvzlX+8IMuAdTfqAylMsFmLgjXAEb3s/aGmmBeL18Ajeg5aodXAG16FVY55/zgwxVzABhveKkdswG0rF8yxrauascSAE3tQMRVlmWTJ/kiAC5rx9IATe2Y0iCGADCpdoQEYEBOahBDBDAtyaDaESrAV+3Q2aq3QQwaoF07+hrEWAB6a0c0AC1vNAt3cx8jAKiFu6niUQIg4jZN02a75xfAR49v+82oQ0hKqbpYtZnVXDGF0JuU8vq4BY8FYMM5L7tCK3SAJ2316FqJDyll3o71vokdnAdUjk+SpBy6Zg4GABH/I6Ky+knr5BAAPgCg5JxXtvwf3CRGxAdt9dEbwkt5oDOnx+KBDWOsGjpJbVBzeuCJEJK7fi01B8DgnG6z9hKT+MAYy12Fy2wAY3N6CB5QOV2tWTsbrzECbWOczQEXOd0m1lcIvek3MPG9Zj218RpjYduYvhD68agBAHjJ6Taxg0NIrzW/HaLQgyc1XmME2sZ0HvYwg+q6rgghf/W995xuE9v1XB9MUca+MPtFn00qrDU6ji5lAAAAAElFTkSuQmCC"
 
 /***/ }),
-/* 40 */
+/* 24 */
 /*!***********************************************************************************************!*\
   !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/z-audio/static/playbtn2.png ***!
   \***********************************************************************************************/
@@ -9745,7 +9730,7 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABX
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFQAAABUAQMAAAAmpYKCAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAmZmZfvUgAwAAAAJ0Uk5TAP9bkSK1AAAAZElEQVR4nOXSuQGAMAgAQDZwBFd1NEZhjFSJJWeRwlaprgnhi/hHHDrbZ+GBJ146ceGBJ146ceGBJ146ceGBJ176eulNTv+yBmvb9GKP9p442s7Q2RZOHG1350776eMGvI2vxw2uiXevUQltlgAAAABJRU5ErkJggg=="
 
 /***/ }),
-/* 41 */
+/* 25 */
 /*!************************************************************************************************!*\
   !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/z-audio/static/pausebtn2.png ***!
   \************************************************************************************************/
@@ -9755,7 +9740,7 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFQAAABUAQMAAAAm
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFQAAABcAQMAAADK9gDvAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAmZmZfvUgAwAAAAJ0Uk5TAP9bkSK1AAAAMklEQVR4nGNgGAWEgD0DA/8BKLv+AIP9Ayj7/wGG+g8w9oNR9rBjI8Uvcrwjp4dRgAoAMnCOF7E8IpwAAAAASUVORK5CYII="
 
 /***/ }),
-/* 42 */
+/* 26 */
 /*!*******************************************************************************************!*\
   !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/z-audio/static/next.png ***!
   \*******************************************************************************************/
