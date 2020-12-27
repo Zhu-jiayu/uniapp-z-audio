@@ -14,7 +14,12 @@
  * @method onPause       暂停回调
  * @method onStop        暂停回调
  * @method onEnded       结束回调
-
+ * @method setRender     指定音频, 渲染到zaudio组件
+ * @method syncRender    同步并渲染当前的播放状态
+ * @method operate       播放或暂停指定索引的音频
+ * @method setAudio		 覆盖设置音频列表
+ * @method updateAudio   添加音频列表
+ * @method stop          暂停当前播放音频
  * **/
 import {
 	formatSeconds as format

@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import ZAudioTemplate from '@/zaudio/template';
-//import { ZAudioTemplate } from 'uniapp-zaudio/zaudio/template'
+import zaudio from '@/components/z-audio/z-audio';
+//import { zaudio } from 'uniapp-zaudio/z-audio/z-audio'
 export default {
 	data() {
 		return {
@@ -15,7 +15,7 @@ export default {
 			themelist: ['theme1', 'theme2', 'theme3']
 		};
 	},
-	components: { zaudio: ZAudioTemplate },
+	components: { zaudio: zaudio },
 	onLoad(query) {
 		let { key } = query; 
 		//通过索引去渲染需要播放的音频, 方法1:

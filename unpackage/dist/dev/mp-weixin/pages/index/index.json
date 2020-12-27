@@ -1,5 +1,5 @@
 {
   "usingComponents": {
-    "zaudio": "/zaudio/template"
+    "zaudio": "/components/z-audio/z-audio"
   }
 }

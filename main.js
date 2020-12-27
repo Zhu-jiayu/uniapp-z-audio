@@ -13,10 +13,10 @@ Vue.prototype.$store = store;
 
 import {
 	ZAudio
-} from '@/zaudio'
+} from '@/components/z-audio'
 
 // npm引用方式
-// import { ZAudio } from 'uniapp-zaudio/zaudio'
+// import { ZAudio } from 'uniapp-zaudio/z-audio'
 
 
 let zaudio = new ZAudio({

@@ -2,7 +2,7 @@
   "name": "uniapp-zaudio",
   "version": "1.0.15",
   "description": "audio manager for uniapp",
-  "main": "zaudio/index.js",
+  "main": "components/z-audio/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

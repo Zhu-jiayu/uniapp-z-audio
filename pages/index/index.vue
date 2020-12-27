@@ -12,8 +12,8 @@
 		</view>
 
 		<div class="demo">
-			<button @click="reset" size="mini" type="primary">覆盖音频列表</button>
-			<button @click="add" size="mini" type="primary">添加音频列表</button>
+			<button @click="reset" size="mini" type="primary">音频-覆盖</button>
+			<button @click="add" size="mini" type="primary">音频-添加</button>
 			<button @click="willStop" size="mini" type="primary">限制播放5s后暂停</button>
 			<button @click="removeStop" size="mini" type="primary">去除播放限制,并继续播放</button>
 		</div>
@@ -21,13 +21,13 @@
 </template>
 
 <script>
-import ZAudioTemplate from '@/zaudio/template';
-//import { ZAudioTemplate } from 'uniapp-zaudio/zaudio/template'
+import zaudio from '@/components/z-audio/z-audio';
+//import { zaudio } from 'uniapp-zaudio/z-audio/z-audio'
 export default {
 	data() {
 		return {};
 	},
-	components: { zaudio: ZAudioTemplate },
+	components: { zaudio: zaudio },
 	computed: {
 		paused() {
 			return this.$zaudio.paused; //当前是否暂停
