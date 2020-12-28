@@ -120,7 +120,7 @@ autoPlay | Boolean | false | 自动播放,浏览器不支持 | 默认false
 
 
 回调函数|必填|描述|其他
--|-|-|-|-
+-|-|-|-
 onError|false|错误播放回调|
 onCanplay|false|点击播放时回调|
 onPlaying|false|播放中回调| 回调函数参数:当前播放音频的数据
@@ -147,7 +147,7 @@ new ZAudio({
 
 
 方法|必填|描述|其他
--|-|-|-|-
+-|-|-|-
 onError| false|错误播放回调|
 onCanplay|false|点击播放时回调| 
 onPlaying|false|播放中回调|
