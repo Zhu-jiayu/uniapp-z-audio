@@ -1,7 +1,7 @@
 export default {
 	namespaced: false,
 	state: {
-		version: '2.0.2',
+		version: '2.0.22',
 		renderIndex: 0, // 组件渲染的索引值
 		audiolist: [], //音频列表
 

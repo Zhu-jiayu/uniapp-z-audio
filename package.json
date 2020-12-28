@@ -1,6 +1,6 @@
 {
   "name": "uniapp-zaudio",
-  "version": "2.0.21",
+  "version": "2.0.22",
   "description": "audio manager for uniapp",
   "main": "components/z-audio/index.js",
   "scripts": {

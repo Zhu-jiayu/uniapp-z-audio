@@ -17,6 +17,7 @@
 + 为了支持音频多页面状态同步, zaudio依赖vuex管理
 + 音频对象基于`uni.getBackgroundAudioManager`和`uni.createInnerAudioContext`创建
 + 具体使用方式,请下载示例
++ 若文档展示不全,请查看[gitee](https://gitee.com/jingangtui/uniapp-z-audio.git)或下载[示例](https://ext.dcloud.net.cn/plugin?id=1888)
 
 ## 使用步骤 
 
@@ -98,40 +99,84 @@ export default {
 
 ## zaudio组件参数配置
 
+若文档展示不全,请查看[gitee](https://gitee.com/jingangtui/uniapp-z-audio.git)或下载[示例](https://ext.dcloud.net.cn/plugin?id=1888)
+
 参数 | 类型 | 必填 | 描述 | 其他
 -|-|-|-|-
 theme | String | false | 主题 | `theme2` or `theme1` or `theme3`;   默认`theme1`
 themeColor | String | false | 进度条颜色 |  默认 `#42b983`
 
 ## ZAudio对象参数和回调函数
-用法见示例
+
+若文档展示不全,请查看[gitee](https://gitee.com/jingangtui/uniapp-z-audio.git)或下载[示例](https://ext.dcloud.net.cn/plugin?id=1888)
+
 参数 | 类型 | 必填 | 描述 | 其他
 -|-|-|-|-
-store | Object | true | 实例化vuex的store |
+store | Object | true | 实例化vuex的store |-
 continuePlay | Boolean | false | 下一首续播 | 默认true
-autoPlay | Boolean | false | 自动播放 浏览器不支持 | 默认false
-onError | Function | false | 错误播放回调 | 
-onCanplay | Function | false | 点击播放时回调 |  
-onPlaying | Function | false | 播放中回调 | 回调函数参数:当前播放音频的数据
-onPause | Function | false | 暂停回调 |
-onEnded | Function | false | 结束回调 | 
+autoPlay | Boolean | false | 自动播放,浏览器不支持 | 默认false
 
-## ZAudio实例化对象方法
-用法见示例
-方法 | 类型 | 必填 | 描述 | 其他
+回调函数  | 必填 | 描述 | 其他
 -|-|-|-|-
-onError | Function | false | 错误播放回调 | 
-onCanplay | Function | false | 点击播放时回调 |  
-onPlaying | Function | false | 播放中回调 | 
-onPause | Function | false | 暂停回调 |
-onEnded | Function | false | 结束回调 | 
-setRender | Function | false | 指定音频, 渲染到zaudio组件 | 参数number,string,object类型, 见示例
-syncRender | Function | true | 同步并渲染当前的播放状态 | 必须在onshow中, 见示例
-operate | Function | false | 播放或暂停指定索引的音频 | 参数number类型, 自动判断播放或暂停
-setAudio | Function | false | 覆盖设置音频列表 | 赋值数组
-updateAudio | Function | false | 添加音频列表 | push数组
-stop | Function | false | 暂停当前播放音频 | 
+onError | false | 错误播放回调 | -
+onCanplay | false | 点击播放时回调 | -
+onPlaying | false | 播放中回调 | 回调函数参数:当前播放音频的数据
+onPause | false | 暂停回调 |-
+onEnded | false | 结束回调 | -
 
+用法举例
+```javascript
+new ZAudio({
+	store: store,
+	autoPlay: true,
+	onPlaying(info){
+		console.log(info)
+	}
+	//...其他参数或回调
+})
+```
+## ZAudio实例化对象方法
+
+若文档展示不全,请查看[gitee](https://gitee.com/jingangtui/uniapp-z-audio.git)或下载[示例](https://ext.dcloud.net.cn/plugin?id=1888)
+
+方法 | 必填 | 描述 | 其他
+-|-|-|-|-
+onError | false | 错误播放回调 | -
+onCanplay | false | 点击播放时回调 | - 
+onPlaying | false | 播放中回调 | -
+onPause | false | 暂停回调 |-
+onEnded | false | 结束回调 | -
+setRender | false | 指定音频, 渲染到zaudio组件 | 参数number,string,object类型, 见示例
+syncRender  | true | 同步并渲染当前的播放状态 | 必须在onshow中, 见示例
+operate  | false | 播放或暂停指定索引的音频 | 参数number类型, 自动判断播放或暂停
+setAudio  | true | 覆盖设置音频列表 | 参数:对象数组 [{src: 音频地址, title: 音频名, singer: 歌手 coverImgUrl: 封面}]
+updateAudio  | false | 添加音频列表 |  参数:对象数组 [{src: 音频地址, title: 音频名, singer: 歌手 coverImgUrl: 封面}]
+stop  | false | 暂停当前播放音频 | -
+
+用法举例
+```javascript
+let zaudio = new ZAudio({store: store})
+//添加音频
+zaudio.setAudio([{
+		src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2016aJan/18X/18d_DeH/01.mp3',
+		title: '恭喜发财',
+		singer: '刘德华',
+		coverImgUrl: 'https://img.1ting.com/images/special/75/s150_f84ef5082b0420f74cd2546b986ab0fc.jpg'
+	},
+	{
+		src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2015kNov/25X/25m_XiaoQ/03.mp3',
+		title: '好运来',
+		singer: '作者1111',
+		coverImgUrl: 'https://img.1ting.com/images/special/204/s150_77254cd4a4da1a33b8faf89c4cbf6e40.jpg'
+	}
+])
+//播放中回调
+zaudio.onCanplay=info=>{
+	console.log(info)
+}
+//播放或暂停第一首音频
+zaudio.operate(1)
+```
 ## 切换后台播放配置
 
 在manifest.json中配置
