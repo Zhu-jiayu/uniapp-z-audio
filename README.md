@@ -112,7 +112,7 @@ themeColor | String | false | 进度条颜色 |  默认 `#42b983`
 若文档展示不全,请查看[gitee](https://gitee.com/jingangtui/uniapp-z-audio.git)或下载[示例](https://ext.dcloud.net.cn/plugin?id=1888)
 
 参数 | 类型 | 必填 | 描述 | 其他
-- | - | - | - | -
+-|-| - | - | -
 store | Object | true | 实例化vuex的store |-
 continuePlay | Boolean | false | 下一首续播 | 默认true
 autoPlay | Boolean | false | 自动播放,浏览器不支持 | 默认false
@@ -120,7 +120,7 @@ autoPlay | Boolean | false | 自动播放,浏览器不支持 | 默认false
 
 
 回调函数  | 必填 | 描述 | 其他
-- | - | - | - | -
+-| - | - | - | -
 onError | false | 错误播放回调 | -
 onCanplay | false | 点击播放时回调 | -
 onPlaying | false | 播放中回调 | 回调函数参数:当前播放音频的数据
@@ -147,7 +147,7 @@ new ZAudio({
 
 
 方法 | 必填 | 描述 | 其他
-- | - | - | - | -
+-| - | - | - | -
 onError | false | 错误播放回调 | -
 onCanplay | false | 点击播放时回调 | - 
 onPlaying | false | 播放中回调 | -
