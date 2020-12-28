@@ -20,6 +20,7 @@
 + 若文档展示不全,请查看[gitee](https://gitee.com/jingangtui/uniapp-z-audio.git)或下载[示例](https://ext.dcloud.net.cn/plugin?id=1888)
 
 ## 使用步骤 
+# 下面文档建议查看[gitee](https://gitee.com/jingangtui/uniapp-z-audio.git), dcloud的markdown有bug, 下面部分字段不显示
 
 1. <a href="https://ext.dcloud.net.cn/plugin?id=1888">插件市场下载</a> or `npm install uniapp-zaudio`
 2. 配置ZAudioStore (store/index.js)
