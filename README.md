@@ -101,6 +101,7 @@ export default {
 
 若文档展示不全,请查看[gitee](https://gitee.com/jingangtui/uniapp-z-audio.git)或下载[示例](https://ext.dcloud.net.cn/plugin?id=1888)
 
+
 参数 | 类型 | 必填 | 描述 | 其他
 -|-|-|-|-
 theme | String | false | 主题 | `theme2` or `theme1` or `theme3`;   默认`theme1`
@@ -111,18 +112,22 @@ themeColor | String | false | 进度条颜色 |  默认 `#42b983`
 若文档展示不全,请查看[gitee](https://gitee.com/jingangtui/uniapp-z-audio.git)或下载[示例](https://ext.dcloud.net.cn/plugin?id=1888)
 
 参数 | 类型 | 必填 | 描述 | 其他
--|-|-|-|-
+- | - | - | - | -
 store | Object | true | 实例化vuex的store |-
 continuePlay | Boolean | false | 下一首续播 | 默认true
 autoPlay | Boolean | false | 自动播放,浏览器不支持 | 默认false
 
+
+
 回调函数  | 必填 | 描述 | 其他
--|-|-|-|-
+- | - | - | - | -
 onError | false | 错误播放回调 | -
 onCanplay | false | 点击播放时回调 | -
 onPlaying | false | 播放中回调 | 回调函数参数:当前播放音频的数据
 onPause | false | 暂停回调 |-
 onEnded | false | 结束回调 | -
+
+
 
 用法举例
 ```javascript
@@ -137,10 +142,12 @@ new ZAudio({
 ```
 ## ZAudio实例化对象方法
 
+
 若文档展示不全,请查看[gitee](https://gitee.com/jingangtui/uniapp-z-audio.git)或下载[示例](https://ext.dcloud.net.cn/plugin?id=1888)
 
+
 方法 | 必填 | 描述 | 其他
--|-|-|-|-
+- | - | - | - | -
 onError | false | 错误播放回调 | -
 onCanplay | false | 点击播放时回调 | - 
 onPlaying | false | 播放中回调 | -
@@ -152,6 +159,7 @@ operate  | false | 播放或暂停指定索引的音频 | 参数number类型, �
 setAudio  | true | 覆盖设置音频列表 | 参数:对象数组 [{src: 音频地址, title: 音频名, singer: 歌手 coverImgUrl: 封面}]
 updateAudio  | false | 添加音频列表 |  参数:对象数组 [{src: 音频地址, title: 音频名, singer: 歌手 coverImgUrl: 封面}]
 stop  | false | 暂停当前播放音频 | -
+
 
 用法举例
 ```javascript
