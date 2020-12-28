@@ -73,6 +73,7 @@ export default class ZAudio {
 
 		// #ifdef H5
 		var audioCtx = uni.createInnerAudioContext()
+		audioCtx.autoplay = this.autoPlay
 		// #endif
 
 		this.audioCtx = audioCtx;
@@ -92,6 +93,7 @@ export default class ZAudio {
 			}
 		}, 500)
 		// #endif
+		
 
 		this.appCheckReplay(this.audioCtx, this.store)
 	}
