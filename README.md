@@ -1,4 +1,4 @@
-# uniapp 音频后台播放组件
+# uniapp 背景音频播放组件
 
 ## 预览
 [http://jingangtui.gitee.io/uniapp-z-audio/#/](http://jingangtui.gitee.io/uniapp-z-audio/#/)
@@ -20,7 +20,7 @@
 + 若文档展示不全,请查看[gitee](https://gitee.com/jingangtui/uniapp-z-audio.git)或下载[示例](https://ext.dcloud.net.cn/plugin?id=1888)
 
 ## 使用步骤 
-# 下面文档建议查看[gitee](https://gitee.com/jingangtui/uniapp-z-audio.git), dcloud的markdown有bug, 下面部分字段不显示
+# 下面文档请查看[gitee](https://gitee.com/jingangtui/uniapp-z-audio.git), dcloud的markdown有bug, 部分字段不显示
 
 1. <a href="https://ext.dcloud.net.cn/plugin?id=1888">插件市场下载</a> or `npm install uniapp-zaudio`
 2. 配置ZAudioStore (store/index.js)
@@ -210,4 +210,4 @@ iOS
 }
 ```
 
-## 如果你觉得这个项目不错, 欢迎[STAR!](https://github.com/P3T3R-Z/uniapp-z-audio.git)
+## 如果你觉得这个项目不错, 给我一个[STAR](https://gitee.com/jingangtui/uniapp-z-audio.git)
