@@ -5,21 +5,24 @@
  * @param autoPlay      <Boolean>  自动播放
  */
 
-/**----------------------------------------zaudio.on(event, action, callback) 回调方法
- * @method error       错误播放时回调
- * @method playing     播放时回调         @return playinfo
- * @method canPlay     可以播放回调       @return playinfo
- * @method pause       暂停回调
- * @method ended       结束回调
- * @method setAudio    覆盖音频的回调      @return audiolist
- * @method updateAudio    添加音频的回调   @return audiolist
- * @method setRender    指定音频的回调
- * @method syncRender    同步并渲染的回调     
- * @method operate      播放或暂停的回调    
- * @method stop         暂停的回调        
- * @method seek         快进拖到回调        
+/**----------------------------------------zaudio.on(event, action, callback) 注册回调方法
+ *----------------------------------------zaudio.off(event, action) 卸载回调方法
+ * @event error       错误播放时回调
+ * @event playing     播放时回调         @return playinfo
+ * @event canPlay     可以播放回调       @return playinfo
+ * @event pause       暂停回调
+ * @event ended       结束回调
+ * @event setAudio    覆盖音频的回调      @return audiolist
+ * @event updateAudio    添加音频的回调   @return audiolist
+ * @event setRender    指定音频的回调
+ * @event syncRender    同步并渲染的回调     
+ * @event operate      播放或暂停的回调    
+ * @event stop         暂停的回调        
+ * @event seek         快进拖到回调        
  * 
- * -----------------------------------------zaudio.xxx 实例方法
+ * 
+ * 
+ * -----------------------------------------zaudio 实例方法
  * 
  * @method setRender     指定音频, 渲染到zaudio组件
  * @method syncRender    同步并渲染当前的播放状态
@@ -27,6 +30,7 @@
  * @method setAudio		   覆盖音频列表
  * @method updateAudio   添加音频列表
  * @method stop          暂停当前播放音频
+ * @method stepPlay      快进快退@param number
  * **/
 import {
 	formatSeconds as format
@@ -46,7 +50,6 @@ class EventBus {
 
 			let hasAction = arr ? arr.findIndex((i) => i.action == action) : -1;
 			if (hasAction > -1) {
-				console.warn(action + '事件已注册')
 				return
 			}
 			this._events.set(event, [
@@ -259,7 +262,10 @@ export default class ZAudio extends EventBus {
 			this.changeplay(1);
 		}
 	}
-
+	//卸载监听回调事件
+	off(event, action){
+		super.off(event, action)
+	}
 	commit(action, data) {
 		typeof this[action] === 'function' && this[action](data)
 	}
@@ -271,7 +277,7 @@ export default class ZAudio extends EventBus {
 	}
 
 
-	//快进
+	//指定位置
 	seek(value) {
 		this.audioCtx.seek(value)
 		setTimeout(() => {
@@ -422,15 +428,16 @@ export default class ZAudio extends EventBus {
 		}
 
 	}
-
+	//设置暂停状态
 	setPause(data) {
 		this.paused = data
 	}
+	//设置通话时暂停状态
 	setUnnormalPause(data) {
 		this.uPause = data
 	}
 
-	//设置渲染索引 和 渲染信息
+	//设置渲染 @param 索引或渲染信息
 	setRender(data) {
 		if (this.audiolist.length == 0) return
 
@@ -456,20 +463,15 @@ export default class ZAudio extends EventBus {
 		}
 	}
 
-
+	//当前索引
 	get playIndex() {
 		let index = this.audiolist.findIndex(i => i.src == this.playinfo.src)
 		return index <= 0 ? 0 : index
 	}
-
+	//渲染与播放是否一致
 	get renderIsPlay() {
 		return this.renderinfo.src == this.playinfo.src
 	}
-
-
-
-
-
 
 
 	//app端判断电话来电后, 音频意外中断之后的继续播放

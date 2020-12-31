@@ -37,8 +37,7 @@
 
 		<template v-if="theme == 'theme2'">
 			<view class="top">
-				<view class="audio-control-wrapper">
-					<image :src="renderData('coverImgUrl')" mode="aspectFill" class="cover" :class="{ on: !renderData('paused') }"></image>
+				<view class="audio-control-wrapper" :style="{backgroundImage: `url(${renderData('coverImgUrl')})`}">
 					<template>
 						<image :src="require('./static/playbtn.png')" alt="" @click="operate" class="play" v-if="renderData('paused')"></image>
 						<image :src="require('./static/pausebtn.png')" alt="" @click="operate" class="play" v-else></image>
@@ -46,22 +45,12 @@
 				</view>
 
 				<view>
-					<view class="title">{{ renderData('title') }}</view>
+					<view class="title">
+						<text>{{ renderData('title') }}</text>
+						<view class="audio-number">{{ renderData('current') }}/{{ renderData('duration') }}</view>
+					</view>
 					<view class="singer">{{ renderData('singer') }}</view>
 				</view>
-			</view>
-			<view class="audio-wrapper">
-				<view class="audio-number">{{ renderData('current') }}</view>
-				<slider
-					class="audio-slider"
-					:activeColor="themeColor"
-					block-size="16"
-					:value="renderData('current_value')"
-					:max="renderData('duration_value')"
-					@change="change"
-					:disabled="!renderIsPlay"
-				></slider>
-				<view class="audio-number">{{ renderData('duration') }}</view>
 			</view>
 		</template>
 
@@ -108,7 +97,7 @@
 
 <script>
 import { formatSeconds } from './util.js';
-let base = Symbol('base');
+
 export default {
 	props: {
 		theme: {
@@ -126,7 +115,8 @@ export default {
 			audiolist: this.$zaudio.audiolist,
 			paused: this.$zaudio.paused,
 			renderIsPlay: this.$zaudio.renderIsPlay,
-			audio: this.$zaudio.renderinfo
+			audio: this.$zaudio.renderinfo,
+			action: Symbol('zaudio')
 		};
 	},
 	computed: {
@@ -149,27 +139,28 @@ export default {
 
 	mounted() {
 		this.$nextTick(() => {
+			let action = this.action;
 			//设置音频回调
-			this.$zaudio.on('setAudio', base, list => {
+			this.$zaudio.on('setAudio', action, list => {
 				this.audiolist = [...list];
 			});
 			//更新音频回调
-			this.$zaudio.on('updateAudio', base, list => {
+			this.$zaudio.on('updateAudio', action, list => {
 				this.audiolist = [...list];
 			});
 			//开始播放回调
-			this.$zaudio.on('canPlay', base, data => {
+			this.$zaudio.on('canPlay', action, data => {
 				this.playinfo = data;
 				this.renderIsPlay = this.$zaudio.renderIsPlay;
 				this.audio = this.$zaudio.renderinfo;
 				this.paused = this.$zaudio.paused;
 			});
 			//播放中回调
-			this.$zaudio.on('playing', base, data => {
+			this.$zaudio.on('playing', action, data => {
 				this.playinfo = data;
 			});
 			//播放暂停回调
-			this.$zaudio.on('pause', base, () => {
+			this.$zaudio.on('pause', action, () => {
 				this.paused = this.$zaudio.paused;
 			});
 		});
@@ -197,6 +188,15 @@ export default {
 		changeplay(count) {
 			this.$zaudio.changeplay(count);
 		}
+	},
+	beforeDestroy() {
+		//组件卸载时卸载业务逻辑
+		let action = this.action;
+		this.$zaudio.off('setAudio', action);
+		this.$zaudio.off('updateAudio', action);
+		this.$zaudio.off('canPlay', action);
+		this.$zaudio.off('playing', action);
+		this.$zaudio.off('pause', action);
 	}
 };
 </script>

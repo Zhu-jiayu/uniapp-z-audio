@@ -26,7 +26,7 @@
 			.title {
 				font-weight: bold;
 				font-size: 34rpx;
-				margin-top: 24rpx;
+				margin-top: 50rpx;
 				text-align: center;
 			}
 
@@ -74,9 +74,10 @@
 	}
 
 	.cover {
-		width: 100%;
+		width: 350rpx;
 		height: 350rpx;
-		box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.13);
+		box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+		border-radius: 5px;
 	}
 
 	.play,
@@ -108,26 +109,36 @@
 	border: 1px solid #cecece;
 	width: 90%;
 	margin: 0 auto;
-	border-radius: 10px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 	overflow: hidden;
 
 	.top {
-		background: #efefef;
+		background: #fff;
 		display: flex;
 		align-items: center;
+		height: 150rpx;
 
 		& > view:nth-child(2) {
 			flex: 1;
-			margin-left: 30rpx;
+			margin: 0 30rpx;
 
 			.title {
-				font-weight: bold;
-				font-size: 34rpx;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
 				margin-top: 24rpx;
-				text-align: left;
-				max-width: 100%;
-				@include textoverflow;
+				text{
+					font-size: 30rpx;
+					text-align: left;
+					max-width: 100%;
+					@include textoverflow;
+					flex: 1;
+				}
+				
+				.audio-number {
+					font-size: 24upx;
+					line-height: 1;
+					color: #333;
+				}
 			}
 
 			.singer {
@@ -140,33 +151,13 @@
 				@include textoverflow;
 			}
 		}
+		
+		
 	}
 
-	.audio-wrapper {
-		display: flex;
-		align-items: center;
-		padding: 30rpx 20rpx;
-	}
 
-	.audio-number {
-		font-size: 24upx;
-		line-height: 1;
-		color: #333;
-	}
+	
 
-	.audio-slider {
-		flex: 1;
-		margin: 0 30rpx 0 35rpx;
-	}
-
-	.audio-control-wrapper {
-		margin: 20rpx;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		position: relative;
-		padding: 30rpx 20rpx;
-	}
 
 	.cover {
 		width: 120rpx;
@@ -188,12 +179,22 @@
 		animation-fill-mode: forwards;
 		-webkit-animation-fill-mode: forwards;
 	}
-
+	.audio-control-wrapper{
+		width: 150rpx;
+		height: 150rpx;
+		display: flex;
+		align-items:center;
+		justify-content: center;
+		background: #efefef;
+		background-size: contain;
+		background-position: center;
+		background-repeat: no-repeat;
+	}
 	.play {
 		width: 80rpx;
 		height: 80rpx;
 		z-index: 99;
-		background: rgba(0, 0, 0, 0.4);
+		background: rgba(255, 255, 255, 0.4);
 		border-radius: 50%;
 	}
 
@@ -239,15 +240,14 @@
 			line-height: 46rpx;
 			margin-bottom: 30rpx;
 			.title {
-				font-weight: bold;
-				font-size: 36rpx;
+				font-size: 30rpx;
 				max-width: 50%;
 				@include textoverflow;
 			}
 
 			.singer {
 				margin-left: 20rpx;
-				font-size: 30rpx;
+				font-size: 28rpx;
 				max-width: 50%;
 				@include textoverflow;
 			}
@@ -263,7 +263,7 @@
 				font-size: 28rpx;
 			}
 			&:last-child{
-				font-size: 30rpx;
+				font-size: 28rpx;
 				text{
 					&:last-child{
 						margin-left: 40rpx;

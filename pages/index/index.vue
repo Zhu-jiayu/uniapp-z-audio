@@ -7,17 +7,19 @@
 			<view v-for="(i, k) in audiolist" :key="k" class="list">
 				{{ i.title }}
 				<button size="mini" @click="go(k)">查看详情</button>
-				<button size="mini" @click="play(k)">{{ i.src === playinfo.src && !paused ? '暂停' : '播放' }}</button>
+				<button size="mini" @click="play(k)">{{ !paused && i.src === playinfo.src ? '暂停' : '播放' }}</button>
 			</view>
 		</view>
 
 		<div class="demo">
-			<button @click="reset" size="mini" >覆盖音频</button>
-			<button @click="add" size="mini" >添加音频</button>
-			<button @click="willStop" size="mini">限制播放5s后暂停</button>
-			<button @click="removeStop" size="mini">去除播放限制</button>
-			<button @click="watchPlaying('我是按钮注册的')" size="mini">注册播放中回调函数(控制台)</button>
-			<button @click="offPlaying('我是按钮解除的')" size="mini">解除播放中回调函数(控制台)</button>
+			<button @click="reset" size="mini">覆盖音频</button>
+			<button @click="add" size="mini">添加音频</button>
+			<button @click="willStop" size="mini">注册5秒后暂停事件</button>
+			<button @click="removeStop" size="mini">卸载5秒后暂停事件</button>
+			<button @click="logPlaying('log')" size="mini">注册播放时打印事件</button>
+			<button @click="offPlaying('log')" size="mini">卸载播放时打印事件</button>
+			<button @click="stepPlay(20)" size="mini">快进20s</button>
+			<button @click="stepPlay(-20)" size="mini">快退20s</button>
 		</div>
 	</view>
 </template>
@@ -27,34 +29,27 @@ import zaudio from '@/components/z-audio/z-audio';
 // import zaudio from 'uniapp-zaudio/components/z-audio/z-audio.vue'
 export default {
 	data() {
-		return {};
+		return {
+			audiolist: this.$zaudio.audiolist, //当前音频列表
+			playIndex: this.$zaudio.playIndex, //当前播放的索引
+			paused: this.$zaudio.paused, //当前是否暂停
+			playinfo: this.$zaudio.playinfo //当前播放的信息
+		};
 	},
 	components: { zaudio: zaudio },
-	computed: {
-		paused() {
-			return this.$zaudio.paused; //当前是否暂停
-		},
-		playIndex() {
-			return this.$zaudio.playIndex; //当前播放的索引
-		},
-		audiolist() {
-			return this.$zaudio.audiolist; //当前音频列表
-		},
-		playinfo() {
-			return this.$zaudio.playinfo; //当前播放的信息
-		}
-	},
-  onLoad(){
-		this.$nextTick(()=>{
-			this.watchPlaying('我是onload时候注册的')
-		})
+
+	onLoad() {
+		
+		this.getListData()
 	},
 	onShow() {
-		//进入其他页面, zaudio渲染了其他数据
-		//每次页面onshow时同步当前的播放状态
+		//进入其他页面, zaudio组件渲染了其他数据
+		//每次页面onshow时同步zaudio组件当前的播放状态
 		this.$zaudio.syncRender();
 	},
+
 	methods: {
+		
 		play(key) {
 			//播放或暂停
 			this.$zaudio.operate(key);
@@ -89,7 +84,7 @@ export default {
 		},
 
 		willStop() {
-			this.$zaudio.onPlaying = info => {
+			this.$zaudio.on('playing', 'recharge', info => {
 				if (info.current_value > 5) {
 					this.$zaudio.stop();
 
@@ -105,25 +100,57 @@ export default {
 						}
 					});
 				}
-			};
+			})
+
 		},
 
 		removeStop() {
-			this.$zaudio.onPlaying = null;
+			this.$zaudio.off('playing', 'recharge')
 			this.$zaudio.operate();
 		},
- 
-		watchPlaying(action){
-			//action用于注册多个同一件回调函数(比如多个playing回调), 同一个action只可以注册一次
-			this.$zaudio.on('playing', action, info=>{
-				console.log('播放中----'+action,  info)
-			})
+
+		logPlaying(action){
+			// 一个回调事件可以注册多次业务, action用于区分相同回调事件的不同业务
+			//例: playing回调时注册 打印事件
+			this.$zaudio.on('playing', action, info => {
+				console.log('播放中----' + action, info);
+			});
 		},
-		offPlaying(action){
+		offPlaying(action) {
 			//注意解除事件action必须与注册事件的action相同
-			this.$zaudio.on('playing', action, info=>{
-				console.log('解除播放回调----'+action,  info)
-			})
+			this.$zaudio.off('playing', action);
+		},
+		stepPlay(val){
+			this.$zaudio.stepPlay(val)
+		},
+		
+		//--------------获取音频列表的播放状态和列表数据
+		getListData(){
+			let action = 'getAudioListState';
+			
+			//设置音频回调
+			this.$zaudio.on('setAudio', action, list => {
+				this.audiolist = [...list];
+			});
+			//更新音频回调
+			this.$zaudio.on('updateAudio', action, list => {
+				this.audiolist = [...list];
+			});
+			//开始播放回调
+			this.$zaudio.on('canPlay', action, data => {
+				this.playinfo = data;
+				this.renderIsPlay = this.$zaudio.renderIsPlay;
+				this.audio = this.$zaudio.renderinfo;
+				this.paused = this.$zaudio.paused;
+			});
+			//播放中回调
+			this.$zaudio.on('playing', action, data => {
+				this.playinfo = data;
+			});
+			//播放暂停回调
+			this.$zaudio.on('pause', action, () => {
+				this.paused = this.$zaudio.paused;
+			});
 		}
 	}
 };
