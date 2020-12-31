@@ -41,21 +41,24 @@ class EventBus {
 		this.on(event, action, fn, true);
 	}
 	on(event, action, fn, once = false) {
-		let arr = this._events.get(event);
-console.log(arr)
-		// let hasAction = arr.findIndex((i) => i.action == action);
-		// if (hasAction > -1) {
-		// 	console.warn(event + '时的' + action + '事件已注册')
-		// 	return
-		// }
-		this._events.set(event, [
-			...(this._events.get(event) || []),
-			{
-				action,
-				fn,
-				once
-			},
-		]);
+		if (event !== undefined && action !== undefined) {
+			let arr = this._events.get(event);
+
+			let hasAction = arr ? arr.findIndex((i) => i.action == action) : -1;
+			if (hasAction > -1) {
+				console.warn(action + '事件已注册')
+				return
+			}
+			this._events.set(event, [
+				...(this._events.get(event) || []),
+				{
+					action,
+					fn,
+					once
+				},
+			]);
+		}
+
 
 
 	}

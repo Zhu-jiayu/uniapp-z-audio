@@ -17,7 +17,7 @@
 			<button @click="willStop" size="mini">限制播放5s后暂停</button>
 			<button @click="removeStop" size="mini">去除播放限制</button>
 			<button @click="watchPlaying('我是按钮注册的')" size="mini">注册播放中回调函数(控制台)</button>
-			<button @click="watchPlaying('我是按钮注册的')" size="mini">解除播放中回调函数(控制台)</button>
+			<button @click="offPlaying('我是按钮解除的')" size="mini">解除播放中回调函数(控制台)</button>
 		</div>
 	</view>
 </template>
@@ -46,7 +46,7 @@ export default {
 	},
   onLoad(){
 		this.$nextTick(()=>{
-			// this.watchPlaying('我是onload时候注册的')
+			this.watchPlaying('我是onload时候注册的')
 		})
 	},
 	onShow() {
@@ -114,8 +114,15 @@ export default {
 		},
  
 		watchPlaying(action){
+			//action用于注册多个同一件回调函数(比如多个playing回调), 同一个action只可以注册一次
 			this.$zaudio.on('playing', action, info=>{
 				console.log('播放中----'+action,  info)
+			})
+		},
+		offPlaying(action){
+			//注意解除事件action必须与注册事件的action相同
+			this.$zaudio.on('playing', action, info=>{
+				console.log('解除播放回调----'+action,  info)
 			})
 		}
 	}
