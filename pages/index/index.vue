@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<zaudio theme="theme3"></zaudio>
+		<zaudio theme="theme1"></zaudio>
 
 		<view class="listbox">
 			<view style="padding:10px">音频列表:</view>
@@ -12,10 +12,12 @@
 		</view>
 
 		<div class="demo">
-			<button @click="reset" size="mini" type="primary">音频-覆盖</button>
-			<button @click="add" size="mini" type="primary">音频-添加</button>
-			<button @click="willStop" size="mini" type="primary">限制播放5s后暂停</button>
-			<button @click="removeStop" size="mini" type="primary">去除播放限制,并继续播放</button>
+			<button @click="reset" size="mini" >覆盖音频</button>
+			<button @click="add" size="mini" >添加音频</button>
+			<button @click="willStop" size="mini">限制播放5s后暂停</button>
+			<button @click="removeStop" size="mini">去除播放限制</button>
+			<button @click="watchPlaying('我是按钮注册的')" size="mini">注册播放中回调函数(控制台)</button>
+			<button @click="watchPlaying('我是按钮注册的')" size="mini">解除播放中回调函数(控制台)</button>
 		</div>
 	</view>
 </template>
@@ -42,7 +44,11 @@ export default {
 			return this.$zaudio.playinfo; //当前播放的信息
 		}
 	},
-	onLoad() {},
+  onLoad(){
+		this.$nextTick(()=>{
+			// this.watchPlaying('我是onload时候注册的')
+		})
+	},
 	onShow() {
 		//进入其他页面, zaudio渲染了其他数据
 		//每次页面onshow时同步当前的播放状态
@@ -105,6 +111,12 @@ export default {
 		removeStop() {
 			this.$zaudio.onPlaying = null;
 			this.$zaudio.operate();
+		},
+ 
+		watchPlaying(action){
+			this.$zaudio.on('playing', action, info=>{
+				console.log('播放中----'+action,  info)
+			})
 		}
 	}
 };
@@ -128,7 +140,7 @@ export default {
 }
 
 .demo {
-	margin-top: 30px;
+	margin-top: 20px;
 	button {
 		margin: 5px;
 	}

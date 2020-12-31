@@ -108,7 +108,7 @@
 
 <script>
 import { formatSeconds } from './util.js';
-import { mapGetters } from 'vuex';
+let base = Symbol('base');
 export default {
 	props: {
 		theme: {
@@ -120,9 +120,16 @@ export default {
 			default: '#42b983'
 		}
 	},
-
+	data() {
+		return {
+			playinfo: this.$zaudio.playinfo,
+			audiolist: this.$zaudio.audiolist,
+			paused: this.$zaudio.paused,
+			renderIsPlay: this.$zaudio.renderIsPlay,
+			audio: this.$zaudio.renderinfo
+		};
+	},
 	computed: {
-		...mapGetters(['audiolist', 'playinfo', 'paused', 'audio', 'renderIsPlay']),
 		renderData() {
 			return name => {
 				if (!this.renderIsPlay) {
@@ -140,7 +147,33 @@ export default {
 		}
 	},
 
-	created() {},
+	mounted() {
+		this.$nextTick(() => {
+			//设置音频回调
+			this.$zaudio.on('setAudio', base, list => {
+				this.audiolist = [...list];
+			});
+			//更新音频回调
+			this.$zaudio.on('updateAudio', base, list => {
+				this.audiolist = [...list];
+			});
+			//开始播放回调
+			this.$zaudio.on('canPlay', base, data => {
+				this.playinfo = data;
+				this.renderIsPlay = this.$zaudio.renderIsPlay;
+				this.audio = this.$zaudio.renderinfo;
+				this.paused = this.$zaudio.paused;
+			});
+			//播放中回调
+			this.$zaudio.on('playing', base, data => {
+				this.playinfo = data;
+			});
+			//播放暂停回调
+			this.$zaudio.on('pause', base, () => {
+				this.paused = this.$zaudio.paused;
+			});
+		});
+	},
 	methods: {
 		//播放or暂停
 		operate() {
@@ -150,7 +183,7 @@ export default {
 		change(event) {
 			if (this.renderIsPlay) {
 				this.$zaudio.seek(event.detail.value);
-				this.$zaudio.commitStore('set_playinfo', {
+				this.$zaudio.commit('setPlayinfo', {
 					current: formatSeconds(event.detail.value),
 					current_value: event.detail.value
 				});

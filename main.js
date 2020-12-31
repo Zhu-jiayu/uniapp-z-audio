@@ -6,11 +6,6 @@ Vue.config.productionTip = false
 
 App.mpType = 'app'
 
-
-
-import store from './store'
-Vue.prototype.$store = store;
-
 import {
 	ZAudio
 } from '@/components/z-audio'
@@ -20,7 +15,6 @@ import {
 
 
 let zaudio = new ZAudio({
-	store: store, //此处的store必须为实例化vuex的store
 	continuePlay: true, //续播
 	autoPlay: true, //自动播放 部分浏览器不支持
 
@@ -38,7 +32,7 @@ let zaudio = new ZAudio({
 	},
 
 	onPlaying(playinfo) { //播放中
-		console.log('onPlaying---------', playinfo)
+		// console.log('onPlaying---------', playinfo)
 	},
 
 	onPause() { //暂停

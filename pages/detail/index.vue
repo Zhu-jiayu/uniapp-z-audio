@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
-		<zaudio :theme="themelist[key]" :autoplay="true" :continue="true"></zaudio>
-		<button @click="changeTheme(k)" class="bottom" type="primary" size="mini" v-for="(i, k) in themelist" :key="k">{{ i }}</button>
+		<zaudio :theme="themelist[key].val" :autoplay="true" :continue="true"></zaudio>
+		<button @click="changeTheme(k)" class="bottom" type="primary" size="mini" v-for="(i, k) in themelist" :key="k">{{ i.name }}</button>
 	</view>
 </template>
 
@@ -11,8 +11,18 @@ import zaudio from '@/components/z-audio/z-audio';
 export default {
 	data() {
 		return {
-			key: 0,
-			themelist: ['theme1', 'theme2', 'theme3']
+			key: 2,
+			themelist: [
+				{
+					name:'样式1',val:'theme1',
+				},
+				{
+					name:'样式2',val:'theme2',
+				},
+				{
+					name:'样式3',val:'theme3',
+				}
+			]
 		};
 	},
 	components: { zaudio: zaudio },

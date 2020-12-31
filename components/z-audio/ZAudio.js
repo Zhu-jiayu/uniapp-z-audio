@@ -1,23 +1,30 @@
 /**
  * options参数
- * @param store         <Object>   vuex实例化的store
  * @param defaultCover  <String>   音频默认海报
- * @param continuePlay  <Boolean>  继续播放
+ * @param continuePlay  <Boolean>  继续播放         错误播放或结束播放后执行
  * @param autoPlay      <Boolean>  自动播放
  */
 
-/**
- * @method onError       错误播放时回调
- * @method onPlaying     播放时回调
- * @method onCanplay     可以播放回调
- * @method onPlay        开始播放回调
- * @method onPause       暂停回调
- * @method onStop        暂停回调
- * @method onEnded       结束回调
+/**----------------------------------------zaudio.on(event, action, callback) 回调方法
+ * @method error       错误播放时回调
+ * @method playing     播放时回调         @return playinfo
+ * @method canPlay     可以播放回调       @return playinfo
+ * @method pause       暂停回调
+ * @method ended       结束回调
+ * @method setAudio    覆盖音频的回调      @return audiolist
+ * @method updateAudio    添加音频的回调   @return audiolist
+ * @method setRender    指定音频的回调
+ * @method syncRender    同步并渲染的回调     
+ * @method operate      播放或暂停的回调    
+ * @method stop         暂停的回调        
+ * @method seek         快进拖到回调        
+ * 
+ * -----------------------------------------zaudio.xxx 实例方法
+ * 
  * @method setRender     指定音频, 渲染到zaudio组件
  * @method syncRender    同步并渲染当前的播放状态
  * @method operate       播放或暂停指定索引的音频
- * @method setAudio		 覆盖设置音频列表
+ * @method setAudio		   覆盖音频列表
  * @method updateAudio   添加音频列表
  * @method stop          暂停当前播放音频
  * **/
@@ -25,41 +32,104 @@ import {
 	formatSeconds as format
 } from './util.js';
 
-export default class ZAudio {
+
+class EventBus {
+	constructor() {
+		this._events = new Map();
+	}
+	once(event, action, fn) {
+		this.on(event, action, fn, true);
+	}
+	on(event, action, fn, once = false) {
+		let arr = this._events.get(event);
+console.log(arr)
+		// let hasAction = arr.findIndex((i) => i.action == action);
+		// if (hasAction > -1) {
+		// 	console.warn(event + '时的' + action + '事件已注册')
+		// 	return
+		// }
+		this._events.set(event, [
+			...(this._events.get(event) || []),
+			{
+				action,
+				fn,
+				once
+			},
+		]);
+
+
+	}
+	has(event) {
+		return this._events.has(event);
+	}
+	emit(event, data) {
+		if (!this.has(event)) {
+			return false;
+		}
+		let arr = this._events.get(event);
+		arr.forEach((i) => {
+			i.fn(data);
+			if (i.once) {
+				this.off(event, data);
+			}
+		});
+	}
+	off(event, action) {
+		if (!this.has(event)) {
+			return false;
+		}
+		let arr = this._events.get(event);
+		let newdata = arr.filter((i) => i.action !== action);
+		this._events.set(event, [...newdata]);
+	}
+}
+
+export default class ZAudio extends EventBus {
+
+	static version = '2.1.0';
+
+	renderIndex = 0; // 组件渲染的索引值
+	audiolist = []; //音频列表
+	renderinfo = { //zaudio组件-当前渲染的音频数据
+		current: 0, //当前时间
+		duration: 0, //总时间
+		duration_value: 0, //总长度
+		current_value: 0, //当前长度
+		src: '', //当前音频地址
+		title: '', //当前音频标题
+		singer: '', //当前音频作者
+		coverImgUrl: '', //当前音频封面
+	};
+	playinfo = { //$zaudio对象-当前播放的音频数据
+		current: 0, //当前时间
+		duration: 0, //总时间
+		duration_value: 0, //总长度
+		current_value: 0, //当前长度
+		src: "", //当前音频地址	
+		title: '', //当前音频标题
+		singer: '', //当前音频作者
+		coverImgUrl: '' //当前音频封面
+	};
+	paused = true; //$zaudio对象当前播放音频的暂停状态
+	uPause = false; //$zaudio对象当前播放音频的意外中断的状态
+
 	constructor(options) {
+		super(options)
 		let {
 			defaultCover = '',
-				store = null,
 				autoPlay = false,
 				continuePlay = true,
-				onError = null,
-				onPlaying = null,
-				onPlay = null,
-				onCanplay = null,
-				onPause = null,
-				onStop = null,
-				onEnded = null
+
 		} = options;
 
 
-		if (!store) {
-			throw Error('请先配置store')
-			return
-		}
+
 		if (this.audioCtx) return
 
-		this.store = store;
+
 		this.defaultCover = defaultCover;
 		this.autoPlay = autoPlay;
 		this.continuePlay = continuePlay;
-
-		this.onPlaying = onPlaying;
-		this.onCanplay = onCanplay;
-		this.onPlay = onPlay;
-		this.onPause = onPause;
-		this.onStop = onStop;
-		this.onEnded = onEnded;
-		this.onError = onError;
 
 		this.init();
 
@@ -77,7 +147,7 @@ export default class ZAudio {
 		// #endif
 
 		this.audioCtx = audioCtx;
-	
+
 		this.audioCtx.onCanplay(this.onCanplayHandle.bind(this))
 		this.audioCtx.onPlay(this.onPlayHandle.bind(this))
 		this.audioCtx.onPause(this.onPauseHandle.bind(this))
@@ -87,21 +157,21 @@ export default class ZAudio {
 		this.audioCtx.onError(this.onErrorHandle.bind(this))
 
 		// #ifndef H5
-		setTimeout(()=>{
+		setTimeout(() => {
 			if (this.autoPlay) {
 				this.operate()
 			}
 		}, 500)
 		// #endif
-		
 
-		this.appCheckReplay(this.audioCtx, this.store)
+
+		this.appCheckReplay(this.audioCtx, this)
 	}
 
 
 
 	onCanplayHandle() {
-		typeof this.onCanplay === 'function' && this.onCanplay();
+		super.emit('canPlay', this.playinfo)
 	}
 	onPlayHandle() {
 		const {
@@ -109,35 +179,33 @@ export default class ZAudio {
 			title: renderTitle,
 			singer: renderSinger,
 			coverImgUrl: renderCoverImgUrl
-		} = this.store.getters.audio;
+		} = this.renderinfo;
 
 		// #ifdef APP-PLUS
-		this.commitStore("set_playinfo", {
+		this.commit("setPlayinfo", {
 			duration: format(this.audioCtx.duration),
 			duration_value: this.audioCtx.duration
 		});
 		// #endif
-		this.commitStore("set_pause", false)
-		this.commitStore("set_n_pause", false)
+		this.commit("setPause", false)
+		this.commit("setUnnormalPause", false)
 
 	}
 	onPauseHandle() {
-		this.commitStore("set_pause", true)
-		typeof this.onPause === 'function' && this.onPause();
+		this.commit("setPause", true)
+		super.emit('pause')
 	}
 	onStopHandle() {
-		this.tore.commit("set_pause", true)
-		typeof this.onStop === 'function' && this.onStop();
+		this.commit("setPause", true)
 	}
 	onEndedHandle() {
-		this.commitStore("set_pause", true);
+		this.commit("setPause", true);
 		this.audioCtx.startTime = 0;
-		this.commitStore("set_playinfo", {
+		this.commit("setPlayinfo", {
 			current: format('0'),
 			current_value: '0'
 		})
-
-		typeof this.onEnded === 'function' && this.onEnded();
+		super.emit('end')
 
 		//续播
 		if (this.continuePlay) {
@@ -146,20 +214,17 @@ export default class ZAudio {
 
 	}
 	onTimeUpdateHandle() {
-		let {
-			renderIsPlay,
-			playinfo
-		} = this.store.getters;
-		if (renderIsPlay) {
-			this.commitStore("set_playinfo", {
+
+		if (this.renderIsPlay) {
+			this.commit("setPlayinfo", {
 				current: format(this.audioCtx.currentTime),
 				current_value: this.audioCtx.currentTime
 			})
 
 			// #ifndef APP-PLUS
-			if (this.audioCtx.duration != playinfo.duration_value) {
+			if (this.audioCtx.duration != this.playinfo.duration_value) {
 
-				this.commitStore("set_playinfo", {
+				this.commit("setPlayinfo", {
 					duration: format(this.audioCtx.duration),
 					duration_value: this.audioCtx.duration
 				})
@@ -167,19 +232,18 @@ export default class ZAudio {
 			// #endif
 		}
 
-		typeof this.onPlaying === 'function' && this.onPlaying(playinfo);
-
+		super.emit("playing", this.playinfo)
 	}
 	onErrorHandle() {
-		this.commitStore("set_pause", true)
+		this.commit("setPause", true)
 
-		this.commitStore("set_render", {
+		this.commit("setRender", {
 			src: '',
 			title: '',
 			singer: '',
 			coverImgUrl: ''
 		})
-		this.commitStore("set_playinfo", {
+		this.commit("setPlayinfo", {
 			current: 0,
 			current_value: 0,
 			duration: 0,
@@ -187,82 +251,69 @@ export default class ZAudio {
 			title: '',
 			src: ''
 		});
-		typeof this.onError === 'function' && this.onError();
-	}
-	//设置store
-	commitStore(action, data) {
-		this.store.commit(action, data)
+		super.emit('error')
+		if (this.continuePlay) {
+			this.changeplay(1);
+		}
 	}
 
-	//渲染指定的音频
-	setRender(data) {
-		this.store.commit("set_render", data)
+	commit(action, data) {
+		typeof this[action] === 'function' && this[action](data)
 	}
 
 	//同步渲染当前状态 (用于不同页面zaudio组件同步播放状态)
 	syncRender() {
-		this.setRender(this.store.getters.playIndex);
-	}
-
-	// 覆盖音频列表
-	setAudio(data) {
-		this.store.commit("set_audiolist", data)
-	}
-	//添加音频列表
-	updateAudio(data) {
-		this.store.commit("updata_audiolist", data)
+		this.setRender(this.playIndex);
+		super.emit('syncRender')
 	}
 
 
 	//快进
 	seek(value) {
 		this.audioCtx.seek(value)
+		setTimeout(() => {
+			super.emit('seek', this.playinfo.current)
+		}, 0)
+
 	}
 
 	//快进,退
 	stepPlay(value) {
-		let {
-			renderIsPlay,
-			playinfo
-		} = this.store.getters;
-		if (renderIsPlay) {
-			var pos = playinfo.current_value + value
+		if (this.renderIsPlay) {
+			var pos = this.playinfo.current_value + value
 			this.seek(pos);
 		}
 	}
 	//切歌
 	changeplay(count) {
-		let {
-			renderIsPlay,
-			renderIndex,
-			audiolist
-		} = this.store.getters
-		if (renderIsPlay) {
-			var nowindex = renderIndex;
+		if (this.renderIsPlay) {
+			var nowindex = this.renderIndex;
 			nowindex += count;
-			nowindex = nowindex < 0 ? audiolist.length - 1 : nowindex > audiolist.length - 1 ? 0 : nowindex;
-			this.commitStore("set_pause", true);
+			nowindex = nowindex < 0 ? this.audiolist.length - 1 : nowindex > this.audiolist.length - 1 ? 0 : nowindex;
+			this.commit("setPause", true);
 			this.operate(nowindex)
 		} else {
-			this.commitStore("set_pause", true);
-			this.operate(renderIndex)
+			this.commit("setPause", true);
+			this.operate(this.renderIndex)
 		}
 
 
 	}
 	//手动播放或暂停, 并渲染对应的数据
 	operate(key) {
-		key !== undefined && this.commitStore("set_render", key);
+		key !== undefined && this.commit("setRender", key);
 		this.operation();
+
+		super.emit('operate')
 	}
 	//暂停播放
-	stop(){
+	stop() {
 		this.audioCtx.pause();
-		this.commitStore('set_pause', true)
-		this.commitStore('set_n_pause', true)
-		return
+		this.commit('setPause', true)
+		this.commit('setUnnormalPause', true)
+		super.emit('stop')
 	}
-	
+
 	//播放,暂停事件判断, 
 	//播放数据与渲染数据相同时: 播放->暂停, 暂停->播放
 	//播放数据与渲染数据不相同时: 播放渲染音频
@@ -273,51 +324,48 @@ export default class ZAudio {
 			duration_value,
 			current_value,
 			src
-		} = this.store.getters.playinfo;
+		} = this.playinfo;
 		const {
 			src: renderSrc,
 			title: renderTitle,
 			singer: renderSinger,
 			coverImgUrl: renderCoverImgUrl
-		} = this.store.getters.audio;
-		const {
-			renderIsPlay,
-			paused
-		} = this.store.getters;
-		
+		} = this.renderinfo;
 
-		
+
+		let renderIsPlay = this.renderIsPlay;
+		let paused = this.paused;
+
 		if (!renderIsPlay) { //渲染与播放地址 不同
 
-				this.audioCtx.src = renderSrc;
-				this.audioCtx.title = renderTitle;
-				this.audioCtx.singer = renderSinger;
-				this.audioCtx.coverImgUrl = renderCoverImgUrl || this.defaultCover;
+			this.audioCtx.src = renderSrc;
+			this.audioCtx.title = renderTitle;
+			this.audioCtx.singer = renderSinger;
+			this.audioCtx.coverImgUrl = renderCoverImgUrl || this.defaultCover;
 
-				this.audioCtx.startTime = 0;
-				this.audioCtx.seek(0);
+			this.audioCtx.startTime = 0;
+			this.audioCtx.seek(0);
 
-				this.audioCtx.play();
-				this.commitStore('set_pause', false)
+			this.audioCtx.play();
+			this.commit('setPause', false)
+			this.commit("setPlayinfo", {
+				src: renderSrc,
+				title: renderTitle,
+				singer: renderSinger,
+				coverImgUrl: renderCoverImgUrl
+			});
 
-				this.commitStore("set_playinfo", {
-					src: renderSrc,
-					title: renderTitle,
-					singer: renderSinger,
-					coverImgUrl: renderCoverImgUrl
-				});
-	
 		} else {
-			
+
 			if (paused) { //渲染与播放地址相同
 				this.audioCtx.play();
 
 				this.audioCtx.startTime = parseFloat(current_value);
 				this.audioCtx.seek(parseFloat(current_value));
-				this.commitStore('set_pause', false)
+				this.commit('setPause', false)
 
 
-				this.commitStore("set_playinfo", {
+				this.commit("setPlayinfo", {
 					src: renderSrc,
 					title: renderTitle,
 					singer: renderSinger,
@@ -325,15 +373,105 @@ export default class ZAudio {
 				});
 			} else {
 				this.audioCtx.pause();
-				this.commitStore('set_pause', true)
-				this.commitStore('set_n_pause', true)
+				this.commit('setPause', true)
+				this.commit('setUnnormalPause', true)
 			}
 		}
 	}
 
-	//app端判断电话来电后, 音频意外中断之后的继续播放
-	appCheckReplay(audioctx, store) {
 
+	//覆盖音频
+	setAudio(data) {
+		this.audiolist = [...data];
+		super.emit("setAudio", this.audiolist)
+	}
+	//添加音频
+	updateAudio(data) {
+		this.audiolist.push(...data)
+		super.emit("updateAudio", this.audiolist)
+	}
+
+	//设置当前播放信息
+	setPlayinfo(data) {
+		if (data.current) {
+			this.playinfo.current = data.current
+		}
+		if (data.duration) {
+			this.playinfo.duration = data.duration
+		}
+		if (data.duration_value) {
+			this.playinfo.duration_value = data.duration_value
+		}
+		if (data.current_value) {
+			this.playinfo.current_value = data.current_value
+		}
+		if (data.src) {
+			this.playinfo.src = data.src
+		}
+		if (data.title) {
+			this.playinfo.title = data.title
+		}
+		if (data.singer) {
+			this.playinfo.singer = data.singer
+		}
+		if (data.coverImgUrl) {
+			this.playinfo.coverImgUrl = data.coverImgUrl
+		}
+
+	}
+
+	setPause(data) {
+		this.paused = data
+	}
+	setUnnormalPause(data) {
+		this.uPause = data
+	}
+
+	//设置渲染索引 和 渲染信息
+	setRender(data) {
+		if (this.audiolist.length == 0) return
+
+		if (typeof data === 'number' || typeof data === 'string') {
+			this.renderIndex = data * 1;
+			this.renderinfo = {
+				src: this.audiolist[data].src,
+				title: this.audiolist[data].title,
+				singer: this.audiolist[data].singer,
+				coverImgUrl: this.audiolist[data].coverImgUrl,
+				current: '00:00',
+				duration: '00:00',
+				current_value: 0,
+				duration_value: 100
+			}
+		} else {
+			this.renderinfo = data;
+			let renderIndex = this.audiolist.findIndex(i => i.src == data.src);
+			if (renderIndex >= 0) {
+				this.renderIndex = renderIndex;
+			}
+
+		}
+	}
+
+
+	get playIndex() {
+		let index = this.audiolist.findIndex(i => i.src == this.playinfo.src)
+		return index <= 0 ? 0 : index
+	}
+
+	get renderIsPlay() {
+		return this.renderinfo.src == this.playinfo.src
+	}
+
+
+
+
+
+
+
+	//app端判断电话来电后, 音频意外中断之后的继续播放
+	appCheckReplay() {
+		let _t = this;
 		// #ifdef APP-PLUS
 		try {
 			if (uni.getSystemInfoSync().platform == 'android') {
@@ -354,8 +492,8 @@ export default class ZAudio {
 						var phoneNumber = intent.getStringExtra(telephonyManager.EXTRA_INCOMING_NUMBER);
 
 
-						if (phonetype == 0 && !store.state.n_pause) {
-							audioctx.play()
+						if (phonetype == 0 && !_t.uPause) {
+							_t.audioctx.play()
 						}
 					}
 				});
@@ -373,7 +511,7 @@ export default class ZAudio {
 				center.setCallEventr(function(ctCall) {
 
 					callstatus = !callstatus
-					if (!callstatus && !store.state.n_pause) {
+					if (!callstatus && !_t.uPause) {
 						audioctx.play()
 					} else {
 						audioctx.pause()
@@ -387,17 +525,7 @@ export default class ZAudio {
 
 		// #endif
 	}
-	get audiolist() {
-		return this.store.getters.audiolist
-	}
-	get playIndex() {
-		return this.store.getters.playIndex
-	}
-	get playinfo() {
-		return this.store.getters.playinfo
-	}
-	get paused() {
-		return this.store.getters.paused
-	}
+
+
 
 }
