@@ -17,30 +17,6 @@ import {
 let zaudio = new ZAudio({
 	continuePlay: true, //续播
 	autoPlay: true, //自动播放 部分浏览器不支持
-
-	onError() {
-		uni.showToast({
-			title: '音频播放错误',
-			duration: 1500,
-			mask: false,
-			icon: 'none',
-			position: 'center'
-		})
-	},
-	onCanplay() { //点击开始触发
-		console.log('onCanplay-------')
-	},
-
-	onPlaying(playinfo) { //播放中
-		// console.log('onPlaying---------', playinfo)
-	},
-
-	onPause() { //暂停
-		console.log('onPause---------')
-	},
-	onEnded() { //结束
-		console.log('onEnded---------')
-	}
 })
  
 Vue.prototype.$zaudio = zaudio

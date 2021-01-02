@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<zaudio theme="theme1"></zaudio>
+		<zaudio theme="theme3"></zaudio>
 
 		<view class="listbox">
 			<view style="padding:10px">音频列表:</view>
@@ -40,7 +40,7 @@ export default {
 
 	onLoad() {
 		
-		this.getListData()
+		this.getAudioState()
 	},
 	onShow() {
 		//进入其他页面, zaudio组件渲染了其他数据
@@ -125,8 +125,8 @@ export default {
 		},
 		
 		//--------------获取音频列表的播放状态和列表数据
-		getListData(){
-			let action = 'getAudioListState';
+		getAudioState(){
+			let action = 'getAudioState';
 			
 			//设置音频回调
 			this.$zaudio.on('setAudio', action, list => {
@@ -139,9 +139,8 @@ export default {
 			//开始播放回调
 			this.$zaudio.on('canPlay', action, data => {
 				this.playinfo = data;
-				this.renderIsPlay = this.$zaudio.renderIsPlay;
-				this.audio = this.$zaudio.renderinfo;
 				this.paused = this.$zaudio.paused;
+				this.playIndex = this.$zaudio.playIndex;
 			});
 			//播放中回调
 			this.$zaudio.on('playing', action, data => {

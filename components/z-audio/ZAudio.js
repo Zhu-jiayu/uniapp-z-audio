@@ -14,16 +14,12 @@
  * @event ended       结束回调
  * @event setAudio    覆盖音频的回调      @return audiolist
  * @event updateAudio    添加音频的回调   @return audiolist
- * @event setRender    指定音频的回调
- * @event syncRender    同步并渲染的回调     
- * @event operate      播放或暂停的回调    
  * @event stop         暂停的回调        
  * @event seek         快进拖到回调        
  * 
- * 
- * 
  * -----------------------------------------zaudio 实例方法
- * 
+ * @method on           回调函数注册业务事件
+ * @method off          回调函数中卸载业务事件
  * @method setRender     指定音频, 渲染到zaudio组件
  * @method syncRender    同步并渲染当前的播放状态
  * @method operate       播放或暂停指定索引的音频
@@ -41,10 +37,7 @@ class EventBus {
 	constructor() {
 		this._events = new Map();
 	}
-	once(event, action, fn) {
-		this.on(event, action, fn, true);
-	}
-	on(event, action, fn, once = false) {
+	on(event, action, fn) {
 		if (event !== undefined && action !== undefined) {
 			let arr = this._events.get(event);
 
@@ -56,14 +49,10 @@ class EventBus {
 				...(this._events.get(event) || []),
 				{
 					action,
-					fn,
-					once
+					fn
 				},
 			]);
 		}
-
-
-
 	}
 	has(event) {
 		return this._events.has(event);
@@ -75,9 +64,6 @@ class EventBus {
 		let arr = this._events.get(event);
 		arr.forEach((i) => {
 			i.fn(data);
-			if (i.once) {
-				this.off(event, data);
-			}
 		});
 	}
 	off(event, action) {
@@ -125,7 +111,6 @@ export default class ZAudio extends EventBus {
 			defaultCover = '',
 				autoPlay = false,
 				continuePlay = true,
-
 		} = options;
 
 
@@ -171,7 +156,7 @@ export default class ZAudio extends EventBus {
 		// #endif
 
 
-		this.appCheckReplay(this.audioCtx, this)
+		this.appCheckReplay()
 	}
 
 
@@ -273,7 +258,6 @@ export default class ZAudio extends EventBus {
 	//同步渲染当前状态 (用于不同页面zaudio组件同步播放状态)
 	syncRender() {
 		this.setRender(this.playIndex);
-		super.emit('syncRender')
 	}
 
 
@@ -313,7 +297,6 @@ export default class ZAudio extends EventBus {
 		key !== undefined && this.commit("setRender", key);
 		this.operation();
 
-		super.emit('operate')
 	}
 	//暂停播放
 	stop() {
