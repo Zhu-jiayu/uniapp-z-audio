@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<zaudio theme="theme3"></zaudio>
+		<zaudio theme="theme1"></zaudio>
 
 		<view class="listbox">
 			<view style="padding:10px">音频列表:</view>
@@ -37,7 +37,11 @@ export default {
 		};
 	},
 	components: { zaudio: zaudio },
-
+	onLoad(){
+		this.$zaudio.on('stop', 'aaa', function(){
+			console.log('aa')
+		})
+	},
 	onShow() {
 		//同步渲染当前的播放状态
 		this.$zaudio.syncRender();

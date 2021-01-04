@@ -1,6 +1,6 @@
 # uniapp-zaudio 背景音频播放组件
 
-当前版本`v2.1.1`
+当前版本`v2.1.2`
 ## 预览
 [http://jingangtui.gitee.io/uniapp-z-audio/#/](http://jingangtui.gitee.io/uniapp-z-audio/#/)
 
@@ -20,6 +20,7 @@
 - 具体使用方式,请下载示例
 
 ## 使用步骤
+0. 先安装[typescript编译插件](https://ext.dcloud.net.cn/plugin?name=compile-typescript)
 1. <a href="https://ext.dcloud.net.cn/plugin?id=1888">插件市场下载</a> or `npm install uniapp-zaudio`
 
 2. 实例化 ZAudio 并挂载 (main.js)
@@ -161,7 +162,7 @@ zaudio.operate(1);
 | ended       | 结束回调       |
 | setAudio    | 覆盖音频的回调 | callback 参数为当前音频列表       |
 | updateAudio | 添加音频的回调 | callback 参数为当前音频列表       |
-| stop        | 收到暂停回调   |
+| stop        | 收到暂停回调, 小程序音频浮窗关闭回调   |
 | seek        | 快进拖动回调   |
 
 用法示例:

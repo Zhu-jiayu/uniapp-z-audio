@@ -5,19 +5,8 @@
  * @param autoPlay      <Boolean>  自动播放
  */
 
-/**----------------------------------------zaudio.on(event, action, callback) 注册回调方法
- *----------------------------------------zaudio.off(event, action) 卸载回调方法
- * @event error       错误播放时回调
- * @event playing     播放时回调         @return playinfo
- * @event canPlay     可以播放回调       @return playinfo
- * @event pause       暂停回调
- * @event ended       结束回调
- * @event setAudio    覆盖音频的回调      @return audiolist
- * @event updateAudio    添加音频的回调   @return audiolist
- * @event stop         暂停的回调
- * @event seek         快进拖到回调
- *
- * -----------------------------------------zaudio 实例方法
+
+ /** -----------------------------------------zaudio 实例方法
  * @method on(event, action, cb)       回调函数注册业务事件
  * @method off(event, action)          回调函数中卸载业务事件
  * @method setRender(data)             指定音频, 渲染到zaudio组件
@@ -29,9 +18,19 @@
  * @method stepPlay(count)      				快进快退
  * @method syncStateOn(action, cb)       	注册一个用于同步获取当前播放状态的事件
  * @method syncStateOff(action)     		卸载用于同步获取当前播放状态的事件
- *
- *
- * --------------------------zaudio属性
+ **/
+ /**----------------------------------------event回调名
+  * @event error       错误播放时回调
+  * @event playing     播放时回调         @return playinfo
+  * @event canPlay     可以播放回调       @return playinfo
+  * @event pause       暂停回调
+  * @event ended       结束回调
+  * @event setAudio    覆盖音频的回调      @return audiolist
+  * @event updateAudio    添加音频的回调   @return audiolist
+  * @event seek         快进拖到回调
+  * @event stop         小程序音频浮窗关闭回调, 停止播放回调
+  **/
+ /** --------------------------zaudio属性
  * renderIndex  	当前zaudio渲染索引
  * audiolist  		音频列表数组           [{src:音频导致, title:音频名, singer: 作者, coverImgUrl: 音频封面}]
  * renderinfo  		当前渲染信息
@@ -40,7 +39,21 @@
  * playIndex  		当前播放索引
  * renderIsPlay   渲染与播放是否一致
  * **/
-import { formatSeconds as format } from "./util";
+import { formatSeconds } from "./util";
+
+interface audio {
+  src: string; //当前音频地址
+  title: string; //当前音频标题
+  singer: string; //当前音频作者
+  coverImgUrl: string; //当前音频封面
+}
+
+interface audioInfo extends audio {
+  current: string | number; //当前时间
+  duration: string | number; //总时间
+  duration_value: number; //总长度
+  current_value: number; //当前长度
+}
 
 class EventBus {
   protected _events;
@@ -88,22 +101,8 @@ class EventBus {
   }
 }
 
-interface audio {
-  src: string; //当前音频地址
-  title: string; //当前音频标题
-  singer: string; //当前音频作者
-  coverImgUrl: string; //当前音频封面
-}
-
-interface audioInfo extends audio {
-  current: string | number; //当前时间
-  duration: string | number; //总时间
-  duration_value: number; //总长度
-  current_value: number; //当前长度
-}
-
-export default class ZAudio extends EventBus {
-  static version: string = "2.1.1";
+export class ZAudio extends EventBus {
+  static version: string = "2.1.2";
 
   renderIndex: number = 0; // 组件渲染的索引值
   audiolist: Array<audio> = []; //音频列表
@@ -154,7 +153,7 @@ export default class ZAudio extends EventBus {
 
     this.init();
   }
-  private init() {
+  private init():void {
     // #ifndef H5
     var audioCtx = uni.getBackgroundAudioManager();
     // #endif
@@ -185,11 +184,11 @@ export default class ZAudio extends EventBus {
     this.appCheckReplay();
   }
 
-  private onCanplayHandle() {
+  private onCanplayHandle():void {
     super.emit("canPlay", this.playinfo);
     this.syncEmitState();
   }
-  private onPlayHandle() {
+  private onPlayHandle():void {
     const {
       src: renderSrc,
       title: renderTitle,
@@ -199,26 +198,28 @@ export default class ZAudio extends EventBus {
 
     // #ifdef APP-PLUS
     this.commit("setPlayinfo", {
-      duration: format(this.audioCtx.duration),
+      duration: formatSeconds(this.audioCtx.duration),
       duration_value: this.audioCtx.duration,
     });
     // #endif
     this.commit("setPause", false);
     this.commit("setUnnormalPause", false);
   }
-  private onPauseHandle() {
+  private onPauseHandle():void {
     this.commit("setPause", true);
     super.emit("pause");
     this.syncEmitState();
   }
-  private onStopHandle() {
+  private onStopHandle():void {
     this.commit("setPause", true);
+	super.emit('stop')
+	this.syncEmitState();
   }
-  private onEndedHandle() {
+  private onEndedHandle():void {
     this.commit("setPause", true);
     this.audioCtx.startTime = 0;
     this.commit("setPlayinfo", {
-      current: format("0"),
+      current: formatSeconds("0"),
       current_value: "0",
     });
     super.emit("end");
@@ -228,17 +229,20 @@ export default class ZAudio extends EventBus {
       this.changeplay(1);
     }
   }
-  private onTimeUpdateHandle() {
+  private onTimeUpdateHandle():void {
     if (this.renderIsPlay) {
+	  //解决播放进度大于总进度问题
+      let currentTime = this.audioCtx.currentTime > this.audioCtx.duration ? this.audioCtx.duration: this.audioCtx.currentTime
       this.commit("setPlayinfo", {
-        current: format(this.audioCtx.currentTime),
-        current_value: this.audioCtx.currentTime,
-      });
+      	current: formatSeconds(currentTime),
+      	current_value: currentTime
+      })
 
       // #ifndef APP-PLUS
+	  // 解决小程序与h5无法获取总进度的问题
       if (this.audioCtx.duration != this.playinfo.duration_value) {
         this.commit("setPlayinfo", {
-          duration: format(this.audioCtx.duration),
+          duration: formatSeconds(this.audioCtx.duration),
           duration_value: this.audioCtx.duration,
         });
       }
@@ -248,7 +252,7 @@ export default class ZAudio extends EventBus {
     super.emit("playing", this.playinfo);
     this.syncEmitState();
   }
-  private onErrorHandle() {
+  private onErrorHandle():void {
     this.commit("setPause", true);
 
     this.commit("setRender", {
@@ -272,10 +276,10 @@ export default class ZAudio extends EventBus {
     }
   }
   //卸载监听回调事件
-  off(event: string, action: string) {
+  off(event: string, action: string):void {
     super.off(event, action);
   }
-  private commit(action: string, data: any) {
+  private commit(action: string, data: any):void {
     typeof this[action] === "function" && this[action](data);
   }
 
@@ -314,14 +318,14 @@ export default class ZAudio extends EventBus {
   //快进,退
   stepPlay(value: number) {
     if (this.renderIsPlay) {
-      var pos = this.playinfo.current_value + value;
+      let pos:number = this.playinfo.current_value + value;
       this.seek(pos);
     }
   }
   //切歌
   changeplay(count: number) {
     if (this.renderIsPlay) {
-      var nowindex = this.renderIndex;
+      let nowindex:number = this.renderIndex;
       nowindex += count;
       nowindex =
         nowindex < 0

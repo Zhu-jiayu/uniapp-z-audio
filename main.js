@@ -16,7 +16,7 @@ import {
 
 let zaudio = new ZAudio({
 	continuePlay: true, //续播
-	autoPlay: true, //自动播放 部分浏览器不支持
+	autoPlay: false, //自动播放 部分浏览器不支持
 })
  
 Vue.prototype.$zaudio = zaudio

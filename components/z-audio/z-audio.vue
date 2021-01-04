@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { formatSeconds } from './util.js';
+import { formatSeconds } from './util';
 
 export default {
 	props: {
@@ -126,11 +126,13 @@ export default {
 					if (name == 'paused') {
 						return true;
 					}
+					
 					return this.audio[name];
 				} else {
 					if (name == 'paused') {
 						return this.paused;
 					}
+					
 					return this.playinfo[name];
 				}
 			};
@@ -139,30 +141,19 @@ export default {
 
 	mounted() {
 		this.$nextTick(() => {
+			//修复小程序autoplay为false时的bug
+			this.audio = this.$zaudio.renderinfo;
+			this.renderIsPlay = this.$zaudio.renderIsPlay;
+			
 			let action = this.action;
-			//设置音频回调
-			this.$zaudio.on('setAudio', action, list => {
-				this.audiolist = [...list];
+			this.$zaudio.syncStateOn(action, ({ audiolist, paused, playinfo, renderIsPlay, renderinfo }) => {
+				this.audiolist = audiolist;
+				this.paused = paused;
+				this.playinfo = playinfo;
+				this.renderIsPlay = renderIsPlay;
+				this.audio = renderinfo
 			});
-			//更新音频回调
-			this.$zaudio.on('updateAudio', action, list => {
-				this.audiolist = [...list];
-			});
-			//开始播放回调
-			this.$zaudio.on('canPlay', action, data => {
-				this.playinfo = data;
-				this.renderIsPlay = this.$zaudio.renderIsPlay;
-				this.audio = this.$zaudio.renderinfo;
-				this.paused = this.$zaudio.paused;
-			});
-			//播放中回调
-			this.$zaudio.on('playing', action, data => {
-				this.playinfo = data;
-			});
-			//播放暂停回调
-			this.$zaudio.on('pause', action, () => {
-				this.paused = this.$zaudio.paused;
-			});
+			
 		});
 	},
 	methods: {
