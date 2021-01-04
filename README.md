@@ -4,6 +4,8 @@
 ## 预览
 [http://jingangtui.gitee.io/uniapp-z-audio/#/](http://jingangtui.gitee.io/uniapp-z-audio/#/)
 
+# 若文档展示不全,请查看[gitee](https://gitee.com/jingangtui/uniapp-z-audio.git)或下载[示例](https://ext.dcloud.net.cn/plugin?id=1888)
+
 ## 特性
 - 支持 H5, app, 微信小程序播放
 - 支持背景音频播放
@@ -13,7 +15,6 @@
 - 支持同一个音频回调中注册多个业务事件(v2.1.0 版本之后)
 
 ## 简要说明
-- 若文档展示不全,请查看[gitee](https://gitee.com/jingangtui/uniapp-z-audio.git)或下载[示例](https://ext.dcloud.net.cn/plugin?id=1888)
 - v2.1.0 版本之后不再依赖 vuex; (依赖vuex版本请查看[gitee v2.0分支](https://gitee.com/jingangtui/uniapp-z-audio.git))
 - 音频对象基于`uni.getBackgroundAudioManager`和`uni.createInnerAudioContext`创建
 - 具体使用方式,请下载示例
