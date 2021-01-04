@@ -34,6 +34,20 @@ export default {
 		// 指定列表中具体信息,去渲染需要播放的音频, 方法2:
 		// this.$zaudio.setRender(this.audiolist[key]);
 		
+		//playing回调, 注册`event-a`和`event-b`两个打印事件
+		this.$zaudio.on('playing', 'event-a', data => {
+			console.log(data,'event-a')
+		});
+		this.$zaudio.on('playing', 'event-b', data => {
+			console.log(data,'event-b')
+		});
+		
+
+	},
+	destroyed(){
+		//页面卸载时卸载业务, 提高页面性能
+		this.$zaudio.off('playing', 'event-a')
+		this.$zaudio.off('playing', 'event-b')
 	},
 	methods: {
 		changeTheme(k) {

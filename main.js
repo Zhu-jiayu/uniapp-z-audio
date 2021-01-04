@@ -43,7 +43,6 @@ zaudio.setAudio(data);
 
 
 
-
 const app = new Vue({
 	...App
 })

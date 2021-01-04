@@ -38,18 +38,23 @@ export default {
 	},
 	components: { zaudio: zaudio },
 
-	onLoad() {
-		
-		this.getAudioState()
-	},
 	onShow() {
-		//进入其他页面, zaudio组件渲染了其他数据
-		//每次页面onshow时同步zaudio组件当前的播放状态
+		//同步渲染当前的播放状态
 		this.$zaudio.syncRender();
-	},
 
+		//同步获取当前播放状态
+		this.$zaudio.syncStateOn('page-index-get-state', ({ audiolist, playIndex, paused, playinfo }) => {
+			this.audiolist = audiolist;
+			this.playIndex = playIndex;
+			this.paused = paused;
+			this.playinfo = playinfo;
+		});
+	},
+	onHide() {
+		//卸载page-index-get-state,提高页面性能
+		this.$zaudio.syncStateOff('page-index-get-state');
+	},
 	methods: {
-		
 		play(key) {
 			//播放或暂停
 			this.$zaudio.operate(key);
@@ -100,16 +105,15 @@ export default {
 						}
 					});
 				}
-			})
-
+			});
 		},
 
 		removeStop() {
-			this.$zaudio.off('playing', 'recharge')
+			this.$zaudio.off('playing', 'recharge');
 			this.$zaudio.operate();
 		},
 
-		logPlaying(action){
+		logPlaying(action) {
 			// 一个回调事件可以注册多次业务, action用于区分相同回调事件的不同业务
 			//例: playing回调时注册 打印事件
 			this.$zaudio.on('playing', action, info => {
@@ -120,36 +124,8 @@ export default {
 			//注意解除事件action必须与注册事件的action相同
 			this.$zaudio.off('playing', action);
 		},
-		stepPlay(val){
-			this.$zaudio.stepPlay(val)
-		},
-		
-		//--------------获取音频列表的播放状态和列表数据
-		getAudioState(){
-			let action = 'getAudioState';
-			
-			//设置音频回调
-			this.$zaudio.on('setAudio', action, list => {
-				this.audiolist = [...list];
-			});
-			//更新音频回调
-			this.$zaudio.on('updateAudio', action, list => {
-				this.audiolist = [...list];
-			});
-			//开始播放回调
-			this.$zaudio.on('canPlay', action, data => {
-				this.playinfo = data;
-				this.paused = this.$zaudio.paused;
-				this.playIndex = this.$zaudio.playIndex;
-			});
-			//播放中回调
-			this.$zaudio.on('playing', action, data => {
-				this.playinfo = data;
-			});
-			//播放暂停回调
-			this.$zaudio.on('pause', action, () => {
-				this.paused = this.$zaudio.paused;
-			});
+		stepPlay(val) {
+			this.$zaudio.stepPlay(val);
 		}
 	}
 };
