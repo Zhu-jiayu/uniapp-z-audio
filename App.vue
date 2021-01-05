@@ -12,5 +12,8 @@
 </script>
 
 <style>
-	/*每个页面公共css */
+	body,.uni-page-head{
+		max-width: 414px;
+		margin:0 auto
+	}
 </style>
