@@ -1,11 +1,11 @@
-interface audio {
+export interface audio {
   src: string; //音频地址
   title: string; //音频标题
   singer: string; //音频作者
   coverImgUrl: string; //音频封面
 }
 
-interface audioInfo extends audio {
+export interface audioInfo extends audio {
   current: string | number; //当前播放时间
   duration: string | number; //总时间
   duration_value: number; //总时长
