@@ -3,6 +3,7 @@
   "version": "2.1.2",
   "description": "audio manager for uniapp",
   "main": "components/z-audio/index.ts",
+  "types": "components/z-audio/types.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -24,7 +24,7 @@
 	</view>
 </template>
 
-<script>
+<script lang='ts'>
 import zaudio from '@/components/z-audio/z-audio';
 // import zaudio from 'uniapp-zaudio/components/z-audio/z-audio.vue'
 export default {

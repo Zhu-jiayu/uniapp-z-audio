@@ -1,16 +1,6 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*每个页面公共css */
+page,.uni-page-head{
+	max-width: 414px;
+	margin:0 auto
+}
 

@@ -7804,9 +7804,9 @@ module.exports = g;
 
 /***/ }),
 /* 4 */
-/*!*******************************************************************!*\
-  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/pages.json ***!
-  \*******************************************************************/
+/*!*****************************************!*\
+  !*** E:/work/uniapp-z-audio/pages.json ***!
+  \*****************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -7947,19 +7947,13 @@ function normalizeComponent (
 
 /***/ }),
 /* 11 */
-/*!************************************************************************************!*\
-  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/z-audio/index.ts ***!
-  \************************************************************************************/
+/*!**********************************************************!*\
+  !*** E:/work/uniapp-z-audio/components/z-audio/index.ts ***!
+  \**********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(uni) {var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;function _get(target, property, receiver) {if (typeof Reflect !== "undefined" && Reflect.get) {_get = Reflect.get;} else {_get = function _get(target, property, receiver) {var base = _superPropBase(target, property);if (!base) return;var desc = Object.getOwnPropertyDescriptor(base, property);if (desc.get) {return desc.get.call(receiver);}return desc.value;};}return _get(target, property, receiver || target);}function _superPropBase(object, property) {while (!Object.prototype.hasOwnProperty.call(object, property)) {object = _getPrototypeOf(object);if (object === null) break;}return object;}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });if (superClass) _setPrototypeOf(subClass, superClass);}function _setPrototypeOf(o, p) {_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return _setPrototypeOf(o, p);}function _createSuper(Derived) {var hasNativeReflectConstruct = _isNativeReflectConstruct();return function _createSuperInternal() {var Super = _getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = _getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return _possibleConstructorReturn(this, result);};}function _possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;}return _assertThisInitialized(self);}function _assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function _isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));return true;} catch (e) {return false;}}function _getPrototypeOf(o) {_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return _getPrototypeOf(o);}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return _arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);}function _iterableToArray(iter) {if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) return _arrayLikeToArray(arr);}function _arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function _createClass(Constructor, protoProps, staticProps) {if (protoProps) _defineProperties(Constructor.prototype, protoProps);if (staticProps) _defineProperties(Constructor, staticProps);return Constructor;} /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * ---------------------------------options参数
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @param defaultCover  <String>   音频默认海报
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @param continuePlay  <Boolean>  继续播放         错误播放或结束播放后执行
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @param autoPlay      <Boolean>  自动播放
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
-!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__, exports, __webpack_require__(/*! ./util */ 43)], __WEBPACK_AMD_DEFINE_RESULT__ = (function (require, exports, util_1) {
+/* WEBPACK VAR INJECTION */(function(uni) {var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;function _get(target, property, receiver) {if (typeof Reflect !== "undefined" && Reflect.get) {_get = Reflect.get;} else {_get = function _get(target, property, receiver) {var base = _superPropBase(target, property);if (!base) return;var desc = Object.getOwnPropertyDescriptor(base, property);if (desc.get) {return desc.get.call(receiver);}return desc.value;};}return _get(target, property, receiver || target);}function _superPropBase(object, property) {while (!Object.prototype.hasOwnProperty.call(object, property)) {object = _getPrototypeOf(object);if (object === null) break;}return object;}function _inherits(subClass, superClass) {if (typeof superClass !== "function" && superClass !== null) {throw new TypeError("Super expression must either be null or a function");}subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });if (superClass) _setPrototypeOf(subClass, superClass);}function _setPrototypeOf(o, p) {_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {o.__proto__ = p;return o;};return _setPrototypeOf(o, p);}function _createSuper(Derived) {var hasNativeReflectConstruct = _isNativeReflectConstruct();return function _createSuperInternal() {var Super = _getPrototypeOf(Derived),result;if (hasNativeReflectConstruct) {var NewTarget = _getPrototypeOf(this).constructor;result = Reflect.construct(Super, arguments, NewTarget);} else {result = Super.apply(this, arguments);}return _possibleConstructorReturn(this, result);};}function _possibleConstructorReturn(self, call) {if (call && (typeof call === "object" || typeof call === "function")) {return call;}return _assertThisInitialized(self);}function _assertThisInitialized(self) {if (self === void 0) {throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function _isNativeReflectConstruct() {if (typeof Reflect === "undefined" || !Reflect.construct) return false;if (Reflect.construct.sham) return false;if (typeof Proxy === "function") return true;try {Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));return true;} catch (e) {return false;}}function _getPrototypeOf(o) {_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {return o.__proto__ || Object.getPrototypeOf(o);};return _getPrototypeOf(o);}function _toConsumableArray(arr) {return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();}function _nonIterableSpread() {throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return _arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);}function _iterableToArray(iter) {if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);}function _arrayWithoutHoles(arr) {if (Array.isArray(arr)) return _arrayLikeToArray(arr);}function _arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function _classCallCheck(instance, Constructor) {if (!(instance instanceof Constructor)) {throw new TypeError("Cannot call a class as a function");}}function _defineProperties(target, props) {for (var i = 0; i < props.length; i++) {var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);}}function _createClass(Constructor, protoProps, staticProps) {if (protoProps) _defineProperties(Constructor.prototype, protoProps);if (staticProps) _defineProperties(Constructor, staticProps);return Constructor;}!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__, exports, __webpack_require__(/*! ./util */ 12), __webpack_require__(/*! ./types */ 13)], __WEBPACK_AMD_DEFINE_RESULT__ = (function (require, exports, util_1, types_1) {
   "use strict";
   Object.defineProperty(exports, "__esModule", { value: true });var
   EventBus = /*#__PURE__*/function () {
@@ -7989,7 +7983,7 @@ function normalizeComponent (
       } }, { key: "emit", value: function emit(
       event, data) {
         if (!this.has(event)) {
-          return false;
+          return;
         }
         var arr = this._events.get(event);
         arr.forEach(function (i) {
@@ -7998,7 +7992,7 @@ function normalizeComponent (
       } }, { key: "off", value: function off(
       event, action) {
         if (!this.has(event)) {
-          return false;
+          return;
         }
         var arr = this._events.get(event);
         var newdata = arr.filter(function (i) {return i.action !== action;});
@@ -8061,9 +8055,21 @@ function normalizeComponent (
           }
         }, 500);
         this.appCheckReplay();
+      } }, { key: "off", value: function off(
+      event, action) {
+        _get(_getPrototypeOf(ZAudio.prototype), "off", this).call(this, event, action);
+      } }, { key: "on", value: function on(
+      event, action, cb) {
+        _get(_getPrototypeOf(ZAudio.prototype), "on", this).call(this, event, action, cb);
+      } }, { key: "emit", value: function emit(
+      event, data) {
+        _get(_getPrototypeOf(ZAudio.prototype), "emit", this).call(this, event, data);
+      } }, { key: "commit", value: function commit(
+      action, data) {
+        typeof this[action] === "function" && this[action](data);
       } }, { key: "onCanplayHandle", value: function onCanplayHandle()
       {
-        _get(_getPrototypeOf(ZAudio.prototype), "emit", this).call(this, "canPlay", this.playinfo);
+        this.emit(types_1.eventName.canPlay, this.playinfo);
         this.syncEmitState();
       } }, { key: "onPlayHandle", value: function onPlayHandle()
       {var _this$renderinfo =
@@ -8073,22 +8079,22 @@ function normalizeComponent (
       } }, { key: "onPauseHandle", value: function onPauseHandle()
       {
         this.commit("setPause", true);
-        _get(_getPrototypeOf(ZAudio.prototype), "emit", this).call(this, "pause");
+        this.emit(types_1.eventName.pause);
         this.syncEmitState();
       } }, { key: "onStopHandle", value: function onStopHandle()
       {
         this.commit("setPause", true);
-        _get(_getPrototypeOf(ZAudio.prototype), "emit", this).call(this, 'stop');
+        this.emit(types_1.eventName.stop);
         this.syncEmitState();
       } }, { key: "onEndedHandle", value: function onEndedHandle()
       {
         this.commit("setPause", true);
         this.audioCtx.startTime = 0;
         this.commit("setPlayinfo", {
-          current: util_1.formatSecondsSeconds("0"),
+          current: util_1.formatSeconds("0"),
           current_value: "0" });
 
-        _get(_getPrototypeOf(ZAudio.prototype), "emit", this).call(this, "end");
+        this.emit(types_1.eventName.ended);
         this.syncEmitState();
         //续播
         if (this.continuePlay) {
@@ -8098,20 +8104,22 @@ function normalizeComponent (
       {
         if (this.renderIsPlay) {
           //解决播放进度大于总进度问题
-          var currentTime = this.audioCtx.currentTime > this.audioCtx.duration ? this.audioCtx.duration : this.audioCtx.currentTime;
+          var currentTime = this.audioCtx.currentTime > this.audioCtx.duration ?
+          this.audioCtx.duration :
+          this.audioCtx.currentTime;
           this.commit("setPlayinfo", {
-            current: util_1.formatSecondsSeconds(currentTime),
+            current: util_1.formatSeconds(currentTime),
             current_value: currentTime });
 
           // 解决小程序与h5无法获取总进度的问题
           if (this.audioCtx.duration != this.playinfo.duration_value) {
             this.commit("setPlayinfo", {
-              duration: util_1.formatSecondsSeconds(this.audioCtx.duration),
+              duration: util_1.formatSeconds(this.audioCtx.duration),
               duration_value: this.audioCtx.duration });
 
           }
         }
-        _get(_getPrototypeOf(ZAudio.prototype), "emit", this).call(this, "playing", this.playinfo);
+        this.emit(types_1.eventName.playing, this.playinfo);
         this.syncEmitState();
       } }, { key: "onErrorHandle", value: function onErrorHandle()
       {
@@ -8130,18 +8138,11 @@ function normalizeComponent (
           title: "",
           src: "" });
 
-        _get(_getPrototypeOf(ZAudio.prototype), "emit", this).call(this, "error");
+        this.emit(types_1.eventName.error);
         this.syncEmitState();
         if (this.continuePlay) {
           this.changeplay(1);
         }
-      }
-      //卸载监听回调事件
-    }, { key: "off", value: function off(event, action) {
-        _get(_getPrototypeOf(ZAudio.prototype), "off", this).call(this, event, action);
-      } }, { key: "commit", value: function commit(
-      action, data) {
-        typeof this[action] === "function" && this[action](data);
       }
       //同步渲染当前状态 (用于不同页面zaudio组件同步播放状态)
     }, { key: "syncRender", value: function syncRender() {
@@ -8149,15 +8150,15 @@ function normalizeComponent (
       }
       //注册一个同步获取属性的方法
     }, { key: "syncStateOn", value: function syncStateOn(action, cb) {
-        typeof cb === "function" && _get(_getPrototypeOf(ZAudio.prototype), "on", this).call(this, "syncStateOn", action, cb);
+        typeof cb === "function" && this.on(types_1.eventName.syncStateOn, action, cb);
       }
       //卸载同步获取属性的方法
     }, { key: "syncStateOff", value: function syncStateOff(action) {
-        _get(_getPrototypeOf(ZAudio.prototype), "off", this).call(this, "syncStateOn", action);
+        this.off(types_1.eventName.syncStateOn, action);
       }
       //订阅同步获取属性事件
     }, { key: "syncEmitState", value: function syncEmitState() {
-        _get(_getPrototypeOf(ZAudio.prototype), "emit", this).call(this, "syncStateOn", {
+        this.emit(types_1.eventName.syncStateOn, {
           renderIndex: this.renderIndex,
           audiolist: this.audiolist,
           renderinfo: this.renderinfo,
@@ -8171,7 +8172,7 @@ function normalizeComponent (
     }, { key: "seek", value: function seek(value) {var _this3 = this;
         this.audioCtx.seek(value);
         setTimeout(function () {
-          _get(_getPrototypeOf(ZAudio.prototype), "emit", _this3).call(_this3, "seek", _this3.playinfo.current);
+          _this3.emit(types_1.eventName.seek, _this3.playinfo.current);
         }, 0);
       }
       //快进,退
@@ -8210,7 +8211,7 @@ function normalizeComponent (
         this.audioCtx.pause();
         this.commit("setPause", true);
         this.commit("setUnnormalPause", true);
-        _get(_getPrototypeOf(ZAudio.prototype), "emit", this).call(this, "stop");
+        this.emit(types_1.eventName.stop);
       }
       //播放,暂停事件判断,
       //播放数据与渲染数据相同时: 播放->暂停, 暂停->播放
@@ -8261,13 +8262,13 @@ function normalizeComponent (
       //覆盖音频
     }, { key: "setAudio", value: function setAudio(data) {
         this.audiolist = _toConsumableArray(data);
-        _get(_getPrototypeOf(ZAudio.prototype), "emit", this).call(this, "setAudio", this.audiolist);
+        this.emit(types_1.eventName.setAudio, this.audiolist);
         this.syncEmitState();
       }
       //添加音频
     }, { key: "updateAudio", value: function updateAudio(data) {var _this$audiolist;
         (_this$audiolist = this.audiolist).push.apply(_this$audiolist, _toConsumableArray(data));
-        _get(_getPrototypeOf(ZAudio.prototype), "emit", this).call(this, "updateAudio", this.audiolist);
+        this.emit(types_1.eventName.updateAudio, this.audiolist);
         this.syncEmitState();
       }
       //设置当前播放信息
@@ -8312,10 +8313,10 @@ function normalizeComponent (
         if (typeof data === "number" || typeof data === "string") {
           this.renderIndex = typeof data === "string" ? parseInt(data) : data;
           this.renderinfo = {
-            src: this.audiolist[data].src,
-            title: this.audiolist[data].title,
-            singer: this.audiolist[data].singer,
-            coverImgUrl: this.audiolist[data].coverImgUrl,
+            src: this.audiolist[this.renderIndex].src,
+            title: this.audiolist[this.renderIndex].title,
+            singer: this.audiolist[this.renderIndex].singer,
+            coverImgUrl: this.audiolist[this.renderIndex].coverImgUrl,
             current: "00:00",
             duration: "00:00",
             current_value: 0,
@@ -8351,8 +8352,63 @@ function normalizeComponent (
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
-/* 12 */,
-/* 13 */,
+/* 12 */
+/*!*********************************************************!*\
+  !*** E:/work/uniapp-z-audio/components/z-audio/util.ts ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__, exports], __WEBPACK_AMD_DEFINE_RESULT__ = (function (require, exports) {
+  "use strict";
+  Object.defineProperty(exports, "__esModule", { value: true });
+  function formatSeconds(seconds) {
+    var result = typeof seconds === "string" ? parseFloat(seconds) : seconds;
+    if (isNaN(result))
+    return '';
+    var h = Math.floor(result / 3600) < 10 ?
+    "0" + Math.floor(result / 3600) :
+    Math.floor(result / 3600);
+    var m = Math.floor(result / 60 % 60) < 10 ?
+    "0" + Math.floor(result / 60 % 60) :
+    Math.floor(result / 60 % 60) + h * 60;
+    var s = Math.floor(result % 60) < 10 ?
+    "0" + Math.floor(result % 60) :
+    Math.floor(result % 60);
+    return "".concat(m, ":").concat(s);
+  }
+  exports.formatSeconds = formatSeconds;
+}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ }),
+/* 13 */
+/*!**********************************************************!*\
+  !*** E:/work/uniapp-z-audio/components/z-audio/types.ts ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__, exports], __WEBPACK_AMD_DEFINE_RESULT__ = (function (require, exports) {
+  "use strict";
+  Object.defineProperty(exports, "__esModule", { value: true });
+  var eventName;
+  (function (eventName) {
+    eventName["error"] = "error";
+    eventName["playing"] = "playing";
+    eventName["canPlay"] = "canPlay";
+    eventName["pause"] = "pause";
+    eventName["ended"] = "ended";
+    eventName["setAudio"] = "setAudio";
+    eventName["updateAudio"] = "updateAudio";
+    eventName["seek"] = "seek";
+    eventName["stop"] = "stop";
+    eventName["syncStateOn"] = "syncStateOn";
+  })(eventName = exports.eventName || (exports.eventName = {}));
+}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ }),
 /* 14 */,
 /* 15 */,
 /* 16 */,
@@ -8362,116 +8418,74 @@ function normalizeComponent (
 /* 20 */,
 /* 21 */,
 /* 22 */,
-/* 23 */,
-/* 24 */,
-/* 25 */,
-/* 26 */,
-/* 27 */,
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */
-/*!**********************************************************************************************!*\
-  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/z-audio/static/playbtn.png ***!
-  \**********************************************************************************************/
+/* 23 */
+/*!********************************************************************!*\
+  !*** E:/work/uniapp-z-audio/components/z-audio/static/playbtn.png ***!
+  \********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAACCCAMAAAC93eDPAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTExIDc5LjE1ODMyNSwgMjAxNS8wOS8xMC0wMToxMDoyMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjMzNzA3QjlBOUNEOTExRUFCNzMyRjYzQ0IxQzI0QjdFIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjMzNzA3QjlCOUNEOTExRUFCNzMyRjYzQ0IxQzI0QjdFIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MzM3MDdCOTg5Q0Q5MTFFQUI3MzJGNjNDQjFDMjRCN0UiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MzM3MDdCOTk5Q0Q5MTFFQUI3MzJGNjNDQjFDMjRCN0UiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6v/3sSAAAAclBMVEX////p4fD9/f7p4vHw6vX59/vq4/H+/v707/j+/v/s5fLq4vHp4vDy7/f49vr18fjo4vH9/P7u6PPs5vL8+v3v6fT8+/36+fzw7PX28vjs5PL7+fz29Pnr5PH6+Pzu6fTw6/X//v/39fr28/nr4/H///874LjBAAAAJnRSTlP/////////////////////////////////////////////////AKd6gbwAAAEASURBVHja7NhZTgJhFEThKmhFccIJBWeU/W/RZgkmnRyjp1bwPfzDvZU9nkiQIEGCBAkSJEiQIEGCBAkSJEiQIEGChEM6Bia8JbOvkoTmkF1xQnJTnJC789KE5KI4IYttaUJyWZyQ3BcnZH1WmpCcFCfkdFmakBytcEIyFCfkel6akFwVJ+TjtjRhPJZznJC8FydkdlyakGyKE/JUnBAJYx5wwmf//aV8pJ+mV/yBxr8p/LPmRxZ8cMPHV36Ix1cZfqHD11p8uV+80BUHXvTwdRde+j2T1ed++PFgNDnhF9TgE0eCBAkSJEiQIEGCBAkSJEiQIEGCBAkS/iDhW4ABACRE+Q8Qp4YAAAAAAElFTkSuQmCC"
 
 /***/ }),
-/* 32 */
-/*!***********************************************************************************************!*\
-  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/z-audio/static/pausebtn.png ***!
-  \***********************************************************************************************/
+/* 24 */
+/*!*********************************************************************!*\
+  !*** E:/work/uniapp-z-audio/components/z-audio/static/pausebtn.png ***!
+  \*********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAAB7CAMAAACPQKgeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTExIDc5LjE1ODMyNSwgMjAxNS8wOS8xMC0wMToxMDoyMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjYyMkY4Q0Y0OUNEOTExRUE4RUExOThDMTY4QkU5NTk5IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjYyMkY4Q0Y1OUNEOTExRUE4RUExOThDMTY4QkU5NTk5Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NjIyRjhDRjI5Q0Q5MTFFQThFQTE5OEMxNjhCRTk1OTkiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NjIyRjhDRjM5Q0Q5MTFFQThFQTE5OEMxNjhCRTk1OTkiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5rpqiWAAAAIVBMVEX////+/v///v/9/P7v6vT8/P3u6fT9/P3x7Pb+/v7///9/DQrdAAAAC3RSTlP/////////////AEpPAfIAAACrSURBVHja7NhBCoMwFATQn0atev8Dt9CaRag7Y1J4sx3Cf5DdxN49gYCAgICAgICAgICAgICAgICAgNCVkHNEzL+a+V3k3J6wxCdrXUzfYmlNOA5F/fBRiqkxIZVL1V88S5EaE8qh2M5scRshnX0EAgICAgICAgICAgICAgICAsJ/EbptTQMsbgPsjgOsryNs0NcHAQEBAQEBAQEBAQEBAQEBAQEB4cq8BBgAzipMRAS48a0AAAAASUVORK5CYII="
 
 /***/ }),
-/* 33 */
-/*!*******************************************************************************************!*\
-  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/z-audio/static/prev.png ***!
-  \*******************************************************************************************/
+/* 25 */
+/*!*****************************************************************!*\
+  !*** E:/work/uniapp-z-audio/components/z-audio/static/prev.png ***!
+  \*****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAsBAMAAADROCZUAAAAJ1BMVEVHcEyZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmampqZmZmZmZmZmZk8UCKAAAAADHRSTlMA9rdB5dGIJ3FUEKPBidVOAAABlUlEQVQ4y3WUvU/CQBTAnyAfrVOj0SgMEIODYeikS4e638QG6WDiygAhcWIAJ2IYNDFODF3UQQY/FmK6UFqE+P4or1/Xa9N7wyV3v3fv3fs6gEjk54Zy0LoxISVSHX2pqKlzgui0GnR1H/jzkoGuZ0W+IGj3ODDGv3Cbb+JxfL6HLlPLG3jNQHM5irWKuI4v7PMOH9mV6bKXeGF1G1pNXgCYhYoFHCVBEWuBJTudBsO3JZOjNNBcby1z7w4lh6rvopcGefyg6zBw8aLDjqIov/6GnEAJppsgvTrMF5PJvQ+6KzBGlq9EvnQYslpoayArQ3//AfjO6aAxZ3MbNKd6SrxnUzAzByHadWmUSLATgPFTVKWCQ6PEIM0UdNtv404QyBKgj44agjsTpA0DEp5DCDypMFOwAB60IudxfnQ4YzfmdgLUTShvowB50G8PrFqUEh7QtjuEKIkJkS/5tMOtml0osASlFTaDuH2EDQdTR81sUXFTg8V7eY3HQDw43qipWaMmHk6QjOxxpuQz+wPwv4wr7sv4B7GTnR8KwKnlAAAAAElFTkSuQmCC"
 
 /***/ }),
-/* 34 */
-/*!*****************************************************************************************!*\
-  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/z-audio/static/go.png ***!
-  \*****************************************************************************************/
+/* 26 */
+/*!***************************************************************!*\
+  !*** E:/work/uniapp-z-audio/components/z-audio/static/go.png ***!
+  \***************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAACW0lEQVRoQ+2awVHrMBCGVzrIbVACHfCoBHKJ7NOzO3AqwDnFygXSAVTwoANeBUAH0ICWkUdiTMZGji3Z0gy+ZDyOkv/bXe2uZBHQlxDiBgBydYuId0mSFKvV6t08D+Fzv9+fI+ItAJwDQMU5L4gSVtf1LSHk+kjkOyKWaZpuQxCvNAgh7gDgyuiRUl6S3W53Ril96ROJiI+U0mK9Xj8vDSKEeASAi2OAP5TSfwPEVYyxzZJhNRVAzY1XQkjBOb8fAOz8K5MBWorupZRFlmWvzlX+8IMuAdTfqAylMsFmLgjXAEb3s/aGmmBeL18Ajeg5aodXAG16FVY55/zgwxVzABhveKkdswG0rF8yxrauascSAE3tQMRVlmWTJ/kiAC5rx9IATe2Y0iCGADCpdoQEYEBOahBDBDAtyaDaESrAV+3Q2aq3QQwaoF07+hrEWAB6a0c0AC1vNAt3cx8jAKiFu6niUQIg4jZN02a75xfAR49v+82oQ0hKqbpYtZnVXDGF0JuU8vq4BY8FYMM5L7tCK3SAJ2316FqJDyll3o71vokdnAdUjk+SpBy6Zg4GABH/I6Ky+knr5BAAPgCg5JxXtvwf3CRGxAdt9dEbwkt5oDOnx+KBDWOsGjpJbVBzeuCJEJK7fi01B8DgnG6z9hKT+MAYy12Fy2wAY3N6CB5QOV2tWTsbrzECbWOczQEXOd0m1lcIvek3MPG9Zj218RpjYduYvhD68agBAHjJ6Taxg0NIrzW/HaLQgyc1XmME2sZ0HvYwg+q6rgghf/W995xuE9v1XB9MUca+MPtFn00qrDU6ji5lAAAAAElFTkSuQmCC"
 
 /***/ }),
-/* 35 */
-/*!***********************************************************************************************!*\
-  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/z-audio/static/playbtn2.png ***!
-  \***********************************************************************************************/
+/* 27 */
+/*!*********************************************************************!*\
+  !*** E:/work/uniapp-z-audio/components/z-audio/static/playbtn2.png ***!
+  \*********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFQAAABUAQMAAAAmpYKCAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAmZmZfvUgAwAAAAJ0Uk5TAP9bkSK1AAAAZElEQVR4nOXSuQGAMAgAQDZwBFd1NEZhjFSJJWeRwlaprgnhi/hHHDrbZ+GBJ146ceGBJ146ceGBJ146ceGBJ176eulNTv+yBmvb9GKP9p442s7Q2RZOHG1350776eMGvI2vxw2uiXevUQltlgAAAABJRU5ErkJggg=="
 
 /***/ }),
-/* 36 */
-/*!************************************************************************************************!*\
-  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/z-audio/static/pausebtn2.png ***!
-  \************************************************************************************************/
+/* 28 */
+/*!**********************************************************************!*\
+  !*** E:/work/uniapp-z-audio/components/z-audio/static/pausebtn2.png ***!
+  \**********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFQAAABcAQMAAADK9gDvAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAZQTFRFAAAAmZmZfvUgAwAAAAJ0Uk5TAP9bkSK1AAAAMklEQVR4nGNgGAWEgD0DA/8BKLv+AIP9Ayj7/wGG+g8w9oNR9rBjI8Uvcrwjp4dRgAoAMnCOF7E8IpwAAAAASUVORK5CYII="
 
 /***/ }),
-/* 37 */
-/*!*******************************************************************************************!*\
-  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/z-audio/static/next.png ***!
-  \*******************************************************************************************/
+/* 29 */
+/*!*****************************************************************!*\
+  !*** E:/work/uniapp-z-audio/components/z-audio/static/next.png ***!
+  \*****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAsBAMAAADROCZUAAAAKlBMVEVHcEyZmZmZmZmZmZmampqampqZmZmZmZmZmZmZmZmampqZmZmZmZmZmZlL+18TAAAADXRSTlMAPNPtX0p6vAemD44jTnceHAAAAbFJREFUOMt9VL9Lw0AUfrG/Yu3QxVaHQgehIgRURBAMVOgqVJwLpdLBQRAHt0JBNxHELiIUiou1U0EEBwuODnbIpbWk9f0v5u6S5nJtfEPyeN/xfnz3vQPgpqbudTP31gLJIg1kNipKcQ3RzF3oiCQvxhM1JDSLmtKQfArAMY6S3FOa+OPFo0iSrq/U8GEK9PBdPGXVp+4AfHnvHO8QfT0qulMloQ/8vWeQV4xh1w+EcZ39S6Qu0VDjuTRD5qdv0qMRPJeBJaS8LDqlWqB2Op02awez9veKsPiNYR9BnPAiv7T2hDNhQGytUDjgkw3gC3pDxsqlAQvTtvtWdATNMXWrYQNCZR5+eQyRDAFtk09lwG1+eYUlMtOoD0HPukC/gibt8wlNtNlwxrCBzE47zQvaN1wXgNUixLeZAnTcByEVtSbj7ZmO7hWndsaFdUrPjF2gYgcbHtN8QAqUyqBYHpWcEgrEJkcnGx7gkBjeAvUVLUG7Lu3UvsW7nHNRkY+gq7X+F8OMfK4d+cwIruS2EyTRYFEHroG8ON2AVduds5xxeTkD19l7APaKMj/8yah6tP8BhyG/YVNwS5IAAAAASUVORK5CYII="
-
-/***/ }),
-/* 38 */,
-/* 39 */,
-/* 40 */,
-/* 41 */,
-/* 42 */,
-/* 43 */
-/*!***********************************************************************************!*\
-  !*** C:/Users/16112/Documents/HBuilderProjects/zaudio/components/z-audio/util.js ***!
-  \***********************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-exports.__esModule = true;
-exports.formatSeconds = void 0;
-function formatSeconds(seconds) {
-  var result = typeof seconds === "string" ? parseFloat(seconds) : seconds;
-  if (isNaN(result))
-  return '';
-  var h = Math.floor(result / 3600) < 10 ?
-  "0" + Math.floor(result / 3600) :
-  Math.floor(result / 3600);
-  var m = Math.floor(result / 60 % 60) < 10 ?
-  "0" + Math.floor(result / 60 % 60) :
-  Math.floor(result / 60 % 60) + h * 60;
-  var s = Math.floor(result % 60) < 10 ?
-  "0" + Math.floor(result % 60) :
-  Math.floor(result % 60);
-  return m + ":" + s;
-}
-exports.formatSeconds = formatSeconds;
 
 /***/ })
 ]]);
