@@ -7,7 +7,7 @@
 
 <script>
 import zaudio from '@/components/z-audio/z-audio';
-// import zaudio from 'uniapp-zaudio/components/z-audio/z-audio.vue'
+// import zaudio from 'uniapp-zaudio/z-audio'
 export default {
 	data() {
 		return {

@@ -24,9 +24,9 @@
 	</view>
 </template>
 
-<script lang='ts'>
+<script lang="ts">
 import zaudio from '@/components/z-audio/z-audio';
-// import zaudio from 'uniapp-zaudio/components/z-audio/z-audio.vue'
+// import zaudio from 'uniapp-zaudio/z-audio'
 export default {
 	data() {
 		return {
@@ -44,7 +44,7 @@ export default {
 	},
 	onShow() {
 		//同步渲染当前的播放状态
-		this.$zaudio.syncRender();
+		this.$zaudio.syncRender()
 
 		//同步获取当前播放状态
 		this.$zaudio.syncStateOn('page-index-get-state', ({ audiolist, playIndex, paused, playinfo }) => {

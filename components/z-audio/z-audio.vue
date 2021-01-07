@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { formatSeconds } from './util';
+import { formatSeconds } from './dist/index.js';
 
 export default {
 	props: {

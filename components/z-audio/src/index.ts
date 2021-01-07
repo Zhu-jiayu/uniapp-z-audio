@@ -1,5 +1,71 @@
-import { formatSeconds } from "./util";
-import {eventName, audioInfo, audio} from "./types"
+declare const uni: any;
+declare const plus: any;
+
+interface audio {
+  src: string; //音频地址
+  title: string; //音频标题
+  singer: string; //音频作者
+  coverImgUrl: string; //音频封面
+}
+
+interface audioInfo extends audio {
+  current: string | number; //当前播放时间
+  duration: string | number; //总时间
+  duration_value: number; //总时长
+  current_value: number; //当前播放时长
+}
+
+interface zaudioCommitEvent {
+  setAudio: (data: Array<audio>) => void;
+  updateAudio: (data: Array<audio>) => void;
+  setPlayinfo: (data: audioInfo) => void;
+  setPause: (data: boolean) => void;
+  setUnnormalPause: (data: boolean) => void;
+  setRender: (data: number | string | audioInfo) => void;
+}
+interface zaudioProperty {
+  renderIndex: number;
+  audiolist: Array<audio>;
+  renderinfo: audioInfo;
+  playinfo: audioInfo;
+  paused: boolean;
+  uPause: boolean;
+  audioCtx: any;
+  autoPlay: boolean;
+  defaultCover: string;
+  continuePlay: boolean;
+}
+
+enum zaudioCbName {
+  onError = "error", //错误播放时回调
+  onTimeUpdate = "playing", //播放时回调
+  onCanplay = "canPlay", //可以播放回调
+  onPause = "pause", //暂停回调
+  onEnded = "ended", //结束回调
+  setAudio = "setAudio", //覆盖音频的回调
+  updateAudio = "updateAudio", //添加音频的回调
+  seek = "seek", //快进拖到回调
+  onStop = "stop", //小程序音频浮窗关闭回调, 停止播放回调
+  syncStateOn = "syncStateOn", //同步获取属性回调
+}
+
+function formatSeconds(seconds: number | string): string {
+  var result = typeof seconds === "string" ? parseFloat(seconds) : seconds;
+  if (isNaN(result)) return "";
+  let h: any =
+    Math.floor(result / 3600) < 10
+      ? "0" + Math.floor(result / 3600)
+      : Math.floor(result / 3600);
+  let m: any =
+    Math.floor((result / 60) % 60) < 10
+      ? "0" + Math.floor((result / 60) % 60)
+      : Math.floor((result / 60) % 60) + h * 60;
+  let s: any =
+    Math.floor(result % 60) < 10
+      ? "0" + Math.floor(result % 60)
+      : Math.floor(result % 60);
+  return `${m}:${s}`;
+}
 
 /**
  * ZAudio类
@@ -9,14 +75,14 @@ import {eventName, audioInfo, audio} from "./types"
  * @param    {Boolean}   continuePlay    继续播放,错误播放或结束播放后执行
  * @param    {Boolean}   autoPlay        自动播放,部分浏览器不支持
  * @property {Number}         renderIndex     当前渲染索引
- * @property {audioinfo}      renderinfo      当前渲染数据
+ * @property {<audioinfo>}      renderinfo      当前渲染数据
  * @property {Array<audio>}   audiolist       音频列表数组
- * @property {audioinfo}      playinfo        当前播放数据
+ * @property {<audioinfo>}      playinfo        当前播放数据
  * @property {Boolean}        paused          音频暂停状态
  * @property {Number}         playIndex       当前播放索引
  * @property {Boolean}        renderIsPlay    渲染与播放是否一致
  *
- * @method on(event, action, cb)       回调函数注册业务事件
+ * @method on(event, action, fn)       回调函数注册业务事件
  * @method off(event, action)          回调函数中卸载业务事件
  * @method setRender(data)             指定音频, 渲染到zaudio组件
  * @method syncRender()    						 同步并渲染当前的播放状态
@@ -30,11 +96,9 @@ import {eventName, audioInfo, audio} from "./types"
  *
  *
  * **/
- 
- declare var uni:any
- declare var plus:any
+
 class EventBus {
-  private _events;
+  private _events: any;
   constructor() {
     this._events = new Map();
   }
@@ -79,14 +143,13 @@ class EventBus {
   }
 }
 
-export class ZAudio extends EventBus {
-  static version: string = "2.1.2";
+export class ZAudio extends EventBus implements zaudioProperty {
+  static version: string = "2.2.0";
 
-  renderIndex: number = 0; // 组件渲染的索引值
-  audiolist: Array<audio> = []; //音频列表
+  renderIndex: number = 0;
+  audiolist: Array<audio> = [];
 
   renderinfo: audioInfo = {
-    //zaudio组件-当前渲染的音频数据
     current: 0,
     duration: 0,
     duration_value: 0,
@@ -97,8 +160,6 @@ export class ZAudio extends EventBus {
     coverImgUrl: "",
   };
   playinfo: audioInfo = {
-    //$zaudio对象-当前播放的音频数据
-
     current: 0,
     duration: 0,
     duration_value: 0,
@@ -108,8 +169,8 @@ export class ZAudio extends EventBus {
     singer: "",
     coverImgUrl: "",
   };
-  paused: boolean = true; //$zaudio对象当前播放音频的暂停状态
-  uPause: boolean = false; //$zaudio对象当前播放音频的意外中断的状态
+  paused: boolean = true;
+  uPause: boolean = false;
   audioCtx: any;
   autoPlay: boolean = false;
   defaultCover: string = "";
@@ -143,13 +204,13 @@ export class ZAudio extends EventBus {
 
     this.audioCtx = audioCtx;
 
-    this.audioCtx.onCanplay(this.onCanplayHandle.bind(this));
-    this.audioCtx.onPlay(this.onPlayHandle.bind(this));
-    this.audioCtx.onPause(this.onPauseHandle.bind(this));
-    this.audioCtx.onStop(this.onStopHandle.bind(this));
-    this.audioCtx.onEnded(this.onEndedHandle.bind(this));
-    this.audioCtx.onTimeUpdate(this.onTimeUpdateHandle.bind(this));
-    this.audioCtx.onError(this.onErrorHandle.bind(this));
+    this.audioCtx.onCanplay(this.onCanplayHandler.bind(this));
+    this.audioCtx.onPlay(this.onPlayHandler.bind(this));
+    this.audioCtx.onPause(this.onPauseHandler.bind(this));
+    this.audioCtx.onStop(this.onStopHandler.bind(this));
+    this.audioCtx.onEnded(this.onEndedHandler.bind(this));
+    this.audioCtx.onTimeUpdate(this.onTimeUpdateHandler.bind(this));
+    this.audioCtx.onError(this.onErrorHandler.bind(this));
 
     // #ifndef H5
     setTimeout(() => {
@@ -161,31 +222,47 @@ export class ZAudio extends EventBus {
 
     this.appCheckReplay();
   }
-  off(event: eventName, action: string): void {
+  /**
+   * @description 回调中卸载业务事件
+   * @param {<zaudioCbName>}   event     回调名称枚举值,具体看types.ts
+   * @param {Sting}         action    业务函数名,用于区分不同业务
+   * @returns undefined
+   * **/
+  off(event: zaudioCbName, action: string): void {
     super.off(event, action);
   }
-  on(event: eventName, action: string, cb: any): void {
-    super.on(event, action, cb);
+
+  /**
+   * @description 回调中注册业务事件
+   * @param {<zaudioCbName>}        event     回调名称枚举值,具体看types.ts
+   * @param {Sting}              action    业务函数名,用于区分不同业务
+   * @param {function(object|string|number|undefined):undefined}      fn      业务函数, 参数或为音频状态
+   * @returns undefined
+   * **/
+  on(event: zaudioCbName, action: string, fn: (arg0?: any) => void): void {
+    super.on(event, action, fn);
   }
-  emit(event: eventName, data?: any): void {
+  /**
+   * @description 订阅触发音频回调
+   * @param {<zaudioCbName>}        event      回调名称枚举值,具体看types.ts
+   * @param {object|string|number|undefined}     data        订阅触发回调时,传的音频属性
+   * @returns undefined
+   * **/
+  emit(event: zaudioCbName, data?: any): void {
     super.emit(event, data);
   }
-  private commit(action: string, data: any): void {
+  private commit<K extends keyof zaudioCommitEvent>(
+    action: K,
+    data: any
+  ): void {
     typeof this[action] === "function" && this[action](data);
   }
 
-  private onCanplayHandle(): void {
-    this.emit(eventName.canPlay, this.playinfo);
+  private onCanplayHandler(): void {
+    this.emit(zaudioCbName.onCanplay, this.playinfo);
     this.syncEmitState();
   }
-  private onPlayHandle(): void {
-    const {
-      src: renderSrc,
-      title: renderTitle,
-      singer: renderSinger,
-      coverImgUrl: renderCoverImgUrl,
-    } = this.renderinfo;
-
+  private onPlayHandler(): void {
     // #ifdef APP-PLUS
     this.commit("setPlayinfo", {
       duration: formatSeconds(this.audioCtx.duration),
@@ -195,33 +272,33 @@ export class ZAudio extends EventBus {
     this.commit("setPause", false);
     this.commit("setUnnormalPause", false);
   }
-  private onPauseHandle(): void {
+  private onPauseHandler(): void {
     this.commit("setPause", true);
-    this.emit(eventName.pause);
+    this.emit(zaudioCbName.onPause);
     this.syncEmitState();
   }
-  private onStopHandle(): void {
+  private onStopHandler(): void {
     this.commit("setPause", true);
-    this.emit(eventName.stop);
+    this.emit(zaudioCbName.onStop);
     this.syncEmitState();
   }
-  private onEndedHandle(): void {
+  private onEndedHandler(): void {
     this.commit("setPause", true);
     this.audioCtx.startTime = 0;
     this.commit("setPlayinfo", {
       current: formatSeconds("0"),
       current_value: "0",
     });
-    this.emit(eventName.ended);
+    this.emit(zaudioCbName.onEnded);
     this.syncEmitState();
     //续播
     if (this.continuePlay) {
       this.changeplay(1);
     }
   }
-  private onTimeUpdateHandle(): void {
+  private onTimeUpdateHandler(): void {
     if (this.renderIsPlay) {
-      //解决播放进度大于总进度问题
+      //fix: 解决播放进度大于总进度问题
       let currentTime =
         this.audioCtx.currentTime > this.audioCtx.duration
           ? this.audioCtx.duration
@@ -232,7 +309,7 @@ export class ZAudio extends EventBus {
       });
 
       // #ifndef APP-PLUS
-      // 解决小程序与h5无法获取总进度的问题
+      //fix: 解决小程序与h5无法获取总进度的问题
       if (this.audioCtx.duration != this.playinfo.duration_value) {
         this.commit("setPlayinfo", {
           duration: formatSeconds(this.audioCtx.duration),
@@ -242,10 +319,10 @@ export class ZAudio extends EventBus {
       // #endif
     }
 
-    this.emit(eventName.playing, this.playinfo);
+    this.emit(zaudioCbName.onTimeUpdate, this.playinfo);
     this.syncEmitState();
   }
-  private onErrorHandle(): void {
+  private onErrorHandler(): void {
     this.commit("setPause", true);
 
     this.commit("setRender", {
@@ -262,7 +339,7 @@ export class ZAudio extends EventBus {
       title: "",
       src: "",
     });
-    this.emit(eventName.error);
+    this.emit(zaudioCbName.onError);
     this.syncEmitState();
     if (this.continuePlay) {
       this.changeplay(1);
@@ -274,16 +351,16 @@ export class ZAudio extends EventBus {
     this.setRender(this.playIndex);
   }
   //注册一个同步获取属性的方法
-  syncStateOn(action: string, cb: () => {}) {
-    typeof cb === "function" && this.on(eventName.syncStateOn, action, cb);
+  syncStateOn(action: string, fn: () => {}) {
+    typeof fn === "function" && this.on(zaudioCbName.syncStateOn, action, fn);
   }
   //卸载同步获取属性的方法
   syncStateOff(action: string) {
-    this.off(eventName.syncStateOn, action);
+    this.off(zaudioCbName.syncStateOn, action);
   }
   //订阅同步获取属性事件
   syncEmitState() {
-    this.emit(eventName.syncStateOn, {
+    this.emit(zaudioCbName.syncStateOn, {
       renderIndex: this.renderIndex,
       audiolist: this.audiolist,
       renderinfo: this.renderinfo,
@@ -297,7 +374,7 @@ export class ZAudio extends EventBus {
   seek(value: number) {
     this.audioCtx.seek(value);
     setTimeout(() => {
-      this.emit(eventName.seek, this.playinfo.current);
+      this.emit(zaudioCbName.seek, this.playinfo.current);
     }, 0);
   }
 
@@ -336,7 +413,7 @@ export class ZAudio extends EventBus {
     this.audioCtx.pause();
     this.commit("setPause", true);
     this.commit("setUnnormalPause", true);
-    this.emit(eventName.stop);
+    this.emit(zaudioCbName.onStop);
   }
 
   //播放,暂停事件判断,
@@ -405,13 +482,13 @@ export class ZAudio extends EventBus {
   //覆盖音频
   setAudio(data: Array<audio>) {
     this.audiolist = [...data];
-    this.emit(eventName.setAudio, this.audiolist);
+    this.emit(zaudioCbName.setAudio, this.audiolist);
     this.syncEmitState();
   }
   //添加音频
   updateAudio(data: Array<audio>) {
     this.audiolist.push(...data);
-    this.emit(eventName.updateAudio, this.audiolist);
+    this.emit(zaudioCbName.updateAudio, this.audiolist);
     this.syncEmitState();
   }
 
@@ -447,7 +524,7 @@ export class ZAudio extends EventBus {
     this.paused = data;
   }
   //设置通话时暂停状态
-  private setUnnormalPause(data: boolean) {
+  setUnnormalPause(data: boolean) {
     this.uPause = data;
   }
 
