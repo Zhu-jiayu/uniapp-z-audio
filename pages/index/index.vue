@@ -24,7 +24,7 @@
 	</view>
 </template>
 
-<script lang="ts">
+<script>
 import zaudio from '@/components/z-audio/z-audio';
 // import zaudio from 'uniapp-zaudio/z-audio'
 export default {
@@ -38,8 +38,16 @@ export default {
 	},
 	components: { zaudio: zaudio },
 	onLoad(){
+		//注意: 不同的回调方法, 相同的业务函数方法名, 不会相互影响;
 		this.$zaudio.on('stop', 'aaa', function(){
-			console.log('aa')
+			console.log('我是强制暂停或关闭小程序音频浮窗触发的')
+		})
+		this.$zaudio.on('seek', 'aaa', function(time){
+			console.log('进度拖动A', time)
+		})
+		//注意: 相同的回调方法, 且相同的业务函数方法名, 只作用于第一次注册的业务
+		this.$zaudio.on('seek', 'aaa', function(time){
+			console.log('进度拖动B', time)
 		})
 	},
 	onShow() {

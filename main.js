@@ -6,12 +6,12 @@ Vue.config.productionTip = false
 
 App.mpType = 'app'
 
-// import {
-// 	ZAudio
-// } from '@/components/z-audio/dist/index.js'
+import {
+	ZAudio
+} from '@/components/z-audio/dist/index.js'
 
 // npm引用方式
-import { ZAudio } from 'uniapp-zaudio'
+// import { ZAudio } from 'uniapp-zaudio'
 
 
 let zaudio = new ZAudio({
@@ -19,7 +19,7 @@ let zaudio = new ZAudio({
 	autoPlay: false, //自动播放 部分浏览器不支持
 })
  
-
+Vue.prototype.$zaudio = zaudio
 
 
 //模拟初始数据
@@ -39,7 +39,7 @@ var data = [{
 
 zaudio.setAudio(data)
 
-Vue.prototype.$zaudio = zaudio
+
 
 
 
