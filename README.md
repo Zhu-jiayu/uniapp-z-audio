@@ -1,6 +1,11 @@
 # uniapp-zaudio 背景音频播放组件
 
-当前版本`v2.1.2`
++ 当前版本`v2.2.0`
+- 增加语法提示
+- 去除需要编译ts的步骤
+- 修改引用插件路径和方式
+- 修改playing回调为节流触发
+- 修复iOS原生音频组件切换歌曲无反应的问题
 ## 预览
 [http://jingangtui.gitee.io/uniapp-z-audio/#/](http://jingangtui.gitee.io/uniapp-z-audio/#/)
 
@@ -12,15 +17,15 @@
 - 支持多页面同步状态
 - 支持 3 种 UI 样式
 - 支持来电中断后续播
-- 支持同一个音频回调中注册多个业务事件(v2.1.0 版本之后)
+- 支持同一个音频回调中注册多个业务事件(v2.1.0 后版本)
 
 ## 简要说明
-- v2.1.0 版本之后不再依赖 vuex; (依赖vuex版本请查看[gitee v2.0分支](https://gitee.com/jingangtui/uniapp-z-audio.git))
+- v2.1.0 后版本不再依赖 vuex; (依赖vuex版本查看[gitee v2.0分支](https://gitee.com/jingangtui/uniapp-z-audio.git))
 - 音频对象基于`uni.getBackgroundAudioManager`和`uni.createInnerAudioContext`创建
 - 具体使用方式,请下载示例
 
 ## 使用步骤
-0. 先安装[typescript编译插件](https://ext.dcloud.net.cn/plugin?name=compile-typescript)
+~~0. 先安装[typescript编译插件](https://ext.dcloud.net.cn/plugin?name=compile-typescript)~~(v2.2版本无需此步)
 1. <a href="https://ext.dcloud.net.cn/plugin?id=1888">插件市场下载</a> or `npm install uniapp-zaudio`
 
 2. 实例化 ZAudio 并挂载 (main.js)
@@ -28,9 +33,8 @@
 注意大小写 ZAudio
 
 ```javascript
-import { ZAudio } from "@/components/z-audio";
-
-// import { ZAudio } from 'uniapp-zaudio' // npm引用方式
+import ZAudio from '@/components/uniapp-zaudio'
+// import ZAudio from 'uniapp-zaudio' // npm引用方式
 
 let zaudio = new ZAudio({
   continuePlay: true, //续播
@@ -38,7 +42,7 @@ let zaudio = new ZAudio({
 });
 Vue.prototype.$zaudio = zaudio; //挂载vue原型链上
 
-//模拟音频初始数据
+//模拟音频初始数据,切勿业务中使用
 var data = [
   {
     src:
@@ -64,8 +68,8 @@ zaudio.setAudio(data); //添加音频
    注意大小写 zaudio
 
 ```javascript
-import zaudio from "@/components/z-audio/z-audio";
-// import zaudio from 'uniapp-zaudio/components/z-audio/z-audio.vue' //npm引入
+import zaudio from '@/components/uniapp-zaudio/zaudio';
+// import zaudio from 'uniapp-zaudio/zaudio'
 export default {
   components: { zaudio: zaudio },
 };
@@ -104,17 +108,17 @@ export default {
 
 | 实例方法                    | 描述                                  | 参数                                                                                  |
 | --------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------- |
-| on(event, action, callback) | 回调函数中注册业务事件                | event(音频回调方法), action(业务名), callback(业务函数); 见[`音频回调事件中注册业务`](#callback) |
-| off(event, action)          | 回调函数中卸载业务事件                | event(音频回调方法), action(业务名);见[`音频回调事件中注册业务`](#callback)                      |
+| on(event, action, fn) | 回调函数中注册业务事件                | event(音频回调方法), action(业务名), fn(业务函数); 见[`音频回调事件中注册业务`](#fn) |
+| off(event, action)          | 回调函数中卸载业务事件, 重要              | event(音频回调方法), action(业务名);见[`音频回调事件中注册业务`](#fn)                      |
 | setRender(data)             | 指定音频索引或对象,渲染到 zaudio 组件 |  索引(number或string类型) 或 音频对象(object类型)                                                  |
 | operate(index)              | 指定索引的音频, 播放或暂停             | 索引, number类型                                                          |
 | setAudio(data)              | 覆盖音频列表                          | 对象数组, 例: [{src: 音频地址, title: 音频名, singer: 歌手 coverImgUrl: 封面}]   |
 | updateAudio(data)           | 添加音频列表                          | 对象数组, 例: [{src: 音频地址, title: 音频名, singer: 歌手 coverImgUrl: 封面}]   |
-| stop()                      | 暂停当前播放音频                      |
+| stop()                      | 停止播放音频 (强制停止)                     |
 | stepPlay(count)             | 快进快退                              | 单位秒, number类型                                                               |
 | syncRender()                | 同步渲染当前播放状态           | 见[`同步渲染当前播放状态`](#syncrender)
-| syncStateOn(action, callback)           | 注册一个用于同步获取当前播放状态的事件            | action(业务名), callback(回调函数), 见[`同步获取当前音频状态`](#params)
-| syncStateOff(action, callback)           | 卸载用于同步获取当前播放状态的事件             | action(业务名), callback(回调函数), 见[`同步获取当前音频状态`](#params)
+| syncStateOn(action, fn)           | 注册一个用于同步获取当前播放状态的事件            | action(业务名), fn(回调函数), 见[`同步获取当前音频状态`](#params)
+| syncStateOff(action, fn)           | 卸载用于同步获取当前播放状态的事件             | action(业务名), fn(回调函数), 见[`同步获取当前音频状态`](#params)
 
 用法示例:
 
@@ -146,24 +150,28 @@ zaudio.setAudio(data);
 zaudio.operate(1);
 ```
 
-## <span id="callback">音频回调事件中注册业务</span>
-- `zaudio.on(event, action, callback)`注册业务事件, `zaudio.off(event, action)`卸载业务事件
-- `event`参数是回调方法名,见下面文档, `action`参数为自定义的业务函数名, `callback`为触发的业务函数
-- 音频事件会触发不同的回调方法(如播放回调, 暂停回调), 一个回调方法可以注册多个互不影响的业务事件;
-- 一个业务函数名在同一个音频回调事件中只能注册一次, 多次注册不会被覆盖
+## <span id="fn">音频回调事件中注册业务</span>
+- 音频事件会触发不同的回调(如播放回调, 暂停回调), 而一个回调中允许注册多个互不影响的业务事件
+- `zaudio.on(event, action, fn)`: 注册业务事件
+- `zaudio.off(event, action)`: 卸载业务事件, 页面卸载时可以卸载不必要的业务事件, 这样可以提高页面性能
+- `event`: 回调方法名,具体表格如下
+- `action`: 自定义的业务函数名, 一个业务函数名在同一个音频回调中只能注册一次, 多次注册不会被覆盖
+- `fn`: 触发的业务函数, 部分回调会返回当前播放的状态
 
 
-| event(音频回调名)  | 描述           | 其他                              |
+
+
+| event(音频回调名)  | 描述           |  fn参数                              |
 | ----------- | -------------- | --------------------------------- |
 | error       | 错误播放时回调 |
-| playing     | 播放时回调     | callback 参数为当前播放的音频对象 |
-| canPlay     | 初始播放时回调 | callback 参数为当前播放的音频对象 |
+| playing     | 播放时回调     | 当前播放的音频对象 |
+| canPlay     | 初始播放时回调 | 当前播放的音频对象 |
 | pause       | 暂停回调       |
 | ended       | 结束回调       |
-| setAudio    | 覆盖音频的回调 | callback 参数为当前音频列表       |
-| updateAudio | 添加音频的回调 | callback 参数为当前音频列表       |
-| stop        | 收到暂停回调, 小程序音频浮窗关闭回调   |
-| seek        | 快进拖动回调   |
+| setAudio    | 覆盖音频的回调 | 当前音频列表       |
+| updateAudio | 添加音频的回调 | 当前音频列表       |
+| stop        | 强制停止播放回调, 小程序音频浮窗关闭回调   |
+| seek        | 快进拖动回调   | 当前跳转的时间点
 
 用法示例:
 

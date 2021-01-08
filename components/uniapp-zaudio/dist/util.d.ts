@@ -1,5 +1,5 @@
 export declare function formatSeconds(seconds: number | string): string;
-export declare function throttle(action: Function, delay: number): Function;
+export declare function throttle(fn: Function, wait: number): Function;
 export declare class EventBus {
     private _events;
     constructor();

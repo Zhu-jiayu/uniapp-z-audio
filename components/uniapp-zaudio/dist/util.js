@@ -17,13 +17,15 @@ function formatSeconds(seconds) {
     return `${m}:${s}`;
 }
 exports.formatSeconds = formatSeconds;
-function throttle(action, delay) {
-    var statTime = 0;
-    return function (...args) {
-        var currTime = +new Date();
-        if (currTime - statTime > delay) {
-            action.apply(this, args);
-            statTime = currTime;
+function throttle(fn, wait) {
+    let previous = 0;
+    return function (...arg) {
+        let context = this;
+        let now = Date.now();
+        //每隔一段时间执行一次；
+        if (now - previous > wait) {
+            fn.apply(context, arg);
+            previous = now;
         }
     };
 }

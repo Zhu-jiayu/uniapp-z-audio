@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import zaudio from '@/components/z-audio/z-audio';
-// import zaudio from 'uniapp-zaudio/z-audio'
+import zaudio from '@/components/uniapp-zaudio/zaudio';
+// import zaudio from 'uniapp-zaudio/zaudio'
 export default {
 	data() {
 		return {

@@ -49,7 +49,7 @@ enum zaudioCbName {
   syncStateOn = "syncStateOn", //同步获取属性回调
 }
 
-import {formatSeconds, throttle, EventBus} from "./util"
+import { formatSeconds, throttle, EventBus } from "./util";
 
 /**
  * ZAudio类
@@ -81,10 +81,8 @@ import {formatSeconds, throttle, EventBus} from "./util"
  *
  * **/
 
-
-
-export class ZAudio extends EventBus implements zaudioProperty {
-  static version: string = "2.2.0";
+export default class ZAudio extends EventBus implements zaudioProperty {
+  static version: string = "2.2.1";
 
   renderIndex: number = 0;
   audiolist: Array<audio> = [];
@@ -149,10 +147,27 @@ export class ZAudio extends EventBus implements zaudioProperty {
     this.audioCtx.onPause(this.onPauseHandler.bind(this));
     this.audioCtx.onStop(this.onStopHandler.bind(this));
     this.audioCtx.onEnded(this.onEndedHandler.bind(this));
-    //fix: 节流触发播放中回调函数
-    let throttlePlaying = throttle(this.onTimeUpdateHandler, 1000).bind(this);
+    //fix: 节流触发播放中的回调函数,
+    //由于播放回调时间间隔有误差,设置1000ms时,会跳过某一秒; 经测试900ms是最准确的保证每一秒都有回调,
+
+    let throttlePlaying = throttle(this.onTimeUpdateHandler, 900).bind(this);
     this.audioCtx.onTimeUpdate(throttlePlaying);
     this.audioCtx.onError(this.onErrorHandler.bind(this));
+
+    //fix: 修复iOS原生音频切换不起作用
+    //  #ifdef APP-PLUS
+    if (uni.getSystemInfoSync().platform == "ios") {
+      const bgMusic = plus.audio.createPlayer();
+
+      bgMusic.addEventListener("prev", () => {
+        this.changeplay(-1);
+      });
+
+      bgMusic.addEventListener("next", () => {
+        this.changeplay(1);
+      });
+    }
+    // #endif
 
     // #ifndef H5
     setTimeout(() => {
@@ -202,7 +217,7 @@ export class ZAudio extends EventBus implements zaudioProperty {
 
   private onCanplayHandler(): void {
     this.emit(zaudioCbName.onCanplay, this.playinfo);
-    this.syncEmitState();
+    this.syncStateEmit();
   }
   private onPlayHandler(): void {
     // #ifdef APP-PLUS
@@ -217,13 +232,12 @@ export class ZAudio extends EventBus implements zaudioProperty {
   private onPauseHandler(): void {
     this.commit("setPause", true);
     this.emit(zaudioCbName.onPause);
-    this.syncEmitState();
+    this.syncStateEmit();
   }
   private onStopHandler(): void {
     this.commit("setPause", true);
-    console.log(1)
     this.emit(zaudioCbName.onStop);
-    this.syncEmitState();
+    this.syncStateEmit();
   }
   private onEndedHandler(): void {
     this.commit("setPause", true);
@@ -233,7 +247,7 @@ export class ZAudio extends EventBus implements zaudioProperty {
       current_value: "0",
     });
     this.emit(zaudioCbName.onEnded);
-    this.syncEmitState();
+    this.syncStateEmit();
     //续播
     if (this.continuePlay) {
       this.changeplay(1);
@@ -261,9 +275,8 @@ export class ZAudio extends EventBus implements zaudioProperty {
       }
       // #endif
     }
-
     this.emit(zaudioCbName.onTimeUpdate, this.playinfo);
-    this.syncEmitState();
+    this.syncStateEmit();
   }
   private onErrorHandler(): void {
     this.commit("setPause", true);
@@ -283,7 +296,7 @@ export class ZAudio extends EventBus implements zaudioProperty {
       src: "",
     });
     this.emit(zaudioCbName.onError);
-    this.syncEmitState();
+    this.syncStateEmit();
     if (this.continuePlay) {
       this.changeplay(1);
     }
@@ -302,7 +315,7 @@ export class ZAudio extends EventBus implements zaudioProperty {
     this.off(zaudioCbName.syncStateOn, action);
   }
   //订阅同步获取属性事件
-  syncEmitState() {
+  syncStateEmit() {
     this.emit(zaudioCbName.syncStateOn, {
       renderIndex: this.renderIndex,
       audiolist: this.audiolist,
@@ -316,9 +329,9 @@ export class ZAudio extends EventBus implements zaudioProperty {
   //指定位置
   seek(value: number) {
     this.audioCtx.seek(value);
-    this.commit('setPlayinfo', {
+    this.commit("setPlayinfo", {
       current: formatSeconds(value),
-      current_value: value
+      current_value: value,
     });
     // setTimeout(() => {
     //   this.emit(zaudioCbName.seek, this.playinfo.current);
@@ -342,8 +355,8 @@ export class ZAudio extends EventBus implements zaudioProperty {
         nowindex < 0
           ? this.audiolist.length - 1
           : nowindex > this.audiolist.length - 1
-            ? 0
-            : nowindex;
+          ? 0
+          : nowindex;
       this.commit("setPause", true);
       this.operate(nowindex);
     } else {
@@ -431,13 +444,13 @@ export class ZAudio extends EventBus implements zaudioProperty {
   setAudio(data: Array<audio>) {
     this.audiolist = [...data];
     this.emit(zaudioCbName.setAudio, this.audiolist);
-    this.syncEmitState();
+    this.syncStateEmit();
   }
   //添加音频
   updateAudio(data: Array<audio>) {
     this.audiolist.push(...data);
     this.emit(zaudioCbName.updateAudio, this.audiolist);
-    this.syncEmitState();
+    this.syncStateEmit();
   }
 
   //设置当前播放信息
@@ -575,7 +588,7 @@ export class ZAudio extends EventBus implements zaudioProperty {
         });
       }
     } catch (err) {
-      console.log(err);
+      console.warn(err);
     }
 
     // #endif

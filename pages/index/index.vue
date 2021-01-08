@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import zaudio from '@/components/z-audio/z-audio';
-// import zaudio from 'uniapp-zaudio/z-audio'
+import zaudio from '@/components/uniapp-zaudio/zaudio';
+// import zaudio from 'uniapp-zaudio/zaudio'
 export default {
 	data() {
 		return {
@@ -63,8 +63,10 @@ export default {
 		});
 	},
 	onHide() {
-		//卸载page-index-get-state,提高页面性能
+		//卸载不需要的业务和获取播放状态的业务,提高页面性能
 		this.$zaudio.syncStateOff('page-index-get-state');
+		this.$zaudio.off('seek', 'aaa');
+		this.$zaudio.off('stop', 'aaa');
 	},
 	methods: {
 		play(key) {

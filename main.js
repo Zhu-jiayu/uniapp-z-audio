@@ -6,12 +6,8 @@ Vue.config.productionTip = false
 
 App.mpType = 'app'
 
-import {
-	ZAudio
-} from '@/components/z-audio/dist/index.js'
-
-// npm引用方式
-// import { ZAudio } from 'uniapp-zaudio'
+import ZAudio from '@/components/uniapp-zaudio'
+// import ZAudio from 'uniapp-zaudio' // npm引用方式
 
 
 let zaudio = new ZAudio({
@@ -36,11 +32,8 @@ var data = [{
 		coverImgUrl: 'https://img.1ting.com/images/special/204/s150_77254cd4a4da1a33b8faf89c4cbf6e40.jpg',
 	}
 ];
-
+// 设置音频数据
 zaudio.setAudio(data)
-
-
-
 
 
 const app = new Vue({

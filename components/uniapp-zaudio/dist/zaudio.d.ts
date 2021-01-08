@@ -64,7 +64,7 @@ import { EventBus } from "./util";
  *
  *
  * **/
-export declare class ZAudio extends EventBus implements zaudioProperty {
+export default class ZAudio extends EventBus implements zaudioProperty {
     static version: string;
     renderIndex: number;
     audiolist: Array<audio>;
@@ -115,7 +115,7 @@ export declare class ZAudio extends EventBus implements zaudioProperty {
     syncRender(): void;
     syncStateOn(action: string, fn: () => {}): void;
     syncStateOff(action: string): void;
-    syncEmitState(): void;
+    syncStateEmit(): void;
     seek(value: number): void;
     stepPlay(value: number): void;
     changeplay(count: number): void;
