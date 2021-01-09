@@ -79,9 +79,6 @@ export default {
 <zaudio theme="theme3"></zaudio>
 ```
 
-## 注意项
-
-- 示例在 app 运行时,注意开启网络权限,若不显示数据则重启 app 应用,或者检查网络权限问题
 
 ## zaudio 组件参数配置
 
@@ -91,7 +88,7 @@ export default {
 | theme      | String | false | 主题       | `theme2` or `theme1` or `theme3`; 默认`theme1` |
 | themeColor | String | false | 进度条颜色 | 默认 `#42b983`                                 |
 
-用法示例:
++ 用法示例:
 ```
 <zaudio theme="theme1"  themeColor="#42b983" />
 ```
@@ -106,21 +103,21 @@ export default {
 | continuePlay | Boolean | false | 下一首续播                   | 默认 true  |
 | autoPlay     | Boolean | false | 自动播放,部分浏览器不支持    | 默认 false |
 
-| 实例方法                    | 描述                                  | 参数                                                                                  |
-| --------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------- |
-| on(event, action, fn) | 回调函数中注册业务事件                | event(音频回调方法), action(业务名), fn(业务函数); 见[`音频回调事件中注册业务`](#fn) |
-| off(event, action)          | 回调函数中卸载业务事件, 重要              | event(音频回调方法), action(业务名);见[`音频回调事件中注册业务`](#fn)                      |
-| setRender(data)             | 指定音频索引或对象,渲染到 zaudio 组件 |  索引(number或string类型) 或 音频对象(object类型)                                                  |
-| operate(index)              | 指定索引的音频, 播放或暂停             | 索引, number类型                                                          |
-| setAudio(data)              | 覆盖音频列表                          | 对象数组, 例: [{src: 音频地址, title: 音频名, singer: 歌手 coverImgUrl: 封面}]   |
-| updateAudio(data)           | 添加音频列表                          | 对象数组, 例: [{src: 音频地址, title: 音频名, singer: 歌手 coverImgUrl: 封面}]   |
-| stop()                      | 停止播放音频 (强制停止)                     |
-| stepPlay(count)             | 快进快退                              | 单位秒, number类型                                                               |
-| syncRender()                | 同步渲染当前播放状态           | 见[`同步渲染当前播放状态`](#syncrender)
-| syncStateOn(action, fn)           | 注册一个用于同步获取当前播放状态的事件            | action(业务名), fn(回调函数), 见[`同步获取当前音频状态`](#params)
-| syncStateOff(action, fn)           | 卸载用于同步获取当前播放状态的事件             | action(业务名), fn(回调函数), 见[`同步获取当前音频状态`](#params)
+| 实例方法                    | 描述							| 参数															|
+| --------------------------- | -------------------------------------| -------------------------------------------------------------------------------------|
+| on(event, action, fn) | 回调函数中注册业务事件		| event(音频回调方法), action(业务名), fn(业务函数); 见[`音频回调事件中注册业务`](#fn)|
+| off(event, action)          | 回调函数中卸载业务事件, 重要	| event(音频回调方法), action(业务名);见[`音频回调事件中注册业务`](#fn)|
+| setAudio(data)              | 设置音频列表(audiolist赋值)	| 对象数组, 例: [{src: 音频地址, title: 音频名, singer: 歌手 coverImgUrl: 封面}]|
+| updateAudio(data)           | 添加音频列表(push数据到audiolist)| 对象数组, 例: [{src: 音频地址, title: 音频名, singer: 歌手 coverImgUrl: 封面}]|
+| setRender(data)             | 指定音频索引或对象,渲染到 zaudio 组件|  索引(number或string类型) 或 音频对象(object类型)				|
+| operate(index)              | 指定索引的音频, 播放或暂停	| 索引, number类型												|
+| stop()						| 停止播放音频 (强制停止)										|
+| stepPlay(count)             | 快进快退						| 单位秒, number类型											|
+| syncRender()					| 实时渲染当前播放状态,见[`实时渲染当前播放状态`](#syncrender)	|
+| syncStateOn(action, fn)           | 注册一个用于实时获取当前播放状态的事件,用法见[`获取音频播放状态和属性`](#params)            | action(业务名), fn(回调函数,回调参数见[`音频对象属性`](#property))
+| syncStateOff(action)           | 卸载用于实时获取当前播放状态的事件,用法见[`获取音频播放状态和属性`](#params)             | action(与注册时的业务名对应)
 
-用法示例:
++ 用法示例:
 
 ```javascript
 let zaudio = new ZAudio({
@@ -156,7 +153,7 @@ zaudio.operate(1);
 - `zaudio.off(event, action)`: 卸载业务事件, 页面卸载时可以卸载不必要的业务事件, 这样可以提高页面性能
 - `event`: 回调方法名,具体表格如下
 - `action`: 自定义的业务函数名, 一个业务函数名在同一个音频回调中只能注册一次, 多次注册不会被覆盖
-- `fn`: 触发的业务函数, 部分回调会返回当前播放的状态
+- `fn`: 触发的业务函数, 部分回调会实时返回当前播放的状态, 见下表
 
 
 
@@ -164,7 +161,7 @@ zaudio.operate(1);
 | event(音频回调名)  | 描述           |  fn参数                              |
 | ----------- | -------------- | --------------------------------- |
 | error       | 错误播放时回调 |
-| playing     | 播放时回调     | 当前播放的音频对象 |
+| playing     | 播放时回调     | 实时返回当前播放的音频对象 |
 | canPlay     | 初始播放时回调 | 当前播放的音频对象 |
 | pause       | 暂停回调       |
 | ended       | 结束回调       |
@@ -173,7 +170,7 @@ zaudio.operate(1);
 | stop        | 强制停止播放回调, 小程序音频浮窗关闭回调   |
 | seek        | 快进拖动回调   | 当前跳转的时间点
 
-用法示例:
++ 用法示例:
 
 一个playing回调,触发两个业务事件
 ```javascript
@@ -195,21 +192,24 @@ zaudio.operate(1);
 ```
 
  
-## <span id="syncrender">同步渲染当前播放状态</span>
-+ 适用情况: 当zaudio组件渲染了其他数据, 需要同步渲染当前的播放状态
-用法示例: 
+## <span id="syncrender">实时渲染当前播放状态</span>
++ 适用情况: 当zaudio组件渲染了非当前播放的数据, 且需要实时渲染当前的播放状态时
++ 用法示例: 
 ```javascript
 onShow(){
-	//同步渲染当前的播放状态
+	//实时渲染当前的播放状态
 	this.$zaudio.syncRender();
 },
 ```
 
-## <span id="params">同步获取当前音频状态</span>
-- 由于v2.1.x之后版本不依赖vuex, 音频状态需要手动同步获取, zaudio组件中已做此步处理;
-- 如果你不需要同步获取音频属性与状态, 可以忽略此步骤
+## <span id="params">实时获取音频播放状态和属性</span>
+- 由于v2.1.x之后版本不依赖vuex, 音频状态需要使用`syncStateOn`方法来实时监听获取
+- `syncStateOn(action, fn)`: 注册一个获取音频播放状态和属性的事件
+- `syncStateOff(action)`: 卸载获取音频播放状态和属性的事件, 页面卸载时卸载该事件, 这样可以提高页面性能
+- `action`: 自定义业务名, 用于区分多个不同的`实时获取音频播放状态和属性`事件
+- `fn`: 实时获取音频播放状态和属性的回调, 回调参数见[`音频对象属性`](#property)
 
-用法示例: 
++ 用法示例: 
 
 ```javascript
 data(){
@@ -222,12 +222,12 @@ data(){
 	}
 }
 onShow(){
-	//同步获取当前播放状态
+	//获取音频播放状态和属性
 	this.getAudioState();
 },
 methods:{
 	getAudioState() {
-		//注册page-index-get-state, 同步获取zaudio属性状态
+		//注册page-index-get-state, 实时获取zaudio属性状态
 		this.$zaudio.syncStateOn('page-index-get-state', ({ audiolist, playIndex, paused, playinfo }) => {
 			this.audiolist = audiolist;
 			this.playIndex = playIndex;
@@ -241,7 +241,7 @@ onHide(){
 	this.$zaudio.syncStateOff('page-index-get-state')
 }
 ```
-#### 音频对象属性
+## <span id="property">音频对象属性</span>
 name | 描述 |其他
 -|-|-
 renderIndex | 当前zaudio渲染索引|
@@ -252,6 +252,13 @@ paused | 音频暂停状态| true:暂停
 playIndex | 当前播放索引|
 renderIsPlay |渲染与播放是否一致 |
 
++ 用法示例:
+```
+let zaudio = new ZAudio();
+console.log(zaudio.audiolist); //获取当前的音频列表数据
+console.log(zaudio.renderIndex); //获取当前zaudio组件渲染音频的索引值
+```
+注意: 上面的获取的属性不是实时的状态, 实时获取见[`实时获取音频播放状态和属性`](#params)
 
 ## 背景播放配置
 
@@ -279,3 +286,5 @@ iOS
 ```
 
 ## 如果你觉得这个项目不错, 给我一个[STAR](https://gitee.com/jingangtui/uniapp-z-audio.git)
+## 注意项
+- 示例在 app 运行时,注意开启网络权限,若不显示数据则重启 app 应用,或者检查网络权限问题

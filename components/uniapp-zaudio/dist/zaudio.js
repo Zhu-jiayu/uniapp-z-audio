@@ -191,7 +191,6 @@ class ZAudio extends util_1.EventBus {
         }
     }
     onTimeUpdateHandler() {
-        
         if (this.renderIsPlay) {
             //fix: 解决播放进度大于总进度问题
             let currentTime = this.audioCtx.currentTime > this.audioCtx.duration
@@ -493,4 +492,4 @@ class ZAudio extends util_1.EventBus {
     }
 }
 exports.default = ZAudio;
-ZAudio.version = "2.2.0";
+ZAudio.version = "2.2.1";

@@ -2,15 +2,17 @@
   "name": "uniapp-zaudio",
   "version": "2.2.1",
   "description": "audio manager for uniapp",
-  "main": "dist/ZAudio.js",
+  "main": "index.js",
   "types": "dist/ZAudio.d.js",
   "files": [
     "static",
-    "dist/index.js",
-    "dist/index.d.js"
+    "dist",
+    "index.js",
+	"index.scss",
+	"zaudio.vue"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",

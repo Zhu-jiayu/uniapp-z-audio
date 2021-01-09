@@ -51,10 +51,10 @@ export default {
 		})
 	},
 	onShow() {
-		//同步渲染当前的播放状态
+		//实时渲染当前的播放状态
 		this.$zaudio.syncRender()
 
-		//同步获取当前播放状态
+		//实时获取当前播放状态
 		this.$zaudio.syncStateOn('page-index-get-state', ({ audiolist, playIndex, paused, playinfo }) => {
 			this.audiolist = audiolist;
 			this.playIndex = playIndex;
@@ -86,6 +86,12 @@ export default {
 					title: '二人转',
 					singer: '作者333',
 					coverImgUrl: 'https://img.1ting.com/images/special/374/s300_2f06b17427718e01e54be1cfe462f3e0.jpg'
+				},
+				{
+					src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2014iSep/15F/15xwsk/21.mp3',
+					title: '蓝莲花',
+					singer: '许巍',
+					coverImgUrl: 'https://img.1ting.com/images/special/358/s100_6d9c9a3f9f67fa76b041561ff0042ae4.jpg'
 				}
 			];
 			this.$zaudio.setAudio(data);
