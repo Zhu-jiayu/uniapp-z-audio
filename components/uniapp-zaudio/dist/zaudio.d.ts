@@ -10,18 +10,6 @@ interface audioInfo extends audio {
     duration_value: number;
     current_value: number;
 }
-interface zaudioProperty {
-    renderIndex: number;
-    audiolist: Array<audio>;
-    renderinfo: audioInfo;
-    playinfo: audioInfo;
-    paused: boolean;
-    uPause: boolean;
-    audioCtx: any;
-    autoPlay: boolean;
-    defaultCover: string;
-    continuePlay: boolean;
-}
 declare enum zaudioCbName {
     onError = "error",
     onTimeUpdate = "playing",
@@ -64,7 +52,7 @@ import { EventBus } from "./util";
  *
  *
  * **/
-export default class ZAudio extends EventBus implements zaudioProperty {
+export default class ZAudio extends EventBus {
     static version: string;
     renderIndex: number;
     audiolist: Array<audio>;
@@ -84,7 +72,7 @@ export default class ZAudio extends EventBus implements zaudioProperty {
     private init;
     /**
      * @description 回调中卸载业务事件
-     * @param {<zaudioCbName>}   event     回调名称枚举值,具体看types.ts
+     * @param {<zaudioCbName>}   event     回调名称枚举值,具体看zaudioCbName
      * @param {Sting}         action    业务函数名,用于区分不同业务
      * @returns undefined
      * **/
@@ -99,7 +87,7 @@ export default class ZAudio extends EventBus implements zaudioProperty {
     on(event: zaudioCbName, action: string, fn: (arg0?: any) => void): void;
     /**
      * @description 订阅触发音频回调
-     * @param {<zaudioCbName>}        event      回调名称枚举值,具体看types.ts
+     * @param {<zaudioCbName>}        event      回调名称枚举值,具体看zaudioCbName
      * @param {object|string|number|undefined}     data        订阅触发回调时,传的音频属性
      * @returns undefined
      * **/
@@ -112,21 +100,94 @@ export default class ZAudio extends EventBus implements zaudioProperty {
     private onEndedHandler;
     private onTimeUpdateHandler;
     private onErrorHandler;
+    /**
+     * @description 实时渲染当前状态
+     * @returns undefined
+     * **/
     syncRender(): void;
+    /**
+    * @description 注册一个实时获取ZAudio属性的方法
+    * @param {String}        action      自定义业务名
+    * @param {Funtion}     fn        实时获取ZAudio属性回调
+    * @returns undefined
+    * **/
     syncStateOn(action: string, fn: () => {}): void;
+    /**
+    * @description 卸载实时获取ZAudio属性的方法
+    * @param {String}        action      自定义业务名
+    * @returns undefined
+    * **/
     syncStateOff(action: string): void;
-    syncStateEmit(): void;
+    /**
+     * @description 订阅实时获取ZAudio属性的方法
+     * @returns undefined
+     * **/
+    private syncStateEmit;
+    /**
+     * @description 跳转播放
+     * @param {Number}        value      跳转位置
+     * @returns undefined
+     * **/
     seek(value: number): void;
+    /**
+    * @description 快进
+    * @param {Number}        value      跳转位置
+    * @returns undefined
+    * **/
     stepPlay(value: number): void;
+    /**
+    * @description 切歌
+    * @param {Number}        count      数量
+    * @returns undefined
+    * **/
     changeplay(count: number): void;
-    operate(key?: any): void;
+    /**
+     * @description 手动播放或暂停, 并渲染对应的数据
+     * @param {Number|String|<audioInfo>|undefined}        key      索引或音频对象
+     * @returns undefined
+     * **/
+    operate(key?: number | string | audioInfo): void;
+    /**
+    * @description 强制暂停播放
+    * @returns undefined
+    * **/
     stop(): void;
     private operation;
+    /**
+    * @description 覆盖音频
+    * @param {Array<audio>} data 音频数组
+    * @returns undefined
+    * **/
     setAudio(data: Array<audio>): void;
+    /**
+     * @description 添加音频
+     * @param {Array<audio>} data 音频数组
+     * @returns undefined
+     * **/
     updateAudio(data: Array<audio>): void;
+    /**
+     * @description 设置当前播放信息
+     * @param {<audioInfo>} data 音频对象
+     * @returns undefined
+     * **/
     setPlayinfo(data: audioInfo): void;
+    /**
+     * @description 设置暂停状态
+     * @param {boolean} data 布尔值
+     * @returns undefined
+     * **/
     setPause(data: boolean): void;
+    /**
+     * @description 设置通话时暂停状态
+     * @param {boolean} data 布尔值
+     * @returns undefined
+     * **/
     setUnnormalPause(data: boolean): void;
+    /**
+     * @description 设置渲染
+     * @param {number | string | audioInfo} data 索引或渲染信息
+     * @returns undefined
+     * **/
     setRender(data: number | string | audioInfo): void;
     get playIndex(): number;
     get renderIsPlay(): boolean;

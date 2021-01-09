@@ -123,7 +123,7 @@ class ZAudio extends util_1.EventBus {
     }
     /**
      * @description 回调中卸载业务事件
-     * @param {<zaudioCbName>}   event     回调名称枚举值,具体看types.ts
+     * @param {<zaudioCbName>}   event     回调名称枚举值,具体看zaudioCbName
      * @param {Sting}         action    业务函数名,用于区分不同业务
      * @returns undefined
      * **/
@@ -142,7 +142,7 @@ class ZAudio extends util_1.EventBus {
     }
     /**
      * @description 订阅触发音频回调
-     * @param {<zaudioCbName>}        event      回调名称枚举值,具体看types.ts
+     * @param {<zaudioCbName>}        event      回调名称枚举值,具体看zaudioCbName
      * @param {object|string|number|undefined}     data        订阅触发回调时,传的音频属性
      * @returns undefined
      * **/
@@ -235,19 +235,34 @@ class ZAudio extends util_1.EventBus {
             this.changeplay(1);
         }
     }
-    //同步渲染当前状态 (用于不同页面zaudio组件同步播放状态)
+    /**
+     * @description 实时渲染当前状态
+     * @returns undefined
+     * **/
     syncRender() {
         this.setRender(this.playIndex);
     }
-    //注册一个同步获取属性的方法
+    /**
+    * @description 注册一个实时获取ZAudio属性的方法
+    * @param {String}        action      自定义业务名
+    * @param {Funtion}     fn        实时获取ZAudio属性回调
+    * @returns undefined
+    * **/
     syncStateOn(action, fn) {
         typeof fn === "function" && this.on(zaudioCbName.syncStateOn, action, fn);
     }
-    //卸载同步获取属性的方法
+    /**
+    * @description 卸载实时获取ZAudio属性的方法
+    * @param {String}        action      自定义业务名
+    * @returns undefined
+    * **/
     syncStateOff(action) {
         this.off(zaudioCbName.syncStateOn, action);
     }
-    //订阅同步获取属性事件
+    /**
+     * @description 订阅实时获取ZAudio属性的方法
+     * @returns undefined
+     * **/
     syncStateEmit() {
         this.emit(zaudioCbName.syncStateOn, {
             renderIndex: this.renderIndex,
@@ -259,7 +274,11 @@ class ZAudio extends util_1.EventBus {
             renderIsPlay: this.renderIsPlay,
         });
     }
-    //指定位置
+    /**
+     * @description 跳转播放
+     * @param {Number}        value      跳转位置
+     * @returns undefined
+     * **/
     seek(value) {
         this.audioCtx.seek(value);
         this.commit("setPlayinfo", {
@@ -271,14 +290,22 @@ class ZAudio extends util_1.EventBus {
         // }, 0);
         this.emit(zaudioCbName.seek, this.playinfo.current);
     }
-    //快进,退
+    /**
+    * @description 快进
+    * @param {Number}        value      跳转位置
+    * @returns undefined
+    * **/
     stepPlay(value) {
         if (this.renderIsPlay) {
             let pos = this.playinfo.current_value + value;
             this.seek(pos);
         }
     }
-    //切歌
+    /**
+    * @description 切歌
+    * @param {Number}        count      数量
+    * @returns undefined
+    * **/
     changeplay(count) {
         if (this.renderIsPlay) {
             let nowindex = this.renderIndex;
@@ -297,12 +324,19 @@ class ZAudio extends util_1.EventBus {
             this.operate(this.renderIndex);
         }
     }
-    //手动播放或暂停, 并渲染对应的数据
+    /**
+     * @description 手动播放或暂停, 并渲染对应的数据
+     * @param {Number|String|<audioInfo>|undefined}        key      索引或音频对象
+     * @returns undefined
+     * **/
     operate(key) {
         key !== undefined && this.commit("setRender", key);
         this.operation();
     }
-    //强制暂停播放
+    /**
+    * @description 强制暂停播放
+    * @returns undefined
+    * **/
     stop() {
         this.audioCtx.pause();
         this.commit("setPause", true);
@@ -355,19 +389,31 @@ class ZAudio extends util_1.EventBus {
             }
         }
     }
-    //覆盖音频
+    /**
+    * @description 覆盖音频
+    * @param {Array<audio>} data 音频数组
+    * @returns undefined
+    * **/
     setAudio(data) {
         this.audiolist = [...data];
         this.emit(zaudioCbName.setAudio, this.audiolist);
         this.syncStateEmit();
     }
-    //添加音频
+    /**
+     * @description 添加音频
+     * @param {Array<audio>} data 音频数组
+     * @returns undefined
+     * **/
     updateAudio(data) {
         this.audiolist.push(...data);
         this.emit(zaudioCbName.updateAudio, this.audiolist);
         this.syncStateEmit();
     }
-    //设置当前播放信息
+    /**
+     * @description 设置当前播放信息
+     * @param {<audioInfo>} data 音频对象
+     * @returns undefined
+     * **/
     setPlayinfo(data) {
         if (data.current) {
             this.playinfo.current = data.current;
@@ -394,15 +440,27 @@ class ZAudio extends util_1.EventBus {
             this.playinfo.coverImgUrl = data.coverImgUrl;
         }
     }
-    //设置暂停状态
+    /**
+     * @description 设置暂停状态
+     * @param {boolean} data 布尔值
+     * @returns undefined
+     * **/
     setPause(data) {
         this.paused = data;
     }
-    //设置通话时暂停状态
+    /**
+     * @description 设置通话时暂停状态
+     * @param {boolean} data 布尔值
+     * @returns undefined
+     * **/
     setUnnormalPause(data) {
         this.uPause = data;
     }
-    //设置渲染 @param 索引或渲染信息
+    /**
+     * @description 设置渲染
+     * @param {number | string | audioInfo} data 索引或渲染信息
+     * @returns undefined
+     * **/
     setRender(data) {
         if (this.audiolist.length == 0)
             return;
