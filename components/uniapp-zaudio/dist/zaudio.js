@@ -492,4 +492,4 @@ class ZAudio extends util_1.EventBus {
     }
 }
 exports.default = ZAudio;
-ZAudio.version = "2.2.1";
+ZAudio.version = "2.2.2";

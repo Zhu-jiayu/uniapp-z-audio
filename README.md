@@ -1,11 +1,7 @@
 # uniapp-zaudio 背景音频播放组件
 
-+ 当前版本`v2.2.0`
-- 增加语法提示
-- 去除需要编译ts的步骤
-- 修改引用插件路径和方式
-- 修改playing回调为节流触发
-- 修复iOS原生音频组件切换歌曲无反应的问题
++ 当前版本`v2.2.2`
+
 ## 预览
 [http://jingangtui.gitee.io/uniapp-z-audio/#/](http://jingangtui.gitee.io/uniapp-z-audio/#/)
 

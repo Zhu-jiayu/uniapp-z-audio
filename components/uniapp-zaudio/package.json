@@ -1,6 +1,6 @@
 {
   "name": "uniapp-zaudio",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "audio manager for uniapp",
   "main": "index.js",
   "types": "dist/ZAudio.d.js",
@@ -9,7 +9,8 @@
     "dist",
     "index.js",
 	"index.scss",
-	"zaudio.vue"
+	"zaudio.vue",
+	"README.md"
   ],
   "scripts": {
     "build": "tsc"

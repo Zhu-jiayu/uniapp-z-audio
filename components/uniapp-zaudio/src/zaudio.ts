@@ -82,7 +82,7 @@ import { formatSeconds, throttle, EventBus } from "./util";
  * **/
 
 export default class ZAudio extends EventBus implements zaudioProperty {
-  static version: string = "2.2.1";
+  static version: string = "2.2.2";
 
   renderIndex: number = 0;
   audiolist: Array<audio> = [];
