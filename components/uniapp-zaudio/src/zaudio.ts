@@ -23,18 +23,18 @@ interface zaudioCommitEvent {
   setUnnormalPause: (data: boolean) => void;
   setRender: (data: number | string | audioInfo) => void;
 }
-interface zaudioProperty {
-  renderIndex: number;
-  audiolist: Array<audio>;
-  renderinfo: audioInfo;
-  playinfo: audioInfo;
-  paused: boolean;
-  uPause: boolean;
-  audioCtx: any;
-  autoPlay: boolean;
-  defaultCover: string;
-  continuePlay: boolean;
-}
+// interface zaudioProperty {
+//   renderIndex: number;
+//   audiolist: Array<audio>;
+//   renderinfo: audioInfo;
+//   playinfo: audioInfo;
+//   paused: boolean;
+//   uPause: boolean;
+//   audioCtx: any;
+//   autoPlay: boolean;
+//   defaultCover: string;
+//   continuePlay: boolean;
+// }
 
 enum zaudioCbName {
   onError = "error", //错误播放时回调
@@ -121,9 +121,6 @@ export default class ZAudio extends EventBus {
   }) {
     super();
     let { defaultCover, autoPlay, continuePlay } = options;
-
-    if (this.audioCtx) return;
-
     this.defaultCover = defaultCover;
     this.autoPlay = autoPlay;
     this.continuePlay = continuePlay;

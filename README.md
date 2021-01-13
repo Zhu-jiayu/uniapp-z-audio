@@ -76,7 +76,7 @@ export default {
 ```
 
 
-## zaudio 组件参数配置
+## < zaudio > 组件参数配置
 
 
 | 参数       | 类型   | 必填  | 描述       | 其他                                           |
@@ -90,7 +90,7 @@ export default {
 ```
 
 
-## ZAudio参数和实例方法
+## ZAudio对象的参数和实例方法
 
 
 | 参数         | 类型    | 必填  | 描述                         | 其他       |

@@ -1,5 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// interface zaudioProperty {
+//   renderIndex: number;
+//   audiolist: Array<audio>;
+//   renderinfo: audioInfo;
+//   playinfo: audioInfo;
+//   paused: boolean;
+//   uPause: boolean;
+//   audioCtx: any;
+//   autoPlay: boolean;
+//   defaultCover: string;
+//   continuePlay: boolean;
+// }
 var zaudioCbName;
 (function (zaudioCbName) {
     zaudioCbName["onError"] = "error";
@@ -74,8 +86,6 @@ class ZAudio extends util_1.EventBus {
         this.defaultCover = "";
         this.continuePlay = true;
         let { defaultCover, autoPlay, continuePlay } = options;
-        if (this.audioCtx)
-            return;
         this.defaultCover = defaultCover;
         this.autoPlay = autoPlay;
         this.continuePlay = continuePlay;
