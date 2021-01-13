@@ -106,9 +106,9 @@ export default {
 | setAudio(data)              | 设置音频列表(audiolist赋值)	| 对象数组, 例: [{src: 音频地址, title: 音频名, singer: 歌手 coverImgUrl: 封面}]|
 | updateAudio(data)           | 添加音频列表(push数据到audiolist)| 对象数组, 例: [{src: 音频地址, title: 音频名, singer: 歌手 coverImgUrl: 封面}]|
 | setRender(data)             | 指定音频索引或对象,渲染到 zaudio 组件|  索引(number或string类型) 或 音频对象(object类型)				|
-| operate(index)              | 指定索引的音频, 播放或暂停	| 索引, number类型												|
+| operate(index)              | 指定索引, 自动判断播放暂停,并渲染对应的音频数据,没有索引时则判断当前音频	| 索引, Number或undefined											|
 | stop()						| 停止播放音频 (强制停止)										|
-| stepPlay(count)             | 快进快退						| 单位秒, number类型											|
+| stepPlay(count)             | 快进快退						| 单位秒, Number类型											|
 | syncRender()					| 实时渲染当前播放状态,见[`实时渲染当前播放状态`](#syncrender)	|
 | syncStateOn(action, fn)           | 注册一个用于实时获取当前播放状态的事件,用法见[`获取音频播放状态和属性`](#params)            | action(业务名), fn(回调函数,回调参数见[`音频对象属性`](#property))
 | syncStateOff(action)           | 卸载用于实时获取当前播放状态的事件,用法见[`获取音频播放状态和属性`](#params)             | action(与注册时的业务名对应)
