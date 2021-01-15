@@ -61,8 +61,8 @@ class ZAudio extends util_1.EventBus {
         this.renderIndex = 0;
         this.audiolist = [];
         this.renderinfo = {
-            current: 0,
-            duration: 0,
+            current: "00;00",
+            duration: "00;00",
             duration_value: 0,
             current_value: 0,
             src: "",
@@ -71,8 +71,8 @@ class ZAudio extends util_1.EventBus {
             coverImgUrl: "",
         };
         this.playinfo = {
-            current: 0,
-            duration: 0,
+            current: "00;00",
+            duration: "00;00",
             duration_value: 0,
             current_value: 0,
             src: "",
@@ -190,8 +190,8 @@ class ZAudio extends util_1.EventBus {
         this.commit("setPause", true);
         this.audioCtx.startTime = 0;
         this.commit("setPlayinfo", {
-            current: util_1.formatSeconds("0"),
-            current_value: "0",
+            current: "00:00",
+            current_value: 0,
         });
         this.emit(zaudioCbName.onEnded);
         this.syncStateEmit();
@@ -232,9 +232,9 @@ class ZAudio extends util_1.EventBus {
             coverImgUrl: "",
         });
         this.commit("setPlayinfo", {
-            current: 0,
+            current: "00:00",
             current_value: 0,
-            duration: 0,
+            duration: "00:00",
             duration_value: 0,
             title: "",
             src: "",
@@ -253,19 +253,19 @@ class ZAudio extends util_1.EventBus {
         this.setRender(this.playIndex);
     }
     /**
-    * @description 注册一个实时获取ZAudio属性的方法
-    * @param {String}        action      自定义业务名
-    * @param {Funtion}     fn        实时获取ZAudio属性回调
-    * @returns undefined
-    * **/
+     * @description 注册一个实时获取ZAudio属性的方法
+     * @param {String}        action      自定义业务名
+     * @param {Funtion}     fn        实时获取ZAudio属性回调
+     * @returns undefined
+     * **/
     syncStateOn(action, fn) {
         typeof fn === "function" && this.on(zaudioCbName.syncStateOn, action, fn);
     }
     /**
-    * @description 卸载实时获取ZAudio属性的方法
-    * @param {String}        action      自定义业务名
-    * @returns undefined
-    * **/
+     * @description 卸载实时获取ZAudio属性的方法
+     * @param {String}        action      自定义业务名
+     * @returns undefined
+     * **/
     syncStateOff(action) {
         this.off(zaudioCbName.syncStateOn, action);
     }
@@ -290,10 +290,11 @@ class ZAudio extends util_1.EventBus {
      * @returns undefined
      * **/
     seek(value) {
-        this.audioCtx.seek(value);
+        let val = value > this.audioCtx.duration ? this.audioCtx.duration : value;
+        this.audioCtx.seek(val);
         this.commit("setPlayinfo", {
-            current: util_1.formatSeconds(value),
-            current_value: value,
+            current: util_1.formatSeconds(val),
+            current_value: val,
         });
         // setTimeout(() => {
         //   this.emit(zaudioCbName.seek, this.playinfo.current);
@@ -301,10 +302,10 @@ class ZAudio extends util_1.EventBus {
         this.emit(zaudioCbName.seek, this.playinfo.current);
     }
     /**
-    * @description 快进
-    * @param {Number}        value      跳转位置
-    * @returns undefined
-    * **/
+     * @description 快进
+     * @param {Number}        value      跳转位置
+     * @returns undefined
+     * **/
     stepPlay(value) {
         if (this.renderIsPlay) {
             let pos = this.playinfo.current_value + value;
@@ -312,11 +313,22 @@ class ZAudio extends util_1.EventBus {
         }
     }
     /**
-    * @description 切歌
-    * @param {Number}        count      数量
-    * @returns undefined
-    * **/
+     * @description 切歌
+     * @param {Number}        count      数量
+     * @returns undefined
+     * **/
     changeplay(count) {
+        //fix: 当audiolist只有一个对象时, 无法续播问题
+        if (this.audiolist.length == 1) {
+            this.commit("setPlayinfo", {
+                current: "00:00",
+                current_value: 0,
+                duration: "00:00",
+                duration_value: 0,
+                title: "",
+                src: "",
+            });
+        }
         if (this.renderIsPlay) {
             let nowindex = this.renderIndex;
             nowindex += count;
@@ -344,9 +356,9 @@ class ZAudio extends util_1.EventBus {
         this.operation();
     }
     /**
-    * @description 强制暂停播放
-    * @returns undefined
-    * **/
+     * @description 强制暂停播放
+     * @returns undefined
+     * **/
     stop() {
         this.audioCtx.pause();
         this.commit("setPause", true);
@@ -383,7 +395,7 @@ class ZAudio extends util_1.EventBus {
                 //渲染与播放地址相同
                 this.audioCtx.play();
                 this.audioCtx.startTime = current_value;
-                this.audioCtx.seek(current_value);
+                // this.audioCtx.seek(current_value);
                 this.commit("setPause", false);
                 this.commit("setPlayinfo", {
                     src: renderSrc,
@@ -400,10 +412,10 @@ class ZAudio extends util_1.EventBus {
         }
     }
     /**
-    * @description 覆盖音频
-    * @param {Array<audio>} data 音频数组
-    * @returns undefined
-    * **/
+     * @description 覆盖音频
+     * @param {Array<audio>} data 音频数组
+     * @returns undefined
+     * **/
     setAudio(data) {
         this.audiolist = [...data];
         this.emit(zaudioCbName.setAudio, this.audiolist);
@@ -425,30 +437,33 @@ class ZAudio extends util_1.EventBus {
      * @returns undefined
      * **/
     setPlayinfo(data) {
-        if (data.current) {
-            this.playinfo.current = data.current;
+        for (let i in data) {
+            this.playinfo[i] = data[i];
         }
-        if (data.duration) {
-            this.playinfo.duration = data.duration;
-        }
-        if (data.duration_value) {
-            this.playinfo.duration_value = data.duration_value;
-        }
-        if (data.current_value) {
-            this.playinfo.current_value = data.current_value;
-        }
-        if (data.src) {
-            this.playinfo.src = data.src;
-        }
-        if (data.title) {
-            this.playinfo.title = data.title;
-        }
-        if (data.singer) {
-            this.playinfo.singer = data.singer;
-        }
-        if (data.coverImgUrl) {
-            this.playinfo.coverImgUrl = data.coverImgUrl;
-        }
+        // if (data.current) {
+        //   this.playinfo.current = data.current;
+        // }
+        // if (data.duration) {
+        //   this.playinfo.duration = data.duration;
+        // }
+        // if (data.duration_value) {
+        //   this.playinfo.duration_value = data.duration_value;
+        // }
+        // if (data.current_value) {
+        //   this.playinfo.current_value = data.current_value;
+        // }
+        // if (data.src) {
+        //   this.playinfo.src = data.src;
+        // }
+        // if (data.title) {
+        //   this.playinfo.title = data.title;
+        // }
+        // if (data.singer) {
+        //   this.playinfo.singer = data.singer;
+        // }
+        // if (data.coverImgUrl) {
+        //   this.playinfo.coverImgUrl = data.coverImgUrl;
+        // }
     }
     /**
      * @description 设置暂停状态
@@ -560,4 +575,4 @@ class ZAudio extends util_1.EventBus {
     }
 }
 exports.default = ZAudio;
-ZAudio.version = "2.2.2";
+ZAudio.version = "2.2.3";

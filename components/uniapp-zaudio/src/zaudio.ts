@@ -9,10 +9,11 @@ interface audio {
 }
 
 interface audioInfo extends audio {
-  current: string | number; //当前播放时间
-  duration: string | number; //总时间
+  current: string; //当前播放时间
+  duration: string; //总时间
   duration_value: number; //总时长
   current_value: number; //当前播放时长
+  // [propName: string]: any
 }
 
 interface zaudioCommitEvent {
@@ -82,14 +83,14 @@ import { formatSeconds, throttle, EventBus } from "./util";
  * **/
 
 export default class ZAudio extends EventBus {
-  static version: string = "2.2.2";
+  static version: string = "2.2.3";
 
   renderIndex: number = 0;
   audiolist: Array<audio> = [];
 
   renderinfo: audioInfo = {
-    current: 0,
-    duration: 0,
+    current: "00;00",
+    duration: "00;00",
     duration_value: 0,
     current_value: 0,
     src: "",
@@ -98,8 +99,8 @@ export default class ZAudio extends EventBus {
     coverImgUrl: "",
   };
   playinfo: audioInfo = {
-    current: 0,
-    duration: 0,
+    current: "00;00",
+    duration: "00;00",
     duration_value: 0,
     current_value: 0,
     src: "",
@@ -240,8 +241,8 @@ export default class ZAudio extends EventBus {
     this.commit("setPause", true);
     this.audioCtx.startTime = 0;
     this.commit("setPlayinfo", {
-      current: formatSeconds("0"),
-      current_value: "0",
+      current: "00:00",
+      current_value: 0,
     });
     this.emit(zaudioCbName.onEnded);
     this.syncStateEmit();
@@ -285,9 +286,9 @@ export default class ZAudio extends EventBus {
       coverImgUrl: "",
     });
     this.commit("setPlayinfo", {
-      current: 0,
+      current: "00:00",
       current_value: 0,
-      duration: 0,
+      duration: "00:00",
       duration_value: 0,
       title: "",
       src: "",
@@ -307,19 +308,19 @@ export default class ZAudio extends EventBus {
     this.setRender(this.playIndex);
   }
   /**
-  * @description 注册一个实时获取ZAudio属性的方法
-  * @param {String}        action      自定义业务名
-  * @param {Funtion}     fn        实时获取ZAudio属性回调
-  * @returns undefined
-  * **/
+   * @description 注册一个实时获取ZAudio属性的方法
+   * @param {String}        action      自定义业务名
+   * @param {Funtion}     fn        实时获取ZAudio属性回调
+   * @returns undefined
+   * **/
   syncStateOn(action: string, fn: () => {}): void {
     typeof fn === "function" && this.on(zaudioCbName.syncStateOn, action, fn);
   }
   /**
-  * @description 卸载实时获取ZAudio属性的方法
-  * @param {String}        action      自定义业务名
-  * @returns undefined
-  * **/
+   * @description 卸载实时获取ZAudio属性的方法
+   * @param {String}        action      自定义业务名
+   * @returns undefined
+   * **/
   syncStateOff(action: string): void {
     this.off(zaudioCbName.syncStateOn, action);
   }
@@ -344,10 +345,11 @@ export default class ZAudio extends EventBus {
    * @returns undefined
    * **/
   seek(value: number): void {
-    this.audioCtx.seek(value);
+    let val = value > this.audioCtx.duration ? this.audioCtx.duration : value;
+    this.audioCtx.seek(val);
     this.commit("setPlayinfo", {
-      current: formatSeconds(value),
-      current_value: value,
+      current: formatSeconds(val),
+      current_value: val,
     });
     // setTimeout(() => {
     //   this.emit(zaudioCbName.seek, this.playinfo.current);
@@ -356,10 +358,10 @@ export default class ZAudio extends EventBus {
   }
 
   /**
-  * @description 快进
-  * @param {Number}        value      跳转位置
-  * @returns undefined
-  * **/
+   * @description 快进
+   * @param {Number}        value      跳转位置
+   * @returns undefined
+   * **/
   stepPlay(value: number): void {
     if (this.renderIsPlay) {
       let pos: number = this.playinfo.current_value + value;
@@ -367,11 +369,22 @@ export default class ZAudio extends EventBus {
     }
   }
   /**
-  * @description 切歌
-  * @param {Number}        count      数量
-  * @returns undefined
-  * **/
+   * @description 切歌
+   * @param {Number}        count      数量
+   * @returns undefined
+   * **/
   changeplay(count: number): void {
+    //fix: 当audiolist只有一个对象时, 无法续播问题
+    if (this.audiolist.length == 1) {
+      this.commit("setPlayinfo", {
+        current: "00:00",
+        current_value: 0,
+        duration: "00:00",
+        duration_value: 0,
+        title: "",
+        src: "",
+      });
+    }
     if (this.renderIsPlay) {
       let nowindex: number = this.renderIndex;
       nowindex += count;
@@ -379,8 +392,8 @@ export default class ZAudio extends EventBus {
         nowindex < 0
           ? this.audiolist.length - 1
           : nowindex > this.audiolist.length - 1
-            ? 0
-            : nowindex;
+          ? 0
+          : nowindex;
       this.commit("setPause", true);
       this.operate(nowindex);
     } else {
@@ -399,9 +412,9 @@ export default class ZAudio extends EventBus {
   }
 
   /**
-  * @description 强制暂停播放
-  * @returns undefined
-  * **/
+   * @description 强制暂停播放
+   * @returns undefined
+   * **/
   stop() {
     this.audioCtx.pause();
     this.commit("setPause", true);
@@ -455,7 +468,7 @@ export default class ZAudio extends EventBus {
         this.audioCtx.play();
 
         this.audioCtx.startTime = current_value;
-        this.audioCtx.seek(current_value);
+        // this.audioCtx.seek(current_value);
         this.commit("setPause", false);
 
         this.commit("setPlayinfo", {
@@ -472,12 +485,11 @@ export default class ZAudio extends EventBus {
     }
   }
 
-
   /**
-  * @description 覆盖音频
-  * @param {Array<audio>} data 音频数组
-  * @returns undefined
-  * **/
+   * @description 覆盖音频
+   * @param {Array<audio>} data 音频数组
+   * @returns undefined
+   * **/
   setAudio(data: Array<audio>) {
     this.audiolist = [...data];
     this.emit(zaudioCbName.setAudio, this.audiolist);
@@ -495,37 +507,39 @@ export default class ZAudio extends EventBus {
     this.syncStateEmit();
   }
 
-
   /**
    * @description 设置当前播放信息
    * @param {<audioInfo>} data 音频对象
    * @returns undefined
    * **/
-  setPlayinfo(data: audioInfo) {
-    if (data.current) {
-      this.playinfo.current = data.current;
+  setPlayinfo<T extends keyof audioInfo>(data: audioInfo) {
+    for (let i in data) {
+      this.playinfo[i as T] = data[i as T];
     }
-    if (data.duration) {
-      this.playinfo.duration = data.duration;
-    }
-    if (data.duration_value) {
-      this.playinfo.duration_value = data.duration_value;
-    }
-    if (data.current_value) {
-      this.playinfo.current_value = data.current_value;
-    }
-    if (data.src) {
-      this.playinfo.src = data.src;
-    }
-    if (data.title) {
-      this.playinfo.title = data.title;
-    }
-    if (data.singer) {
-      this.playinfo.singer = data.singer;
-    }
-    if (data.coverImgUrl) {
-      this.playinfo.coverImgUrl = data.coverImgUrl;
-    }
+    // if (data.current) {
+    //   this.playinfo.current = data.current;
+    // }
+    // if (data.duration) {
+    //   this.playinfo.duration = data.duration;
+    // }
+    // if (data.duration_value) {
+    //   this.playinfo.duration_value = data.duration_value;
+    // }
+    // if (data.current_value) {
+    //   this.playinfo.current_value = data.current_value;
+    // }
+    // if (data.src) {
+    //   this.playinfo.src = data.src;
+    // }
+    // if (data.title) {
+    //   this.playinfo.title = data.title;
+    // }
+    // if (data.singer) {
+    //   this.playinfo.singer = data.singer;
+    // }
+    // if (data.coverImgUrl) {
+    //   this.playinfo.coverImgUrl = data.coverImgUrl;
+    // }
   }
 
   /**

@@ -5,8 +5,8 @@ interface audio {
     coverImgUrl: string;
 }
 interface audioInfo extends audio {
-    current: string | number;
-    duration: string | number;
+    current: string;
+    duration: string;
     duration_value: number;
     current_value: number;
 }
@@ -106,17 +106,17 @@ export default class ZAudio extends EventBus {
      * **/
     syncRender(): void;
     /**
-    * @description 注册一个实时获取ZAudio属性的方法
-    * @param {String}        action      自定义业务名
-    * @param {Funtion}     fn        实时获取ZAudio属性回调
-    * @returns undefined
-    * **/
+     * @description 注册一个实时获取ZAudio属性的方法
+     * @param {String}        action      自定义业务名
+     * @param {Funtion}     fn        实时获取ZAudio属性回调
+     * @returns undefined
+     * **/
     syncStateOn(action: string, fn: () => {}): void;
     /**
-    * @description 卸载实时获取ZAudio属性的方法
-    * @param {String}        action      自定义业务名
-    * @returns undefined
-    * **/
+     * @description 卸载实时获取ZAudio属性的方法
+     * @param {String}        action      自定义业务名
+     * @returns undefined
+     * **/
     syncStateOff(action: string): void;
     /**
      * @description 订阅实时获取ZAudio属性的方法
@@ -130,16 +130,16 @@ export default class ZAudio extends EventBus {
      * **/
     seek(value: number): void;
     /**
-    * @description 快进
-    * @param {Number}        value      跳转位置
-    * @returns undefined
-    * **/
+     * @description 快进
+     * @param {Number}        value      跳转位置
+     * @returns undefined
+     * **/
     stepPlay(value: number): void;
     /**
-    * @description 切歌
-    * @param {Number}        count      数量
-    * @returns undefined
-    * **/
+     * @description 切歌
+     * @param {Number}        count      数量
+     * @returns undefined
+     * **/
     changeplay(count: number): void;
     /**
      * @description 手动播放或暂停, 并渲染对应的数据
@@ -148,16 +148,16 @@ export default class ZAudio extends EventBus {
      * **/
     operate(key?: number | string | audioInfo): void;
     /**
-    * @description 强制暂停播放
-    * @returns undefined
-    * **/
+     * @description 强制暂停播放
+     * @returns undefined
+     * **/
     stop(): void;
     private operation;
     /**
-    * @description 覆盖音频
-    * @param {Array<audio>} data 音频数组
-    * @returns undefined
-    * **/
+     * @description 覆盖音频
+     * @param {Array<audio>} data 音频数组
+     * @returns undefined
+     * **/
     setAudio(data: Array<audio>): void;
     /**
      * @description 添加音频
@@ -170,7 +170,7 @@ export default class ZAudio extends EventBus {
      * @param {<audioInfo>} data 音频对象
      * @returns undefined
      * **/
-    setPlayinfo(data: audioInfo): void;
+    setPlayinfo<T extends keyof audioInfo>(data: audioInfo): void;
     /**
      * @description 设置暂停状态
      * @param {boolean} data 布尔值

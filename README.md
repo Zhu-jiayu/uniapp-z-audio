@@ -1,7 +1,8 @@
 # uniapp-zaudio 背景音频播放组件
 
-+ 当前版本`v2.2.2`
-
++ 当前版本`v2.2.3`
+- 修复进度条跳转超出总进度问题
+- 修复在小程序端中,只有一首音频时报错问题
 ## 预览
 [http://jingangtui.gitee.io/uniapp-z-audio/#/](http://jingangtui.gitee.io/uniapp-z-audio/#/)
 
@@ -96,7 +97,7 @@ export default {
 | 参数         | 类型    | 必填  | 描述                         | 其他       |
 | ------------ | ------- | ----- | ---------------------------- | ---------- |
 | defaultCover | String  | false | 默认音频封面 |
-| continuePlay | Boolean | false | 下一首续播                   | 默认 true  |
+| continuePlay | Boolean | false | 自动播放下一首,完成后从头播放                   | 默认 true  |
 | autoPlay     | Boolean | false | 自动播放,部分浏览器不支持    | 默认 false |
 
 | 实例方法                    | 描述							| 参数															|
@@ -281,6 +282,8 @@ iOS
 }
 ```
 
-## 如果你觉得这个项目不错, 给我一个[STAR](https://gitee.com/jingangtui/uniapp-z-audio.git)
 ## 注意项
 - 示例在 app 运行时,注意开启网络权限,若不显示数据则重启 app 应用,或者检查网络权限问题
+
+### 如果你觉得这个项目不错, 或是想增加新功能 _[欢迎Star Fork PR](https://gitee.com/jingangtui/uniapp-z-audio.git)_
+

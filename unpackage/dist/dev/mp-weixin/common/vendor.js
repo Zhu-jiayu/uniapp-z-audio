@@ -801,7 +801,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"zaudio","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_NAME":"zaudio","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -7253,7 +7253,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"NODE_ENV":"development","VUE_APP_NAME":"zaudio","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"VUE_APP_NAME":"zaudio","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -7274,14 +7274,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"zaudio","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_NAME":"zaudio","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"zaudio","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_NAME":"zaudio","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -7367,7 +7367,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"zaudio","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_NAME":"zaudio","VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -8029,8 +8029,8 @@ ZAudio = /*#__PURE__*/function (_util_1$EventBus) {_inherits(ZAudio, _util_1$Eve
     _this.renderIndex = 0;
     _this.audiolist = [];
     _this.renderinfo = {
-      current: 0,
-      duration: 0,
+      current: "00;00",
+      duration: "00;00",
       duration_value: 0,
       current_value: 0,
       src: "",
@@ -8039,8 +8039,8 @@ ZAudio = /*#__PURE__*/function (_util_1$EventBus) {_inherits(ZAudio, _util_1$Eve
       coverImgUrl: "" };
 
     _this.playinfo = {
-      current: 0,
-      duration: 0,
+      current: "00;00",
+      duration: "00;00",
       duration_value: 0,
       current_value: 0,
       src: "",
@@ -8158,8 +8158,8 @@ ZAudio = /*#__PURE__*/function (_util_1$EventBus) {_inherits(ZAudio, _util_1$Eve
       this.commit("setPause", true);
       this.audioCtx.startTime = 0;
       this.commit("setPlayinfo", {
-        current: util_1.formatSeconds("0"),
-        current_value: "0" });
+        current: "00:00",
+        current_value: 0 });
 
       this.emit(zaudioCbName.onEnded);
       this.syncStateEmit();
@@ -8200,9 +8200,9 @@ ZAudio = /*#__PURE__*/function (_util_1$EventBus) {_inherits(ZAudio, _util_1$Eve
         coverImgUrl: "" });
 
       this.commit("setPlayinfo", {
-        current: 0,
+        current: "00:00",
         current_value: 0,
-        duration: 0,
+        duration: "00:00",
         duration_value: 0,
         title: "",
         src: "" });
@@ -8221,19 +8221,19 @@ ZAudio = /*#__PURE__*/function (_util_1$EventBus) {_inherits(ZAudio, _util_1$Eve
       this.setRender(this.playIndex);
     }
     /**
-      * @description 注册一个实时获取ZAudio属性的方法
-      * @param {String}        action      自定义业务名
-      * @param {Funtion}     fn        实时获取ZAudio属性回调
-      * @returns undefined
-      * **/ }, { key: "syncStateOn", value: function syncStateOn(
+       * @description 注册一个实时获取ZAudio属性的方法
+       * @param {String}        action      自定义业务名
+       * @param {Funtion}     fn        实时获取ZAudio属性回调
+       * @returns undefined
+       * **/ }, { key: "syncStateOn", value: function syncStateOn(
     action, fn) {
       typeof fn === "function" && this.on(zaudioCbName.syncStateOn, action, fn);
     }
     /**
-      * @description 卸载实时获取ZAudio属性的方法
-      * @param {String}        action      自定义业务名
-      * @returns undefined
-      * **/ }, { key: "syncStateOff", value: function syncStateOff(
+       * @description 卸载实时获取ZAudio属性的方法
+       * @param {String}        action      自定义业务名
+       * @returns undefined
+       * **/ }, { key: "syncStateOff", value: function syncStateOff(
     action) {
       this.off(zaudioCbName.syncStateOn, action);
     }
@@ -8258,10 +8258,11 @@ ZAudio = /*#__PURE__*/function (_util_1$EventBus) {_inherits(ZAudio, _util_1$Eve
        * @returns undefined
        * **/ }, { key: "seek", value: function seek(
     value) {
-      this.audioCtx.seek(value);
+      var val = value > this.audioCtx.duration ? this.audioCtx.duration : value;
+      this.audioCtx.seek(val);
       this.commit("setPlayinfo", {
-        current: util_1.formatSeconds(value),
-        current_value: value });
+        current: util_1.formatSeconds(val),
+        current_value: val });
 
       // setTimeout(() => {
       //   this.emit(zaudioCbName.seek, this.playinfo.current);
@@ -8269,10 +8270,10 @@ ZAudio = /*#__PURE__*/function (_util_1$EventBus) {_inherits(ZAudio, _util_1$Eve
       this.emit(zaudioCbName.seek, this.playinfo.current);
     }
     /**
-      * @description 快进
-      * @param {Number}        value      跳转位置
-      * @returns undefined
-      * **/ }, { key: "stepPlay", value: function stepPlay(
+       * @description 快进
+       * @param {Number}        value      跳转位置
+       * @returns undefined
+       * **/ }, { key: "stepPlay", value: function stepPlay(
     value) {
       if (this.renderIsPlay) {
         var pos = this.playinfo.current_value + value;
@@ -8280,11 +8281,22 @@ ZAudio = /*#__PURE__*/function (_util_1$EventBus) {_inherits(ZAudio, _util_1$Eve
       }
     }
     /**
-      * @description 切歌
-      * @param {Number}        count      数量
-      * @returns undefined
-      * **/ }, { key: "changeplay", value: function changeplay(
+       * @description 切歌
+       * @param {Number}        count      数量
+       * @returns undefined
+       * **/ }, { key: "changeplay", value: function changeplay(
     count) {
+      //fix: 当audiolist只有一个对象时, 无法续播问题
+      if (this.audiolist.length == 1) {
+        this.commit("setPlayinfo", {
+          current: "00:00",
+          current_value: 0,
+          duration: "00:00",
+          duration_value: 0,
+          title: "",
+          src: "" });
+
+      }
       if (this.renderIsPlay) {
         var nowindex = this.renderIndex;
         nowindex += count;
@@ -8312,9 +8324,9 @@ ZAudio = /*#__PURE__*/function (_util_1$EventBus) {_inherits(ZAudio, _util_1$Eve
       this.operation();
     }
     /**
-      * @description 强制暂停播放
-      * @returns undefined
-      * **/ }, { key: "stop", value: function stop()
+       * @description 强制暂停播放
+       * @returns undefined
+       * **/ }, { key: "stop", value: function stop()
     {
       this.audioCtx.pause();
       this.commit("setPause", true);
@@ -8351,7 +8363,7 @@ ZAudio = /*#__PURE__*/function (_util_1$EventBus) {_inherits(ZAudio, _util_1$Eve
           //渲染与播放地址相同
           this.audioCtx.play();
           this.audioCtx.startTime = current_value;
-          this.audioCtx.seek(current_value);
+          // this.audioCtx.seek(current_value);
           this.commit("setPause", false);
           this.commit("setPlayinfo", {
             src: renderSrc,
@@ -8368,10 +8380,10 @@ ZAudio = /*#__PURE__*/function (_util_1$EventBus) {_inherits(ZAudio, _util_1$Eve
       }
     }
     /**
-      * @description 覆盖音频
-      * @param {Array<audio>} data 音频数组
-      * @returns undefined
-      * **/ }, { key: "setAudio", value: function setAudio(
+       * @description 覆盖音频
+       * @param {Array<audio>} data 音频数组
+       * @returns undefined
+       * **/ }, { key: "setAudio", value: function setAudio(
     data) {
       this.audiolist = _toConsumableArray(data);
       this.emit(zaudioCbName.setAudio, this.audiolist);
@@ -8393,30 +8405,33 @@ ZAudio = /*#__PURE__*/function (_util_1$EventBus) {_inherits(ZAudio, _util_1$Eve
        * @returns undefined
        * **/ }, { key: "setPlayinfo", value: function setPlayinfo(
     data) {
-      if (data.current) {
-        this.playinfo.current = data.current;
+      for (var i in data) {
+        this.playinfo[i] = data[i];
       }
-      if (data.duration) {
-        this.playinfo.duration = data.duration;
-      }
-      if (data.duration_value) {
-        this.playinfo.duration_value = data.duration_value;
-      }
-      if (data.current_value) {
-        this.playinfo.current_value = data.current_value;
-      }
-      if (data.src) {
-        this.playinfo.src = data.src;
-      }
-      if (data.title) {
-        this.playinfo.title = data.title;
-      }
-      if (data.singer) {
-        this.playinfo.singer = data.singer;
-      }
-      if (data.coverImgUrl) {
-        this.playinfo.coverImgUrl = data.coverImgUrl;
-      }
+      // if (data.current) {
+      //   this.playinfo.current = data.current;
+      // }
+      // if (data.duration) {
+      //   this.playinfo.duration = data.duration;
+      // }
+      // if (data.duration_value) {
+      //   this.playinfo.duration_value = data.duration_value;
+      // }
+      // if (data.current_value) {
+      //   this.playinfo.current_value = data.current_value;
+      // }
+      // if (data.src) {
+      //   this.playinfo.src = data.src;
+      // }
+      // if (data.title) {
+      //   this.playinfo.title = data.title;
+      // }
+      // if (data.singer) {
+      //   this.playinfo.singer = data.singer;
+      // }
+      // if (data.coverImgUrl) {
+      //   this.playinfo.coverImgUrl = data.coverImgUrl;
+      // }
     }
     /**
        * @description 设置暂停状态
