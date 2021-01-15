@@ -1,8 +1,6 @@
 # uniapp-zaudio 背景音频播放组件
 
 + 当前版本`v2.2.3`
-- 修复进度条跳转超出总进度问题
-- 修复在小程序端中,只有一首音频时报错问题
 ## 预览
 [http://jingangtui.gitee.io/uniapp-z-audio/#/](http://jingangtui.gitee.io/uniapp-z-audio/#/)
 
