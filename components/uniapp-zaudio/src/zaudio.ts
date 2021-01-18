@@ -13,7 +13,6 @@ interface audioInfo extends audio {
   duration: string; //总时间
   duration_value: number; //总时长
   current_value: number; //当前播放时长
-  // [propName: string]: any
 }
 
 interface zaudioCommitEvent {
@@ -23,21 +22,11 @@ interface zaudioCommitEvent {
   setPause: (data: boolean) => void;
   setUnnormalPause: (data: boolean) => void;
   setRender: (data: number | string | audioInfo) => void;
+  setLoading: (data: boolean) => void;
 }
-// interface zaudioProperty {
-//   renderIndex: number;
-//   audiolist: Array<audio>;
-//   renderinfo: audioInfo;
-//   playinfo: audioInfo;
-//   paused: boolean;
-//   uPause: boolean;
-//   audioCtx: any;
-//   autoPlay: boolean;
-//   defaultCover: string;
-//   continuePlay: boolean;
-// }
 
 enum zaudioCbName {
+  onWaiting = "waiting", // 加载时回调
   onError = "error", //错误播放时回调
   onTimeUpdate = "playing", //播放时回调
   onCanplay = "canPlay", //可以播放回调
@@ -49,6 +38,7 @@ enum zaudioCbName {
   onStop = "stop", //小程序音频浮窗关闭回调, 停止播放回调
   syncStateOn = "syncStateOn", //同步获取属性回调
 }
+
 
 import { formatSeconds, throttle, EventBus } from "./util";
 
@@ -85,12 +75,13 @@ import { formatSeconds, throttle, EventBus } from "./util";
 export default class ZAudio extends EventBus {
   static version: string = "2.2.3";
 
+  loading: boolean = false;
   renderIndex: number = 0;
   audiolist: Array<audio> = [];
 
   renderinfo: audioInfo = {
-    current: "00;00",
-    duration: "00;00",
+    current: "00:00",
+    duration: "00:00",
     duration_value: 0,
     current_value: 0,
     src: "",
@@ -99,8 +90,8 @@ export default class ZAudio extends EventBus {
     coverImgUrl: "",
   };
   playinfo: audioInfo = {
-    current: "00;00",
-    duration: "00;00",
+    current: "00:00",
+    duration: "00:00",
     duration_value: 0,
     current_value: 0,
     src: "",
@@ -114,7 +105,6 @@ export default class ZAudio extends EventBus {
   autoPlay: boolean = false;
   defaultCover: string = "";
   continuePlay: boolean = true;
-
   constructor(options: {
     defaultCover: string;
     autoPlay: boolean;
@@ -125,7 +115,6 @@ export default class ZAudio extends EventBus {
     this.defaultCover = defaultCover;
     this.autoPlay = autoPlay;
     this.continuePlay = continuePlay;
-
     this.init();
   }
   private init(): void {
@@ -139,17 +128,14 @@ export default class ZAudio extends EventBus {
     // #endif
 
     this.audioCtx = audioCtx;
-
+    this.audioCtx.onWaiting(this.onWaitingHandler.bind(this));
     this.audioCtx.onCanplay(this.onCanplayHandler.bind(this));
     this.audioCtx.onPlay(this.onPlayHandler.bind(this));
     this.audioCtx.onPause(this.onPauseHandler.bind(this));
     this.audioCtx.onStop(this.onStopHandler.bind(this));
     this.audioCtx.onEnded(this.onEndedHandler.bind(this));
-    //fix: 节流触发播放中的回调函数,
-    //由于播放回调时间间隔有误差,设置1000ms时,会跳过某一秒; 经测试900ms是最准确的保证每一秒都有回调,
 
-    let throttlePlaying = throttle(this.onTimeUpdateHandler, 900).bind(this);
-    this.audioCtx.onTimeUpdate(throttlePlaying);
+    this.audioCtx.onTimeUpdate(this.onTimeUpdateHandler.bind(this));
     this.audioCtx.onError(this.onErrorHandler.bind(this));
 
     //fix: 修复iOS原生音频切换不起作用
@@ -212,13 +198,19 @@ export default class ZAudio extends EventBus {
   ): void {
     typeof this[action] === "function" && this[action](data);
   }
-
-  private onCanplayHandler(): void {
-    this.emit(zaudioCbName.onCanplay, this.playinfo);
+  private onWaitingHandler(): void {
+    this.commit("setLoading", true);
+    this.emit(zaudioCbName.onWaiting, true);
     this.syncStateEmit();
+  }
+  private onCanplayHandler(): void {
+    this.emit(zaudioCbName.onCanplay, { ...this.playinfo, waiting: false });
+    this.syncStateEmit();
+		this.commit("setLoading", false);
   }
   private onPlayHandler(): void {
     // #ifdef APP-PLUS
+
     this.commit("setPlayinfo", {
       duration: formatSeconds(this.audioCtx.duration),
       duration_value: this.audioCtx.duration,
@@ -251,6 +243,11 @@ export default class ZAudio extends EventBus {
       this.changeplay(1);
     }
   }
+  //fix: 防抖触发音频播放中事件
+  private throttlePlaying: Function = throttle(() => {
+    this.emit(zaudioCbName.onTimeUpdate, this.playinfo);
+    this.syncStateEmit();
+  }, 1000);
   private onTimeUpdateHandler(): void {
     if (this.renderIsPlay) {
       //fix: 解决播放进度大于总进度问题
@@ -262,7 +259,6 @@ export default class ZAudio extends EventBus {
         current: formatSeconds(currentTime),
         current_value: currentTime,
       });
-
       // #ifndef APP-PLUS
       //fix: 解决小程序与h5无法获取总进度的问题
       if (this.audioCtx.duration != this.playinfo.duration_value) {
@@ -273,8 +269,10 @@ export default class ZAudio extends EventBus {
       }
       // #endif
     }
-    this.emit(zaudioCbName.onTimeUpdate, this.playinfo);
-    this.syncStateEmit();
+
+    // this.emit(zaudioCbName.onTimeUpdate, this.playinfo);
+    // this.syncStateEmit();
+    this.throttlePlaying();
   }
   private onErrorHandler(): void {
     this.commit("setPause", true);
@@ -337,6 +335,7 @@ export default class ZAudio extends EventBus {
       paused: this.paused,
       playIndex: this.playIndex,
       renderIsPlay: this.renderIsPlay,
+      loading: this.loading,
     });
   }
   /**
@@ -425,7 +424,7 @@ export default class ZAudio extends EventBus {
   //播放,暂停事件判断,
   //播放数据与渲染数据相同时: 播放->暂停, 暂停->播放
   //播放数据与渲染数据不相同时: 播放渲染音频
-  private operation() {
+  private async operation() {
     const {
       duration,
       current,
@@ -453,7 +452,6 @@ export default class ZAudio extends EventBus {
 
       this.audioCtx.startTime = 0;
       this.audioCtx.seek(0);
-
       this.audioCtx.play();
       this.commit("setPause", false);
       this.commit("setPlayinfo", {
@@ -516,30 +514,6 @@ export default class ZAudio extends EventBus {
     for (let i in data) {
       this.playinfo[i as T] = data[i as T];
     }
-    // if (data.current) {
-    //   this.playinfo.current = data.current;
-    // }
-    // if (data.duration) {
-    //   this.playinfo.duration = data.duration;
-    // }
-    // if (data.duration_value) {
-    //   this.playinfo.duration_value = data.duration_value;
-    // }
-    // if (data.current_value) {
-    //   this.playinfo.current_value = data.current_value;
-    // }
-    // if (data.src) {
-    //   this.playinfo.src = data.src;
-    // }
-    // if (data.title) {
-    //   this.playinfo.title = data.title;
-    // }
-    // if (data.singer) {
-    //   this.playinfo.singer = data.singer;
-    // }
-    // if (data.coverImgUrl) {
-    //   this.playinfo.coverImgUrl = data.coverImgUrl;
-    // }
   }
 
   /**
@@ -549,6 +523,14 @@ export default class ZAudio extends EventBus {
    * **/
   setPause(data: boolean) {
     this.paused = data;
+  }
+  /**
+   * @description 设置loading
+   * @param {boolean} data 布尔值
+   * @returns undefined
+   * **/
+  setLoading(data: boolean) {
+    this.loading = data;
   }
 
   /**

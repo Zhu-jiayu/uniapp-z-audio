@@ -74,3 +74,4 @@ export class EventBus {
     this._events.set(event, [...newdata]);
   }
 }
+

@@ -14,9 +14,12 @@
 			<view class="top">
 				<view class="audio-control-wrapper">
 					<image :src="renderData('coverImgUrl')" mode="aspectFill" class="cover" :class="{ on: !renderData('paused') }"></image>
-
-					<image :src="require('./static/playbtn.png')" alt="" @click="operate" class="play" v-if="renderData('paused')"></image>
-					<image :src="require('./static/pausebtn.png')" alt="" @click="operate" class="play" v-else></image>
+					
+					<image :src="require('./static/loading.png')" v-if="loading" class="play loading"></image>
+					<template v-else>
+						<image :src="require('./static/playbtn.png')" alt="" @click="operate" class="play" v-if="renderData('paused')"></image>
+						<image :src="require('./static/pausebtn.png')" alt="" @click="operate" class="play" v-else></image>
+					</template>
 				</view>
 			</view>
 			<view class="audio-wrapper">
@@ -38,7 +41,8 @@
 		<template v-if="theme == 'theme2'">
 			<view class="top">
 				<view class="audio-control-wrapper" :style="{backgroundImage: `url(${renderData('coverImgUrl')})`}">
-					<template>
+					<image :src="require('./static/loading.png')" v-if="loading" class="play loading"></image>
+					<template v-else>
 						<image :src="require('./static/playbtn.png')" alt="" @click="operate" class="play" v-if="renderData('paused')"></image>
 						<image :src="require('./static/pausebtn.png')" alt="" @click="operate" class="play" v-else></image>
 					</template>
@@ -82,10 +86,15 @@
 				<image :src="require('./static/prev.png')" class="prevbtn" @click="stepPlay(-15)" mode="widthFix"></image>
 				<!-- 上一首 -->
 				<image :src="require('./static/go.png')" class="prevplay" @click="changeplay(-1)" mode="widthFix"></image>
-				<!-- 播放 -->
-				<image :src="require('./static/playbtn2.png')" alt="" @click="operate" class="play" v-if="renderData('paused')"></image>
-				<!-- 暂停 -->
-				<image :src="require('./static/pausebtn2.png')" alt="" @click="operate" class="pause" v-else></image>
+				<div class="playbox">
+					<image :src="require('./static/loading2.png')" v-if="loading" class="play loading"></image>
+					<template v-else>
+						<!-- 播放 -->
+						<image :src="require('./static/playbtn2.png')" alt="" @click="operate" class="play" v-if="renderData('paused')"></image>
+						<!-- 暂停 -->
+						<image :src="require('./static/pausebtn2.png')" alt="" @click="operate" class="pause" v-else></image>
+					</template>
+				</div>
 				<!-- 下一首 -->
 				<image :src="require('./static/go.png')" class="nextplay" @click="changeplay(1)" mode="widthFix"></image>
 				<!-- 快进15s -->
@@ -114,6 +123,7 @@ export default {
 			paused: this.$zaudio.paused,
 			renderIsPlay: this.$zaudio.renderIsPlay,
 			audio: this.$zaudio.renderinfo,
+			loading: this.$zaudio.loading,
 			action: Symbol('zaudio')
 		};
 	},
@@ -144,15 +154,16 @@ export default {
 			this.renderIsPlay = this.$zaudio.renderIsPlay;
 			
 			let action = this.action;
-			this.$zaudio.syncStateOn(action, ({ audiolist, paused, playinfo, renderIsPlay, renderinfo }) => {
+			this.$zaudio.syncStateOn(action, ({ audiolist, paused, playinfo, renderIsPlay, renderinfo, loading }) => {
 				this.audiolist = audiolist;
 				this.paused = paused;
 				this.playinfo = playinfo;
 				this.renderIsPlay = renderIsPlay;
-				this.audio = renderinfo
-			});
-			
-		});
+				this.audio = renderinfo;
+				this.loading = loading;
+			}); 
+			 
+ 		});
 	},
 	methods: {
 		//播放or暂停
@@ -177,11 +188,7 @@ export default {
 	beforeDestroy() {
 		//组件卸载时卸载业务逻辑
 		let action = this.action;
-		this.$zaudio.off('setAudio', action);
-		this.$zaudio.off('updateAudio', action);
-		this.$zaudio.off('canPlay', action);
-		this.$zaudio.off('playing', action);
-		this.$zaudio.off('pause', action);
+		this.$zaudio.syncStateOff(action)
 	}
 };
 </script>

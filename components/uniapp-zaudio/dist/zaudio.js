@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 // interface zaudioProperty {
 //   renderIndex: number;
@@ -14,6 +23,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // }
 var zaudioCbName;
 (function (zaudioCbName) {
+    zaudioCbName["onWaiting"] = "waiting";
     zaudioCbName["onError"] = "error";
     zaudioCbName["onTimeUpdate"] = "playing";
     zaudioCbName["onCanplay"] = "canPlay";
@@ -58,11 +68,12 @@ const util_1 = require("./util");
 class ZAudio extends util_1.EventBus {
     constructor(options) {
         super();
+        this.loading = false;
         this.renderIndex = 0;
         this.audiolist = [];
         this.renderinfo = {
-            current: "00;00",
-            duration: "00;00",
+            current: "00:00",
+            duration: "00:00",
             duration_value: 0,
             current_value: 0,
             src: "",
@@ -71,8 +82,8 @@ class ZAudio extends util_1.EventBus {
             coverImgUrl: "",
         };
         this.playinfo = {
-            current: "00;00",
-            duration: "00;00",
+            current: "00:00",
+            duration: "00:00",
             duration_value: 0,
             current_value: 0,
             src: "",
@@ -85,6 +96,11 @@ class ZAudio extends util_1.EventBus {
         this.autoPlay = false;
         this.defaultCover = "";
         this.continuePlay = true;
+        //fix: 防抖触发音频播放中事件
+        this.throttlePlaying = util_1.throttle(() => {
+            this.emit(zaudioCbName.onTimeUpdate, this.playinfo);
+            this.syncStateEmit();
+        }, 1000);
         let { defaultCover, autoPlay, continuePlay } = options;
         this.defaultCover = defaultCover;
         this.autoPlay = autoPlay;
@@ -100,15 +116,13 @@ class ZAudio extends util_1.EventBus {
         audioCtx.autoplay = this.autoPlay;
         // #endif
         this.audioCtx = audioCtx;
+        this.audioCtx.onWaiting(this.onWaitingHandler.bind(this));
         this.audioCtx.onCanplay(this.onCanplayHandler.bind(this));
         this.audioCtx.onPlay(this.onPlayHandler.bind(this));
         this.audioCtx.onPause(this.onPauseHandler.bind(this));
         this.audioCtx.onStop(this.onStopHandler.bind(this));
         this.audioCtx.onEnded(this.onEndedHandler.bind(this));
-        //fix: 节流触发播放中的回调函数,
-        //由于播放回调时间间隔有误差,设置1000ms时,会跳过某一秒; 经测试900ms是最准确的保证每一秒都有回调,
-        let throttlePlaying = util_1.throttle(this.onTimeUpdateHandler, 900).bind(this);
-        this.audioCtx.onTimeUpdate(throttlePlaying);
+        this.audioCtx.onTimeUpdate(this.onTimeUpdateHandler.bind(this));
         this.audioCtx.onError(this.onErrorHandler.bind(this));
         //fix: 修复iOS原生音频切换不起作用
         //  #ifdef APP-PLUS
@@ -162,9 +176,15 @@ class ZAudio extends util_1.EventBus {
     commit(action, data) {
         typeof this[action] === "function" && this[action](data);
     }
-    onCanplayHandler() {
-        this.emit(zaudioCbName.onCanplay, this.playinfo);
+    onWaitingHandler() {
+        this.commit("setLoading", true);
+        this.emit(zaudioCbName.onWaiting, true);
         this.syncStateEmit();
+    }
+    onCanplayHandler() {
+        this.emit(zaudioCbName.onCanplay, Object.assign(Object.assign({}, this.playinfo), { waiting: false }));
+        this.syncStateEmit();
+        this.commit("setLoading", false);
     }
     onPlayHandler() {
         // #ifdef APP-PLUS
@@ -220,8 +240,9 @@ class ZAudio extends util_1.EventBus {
             }
             // #endif
         }
-        this.emit(zaudioCbName.onTimeUpdate, this.playinfo);
-        this.syncStateEmit();
+        // this.emit(zaudioCbName.onTimeUpdate, this.playinfo);
+        // this.syncStateEmit();
+        this.throttlePlaying();
     }
     onErrorHandler() {
         this.commit("setPause", true);
@@ -282,6 +303,7 @@ class ZAudio extends util_1.EventBus {
             paused: this.paused,
             playIndex: this.playIndex,
             renderIsPlay: this.renderIsPlay,
+            loading: this.loading,
         });
     }
     /**
@@ -369,33 +391,20 @@ class ZAudio extends util_1.EventBus {
     //播放数据与渲染数据相同时: 播放->暂停, 暂停->播放
     //播放数据与渲染数据不相同时: 播放渲染音频
     operation() {
-        const { duration, current, duration_value, current_value, src, } = this.playinfo;
-        const { src: renderSrc, title: renderTitle, singer: renderSinger, coverImgUrl: renderCoverImgUrl, } = this.renderinfo;
-        let renderIsPlay = this.renderIsPlay;
-        let paused = this.paused;
-        if (!renderIsPlay) {
-            //渲染与播放地址 不同
-            this.audioCtx.src = renderSrc;
-            this.audioCtx.title = renderTitle;
-            this.audioCtx.singer = renderSinger;
-            this.audioCtx.coverImgUrl = renderCoverImgUrl || this.defaultCover;
-            this.audioCtx.startTime = 0;
-            this.audioCtx.seek(0);
-            this.audioCtx.play();
-            this.commit("setPause", false);
-            this.commit("setPlayinfo", {
-                src: renderSrc,
-                title: renderTitle,
-                singer: renderSinger,
-                coverImgUrl: renderCoverImgUrl,
-            });
-        }
-        else {
-            if (paused) {
-                //渲染与播放地址相同
+        return __awaiter(this, void 0, void 0, function* () {
+            const { duration, current, duration_value, current_value, src, } = this.playinfo;
+            const { src: renderSrc, title: renderTitle, singer: renderSinger, coverImgUrl: renderCoverImgUrl, } = this.renderinfo;
+            let renderIsPlay = this.renderIsPlay;
+            let paused = this.paused;
+            if (!renderIsPlay) {
+                //渲染与播放地址 不同
+                this.audioCtx.src = renderSrc;
+                this.audioCtx.title = renderTitle;
+                this.audioCtx.singer = renderSinger;
+                this.audioCtx.coverImgUrl = renderCoverImgUrl || this.defaultCover;
+                this.audioCtx.startTime = 0;
+                this.audioCtx.seek(0);
                 this.audioCtx.play();
-                this.audioCtx.startTime = current_value;
-                // this.audioCtx.seek(current_value);
                 this.commit("setPause", false);
                 this.commit("setPlayinfo", {
                     src: renderSrc,
@@ -405,11 +414,26 @@ class ZAudio extends util_1.EventBus {
                 });
             }
             else {
-                this.audioCtx.pause();
-                this.commit("setPause", true);
-                this.commit("setUnnormalPause", true);
+                if (paused) {
+                    //渲染与播放地址相同
+                    this.audioCtx.play();
+                    this.audioCtx.startTime = current_value;
+                    // this.audioCtx.seek(current_value);
+                    this.commit("setPause", false);
+                    this.commit("setPlayinfo", {
+                        src: renderSrc,
+                        title: renderTitle,
+                        singer: renderSinger,
+                        coverImgUrl: renderCoverImgUrl,
+                    });
+                }
+                else {
+                    this.audioCtx.pause();
+                    this.commit("setPause", true);
+                    this.commit("setUnnormalPause", true);
+                }
             }
-        }
+        });
     }
     /**
      * @description 覆盖音频
@@ -440,30 +464,6 @@ class ZAudio extends util_1.EventBus {
         for (let i in data) {
             this.playinfo[i] = data[i];
         }
-        // if (data.current) {
-        //   this.playinfo.current = data.current;
-        // }
-        // if (data.duration) {
-        //   this.playinfo.duration = data.duration;
-        // }
-        // if (data.duration_value) {
-        //   this.playinfo.duration_value = data.duration_value;
-        // }
-        // if (data.current_value) {
-        //   this.playinfo.current_value = data.current_value;
-        // }
-        // if (data.src) {
-        //   this.playinfo.src = data.src;
-        // }
-        // if (data.title) {
-        //   this.playinfo.title = data.title;
-        // }
-        // if (data.singer) {
-        //   this.playinfo.singer = data.singer;
-        // }
-        // if (data.coverImgUrl) {
-        //   this.playinfo.coverImgUrl = data.coverImgUrl;
-        // }
     }
     /**
      * @description 设置暂停状态
@@ -472,6 +472,14 @@ class ZAudio extends util_1.EventBus {
      * **/
     setPause(data) {
         this.paused = data;
+    }
+    /**
+     * @description 设置loading
+     * @param {boolean} data 布尔值
+     * @returns undefined
+     * **/
+    setLoading(data) {
+        this.loading = data;
     }
     /**
      * @description 设置通话时暂停状态

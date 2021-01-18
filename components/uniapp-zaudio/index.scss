@@ -52,6 +52,7 @@
 		align-items: center;
 		margin: 40rpx auto 0;
 		justify-content: space-around;
+		height: 100rpx
 	}
 
 	.audio-number {
@@ -79,11 +80,22 @@
 		box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
 		border-radius: 5px;
 	}
-
+	.playbox{
+		width: 100rpx;
+		height: 100rpx;
+		display:flex;
+		align-items: center;
+		justify-content: center;
+	}
 	.play,
 	.pause {
 		width: 100rpx;
 		height: 100rpx;
+		&.loading{
+			width: 80rpx;
+			height: 80rpx;
+			animation: rotating 2s linear infinite;
+		}
 	}
 
 	.prevbtn,
@@ -194,8 +206,13 @@
 		width: 80rpx;
 		height: 80rpx;
 		z-index: 99;
-		background: rgba(255, 255, 255, 0.4);
+		background: rgba(0, 0, 0, 0.4);
 		border-radius: 50%;
+		&.loading{
+			width: 60rpx;
+			height: 60rpx;
+			animation: rotating 2s linear infinite;
+		}
 	}
 
 	.prevbtn {
@@ -313,5 +330,27 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
+		&.loading{
+			width: 60rpx;
+			height: 60rpx;
+			animation: rotating_theme3 2s linear infinite;
+		}
+	}
+}
+
+@keyframes rotating {
+	0% {
+		  transform: rotateZ(0deg)
+	}
+	100% {
+		  transform: rotateZ(360deg)
+	}
+}
+@keyframes rotating_theme3 {
+	0% {
+		  transform: translate(-50%, -50%) rotateZ(0deg)
+	}
+	100% {
+		  transform: translate(-50%, -50%) rotateZ(360deg)
 	}
 }

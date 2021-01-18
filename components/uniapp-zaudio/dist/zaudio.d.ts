@@ -11,6 +11,7 @@ interface audioInfo extends audio {
     current_value: number;
 }
 declare enum zaudioCbName {
+    onWaiting = "waiting",
     onError = "error",
     onTimeUpdate = "playing",
     onCanplay = "canPlay",
@@ -54,6 +55,7 @@ import { EventBus } from "./util";
  * **/
 export default class ZAudio extends EventBus {
     static version: string;
+    loading: boolean;
     renderIndex: number;
     audiolist: Array<audio>;
     renderinfo: audioInfo;
@@ -93,11 +95,13 @@ export default class ZAudio extends EventBus {
      * **/
     emit(event: zaudioCbName, data?: any): void;
     private commit;
+    private onWaitingHandler;
     private onCanplayHandler;
     private onPlayHandler;
     private onPauseHandler;
     private onStopHandler;
     private onEndedHandler;
+    private throttlePlaying;
     private onTimeUpdateHandler;
     private onErrorHandler;
     /**
@@ -177,6 +181,12 @@ export default class ZAudio extends EventBus {
      * @returns undefined
      * **/
     setPause(data: boolean): void;
+    /**
+     * @description 设置loading
+     * @param {boolean} data 布尔值
+     * @returns undefined
+     * **/
+    setLoading(data: boolean): void;
     /**
      * @description 设置通话时暂停状态
      * @param {boolean} data 布尔值
