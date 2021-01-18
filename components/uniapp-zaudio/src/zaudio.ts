@@ -73,7 +73,7 @@ import { formatSeconds, throttle, EventBus } from "./util";
  * **/
 
 export default class ZAudio extends EventBus {
-  static version: string = "2.2.3";
+  static version: string = "2.2.4";
 
   loading: boolean = false;
   renderIndex: number = 0;

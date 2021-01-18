@@ -9,7 +9,7 @@ App.mpType = 'app'
 import ZAudio from '@/components/uniapp-zaudio'
 // import ZAudio from 'uniapp-zaudio' // npm引用方式
 
-
+console.log(`ZAudio当前版本`,ZAudio.version)
 let zaudio = new ZAudio({
 	continuePlay: true, //续播
 	autoPlay: false, //自动播放 部分浏览器不支持

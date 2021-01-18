@@ -1,6 +1,5 @@
 # uniapp-zaudio 背景音频播放组件
 
-+ 当前版本`v2.2.4`
 ## 预览
 [http://jingangtui.gitee.io/uniapp-z-audio/#/](http://jingangtui.gitee.io/uniapp-z-audio/#/)
 
@@ -15,17 +14,19 @@
 - 支持同一个音频回调中注册多个业务事件(v2.1.0 后版本)
 
 ## 简要说明
-- v2.1.0 后版本不再依赖 vuex; (依赖vuex版本查看[gitee v2.0分支](https://gitee.com/jingangtui/uniapp-z-audio.git))
-- 音频对象基于`uni.getBackgroundAudioManager`和`uni.createInnerAudioContext`创建
-- 具体使用方式,请下载示例
+- 插件分为`ZAudio`类和 `zaudio` 组件, `ZAudio`类处理音频播放逻辑, `zaudio`组件用于渲染
+- `ZAudio`基于`uni.getBackgroundAudioManager`和`uni.createInnerAudioContext`创建
+- 示例在 app 运行时,注意开启网络权限,若不显示数据则重启 app 应用,或者检查网络权限问题
+- v2.0 版本依赖vuex, v2.1.0 后版本不依赖 vuex, 建议下载最新版本
+- 如果你觉得这个项目不错, 或是想增加新功能 [欢迎Star Fork PR](https://gitee.com/jingangtui/uniapp-z-audio.git)
 
 ## 使用步骤
-~~0. 先安装[typescript编译插件](https://ext.dcloud.net.cn/plugin?name=compile-typescript)~~(v2.2后版本无需此步)
-1. <a href="https://ext.dcloud.net.cn/plugin?id=1888">插件市场下载</a> or `npm install uniapp-zaudio`
+1. <a href="https://ext.dcloud.net.cn/plugin?id=1888">插件市场下载</a> 或 `npm install uniapp-zaudio`;
+当前版本`v2.2.4`, 查看代码版本(`console.log(ZAudio.version)`)
 
-2. 实例化 ZAudio 并挂载 (main.js)
+2. 实例化 ZAudio类 并挂载
 
-注意大小写 ZAudio
+_注意大小写:ZAudio是类_
 
 ```javascript
 import ZAudio from '@/components/uniapp-zaudio'
@@ -59,9 +60,13 @@ var data = [
 zaudio.setAudio(data); //添加音频
 ```
 
-4. 引用组件
-   注意大小写 zaudio
+3. 引用组件
 
+_注意大小写:zaudio是组件_
+
+```html
+<zaudio theme="theme3"></zaudio>
+```
 ```javascript
 import zaudio from '@/components/uniapp-zaudio/zaudio';
 // import zaudio from 'uniapp-zaudio/zaudio'
@@ -70,9 +75,7 @@ export default {
 };
 ```
 
-```html
-<zaudio theme="theme3"></zaudio>
-```
+
 
 
 ## < zaudio > 组件参数配置
@@ -188,7 +191,7 @@ zaudio.operate(1);
 ```
 
  
-## <span id="syncrender">实时渲染当前播放状态</span>
+## <span id="syncrender">实时渲染当前播放状态到zaudio组件</span>
 + 适用情况: 当zaudio组件渲染了非当前播放的数据, 且需要实时渲染当前的播放状态时
 + 用法示例: 
 ```javascript
@@ -282,8 +285,6 @@ iOS
 }
 ```
 
-## 注意项
-- 示例在 app 运行时,注意开启网络权限,若不显示数据则重启 app 应用,或者检查网络权限问题
 
-### 如果你觉得这个项目不错, 或是想增加新功能 _[欢迎Star Fork PR](https://gitee.com/jingangtui/uniapp-z-audio.git)_
+## 如果你觉得这个项目不错, 或是想增加新功能 [欢迎Star Fork PR](https://gitee.com/jingangtui/uniapp-z-audio.git)
 
