@@ -8,23 +8,23 @@
     "static",
     "dist",
     "index.js",
-	"index.scss",
-	"zaudio.vue",
-	"README.md"
+    "index.scss",
+    "zaudio.vue",
+    "README.md"
   ],
   "scripts": {
     "build": "tsc"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/P3T3R-Z/uniapp-z-audio.git"
+    "url": "https://gitee.com/jingangtui/uniapp-z-audio.git"
   },
   "keywords": [
     "audio",
-    "manager",
+    "audioManager",
     "uniapp"
   ],
   "author": "jgt012345",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {}
 }
