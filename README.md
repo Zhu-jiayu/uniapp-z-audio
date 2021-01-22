@@ -59,6 +59,7 @@ var data = [
   },
 ];
 zaudio.setAudio(data); //添加音频
+zaudio.setRender(0)//渲染第一首音频
 ```
 
 3. 引用组件
@@ -118,6 +119,7 @@ export default {
 
 + 用法示例:
 
+初始化ZAudio类, 并渲染音频
 ```javascript
 let zaudio = new ZAudio({
   continuePlay: true, //续播
@@ -141,9 +143,23 @@ var data = [
       "https://img.1ting.com/images/special/204/s150_77254cd4a4da1a33b8faf89c4cbf6e40.jpg",
   },
 ];
-zaudio.setAudio(data);
-//播放或暂停第一首音频
-zaudio.operate(1);
+
+
+// 设置音频数据
+zaudio.setAudio(data)
+//渲染第一首音频
+zaudio.setRender(0)
+
+```
+
+
+异步加载
+```js
+setTimeout(()=>{
+	zaudio.setAudio(data);
+	zaudio.operate(0); //手动去渲染第1首音频
+},2000)
+
 ```
 
 ## <span id="fn">音频回调事件中注册业务</span>

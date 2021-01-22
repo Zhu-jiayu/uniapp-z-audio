@@ -1,5 +1,6 @@
 # uniapp-zaudio 背景音频播放组件
 
+当前版本`v2.2.5`, 查看版本`console.log(ZAudio.version)`
 ## 预览
 [http://jingangtui.gitee.io/uniapp-z-audio/#/](http://jingangtui.gitee.io/uniapp-z-audio/#/)
 
@@ -22,7 +23,7 @@
 
 ## 使用步骤
 1. <a href="https://ext.dcloud.net.cn/plugin?id=1888">插件市场下载</a> 或 `npm install uniapp-zaudio`;
-当前版本`v2.2.4`, 查看代码版本(`console.log(ZAudio.version)`)
+
 
 2. 实例化 ZAudio类 并挂载
 
@@ -107,7 +108,7 @@ export default {
 | off(event, action)          | 回调函数中卸载业务事件, 重要	| event(音频回调方法), action(业务名);见[`音频回调事件中注册业务`](#fn)|
 | setAudio(data)              | 设置音频列表(audiolist赋值)	| 对象数组, 例: [{src: 音频地址, title: 音频名, singer: 歌手 coverImgUrl: 封面}]|
 | updateAudio(data)           | 添加音频列表(push数据到audiolist)| 对象数组, 例: [{src: 音频地址, title: 音频名, singer: 歌手 coverImgUrl: 封面}]|
-| setRender(data)             | 指定音频索引或对象,渲染到 zaudio 组件|  索引(number或string类型) 或 音频对象(object类型)				|
+| setRender(data)             | 指定音频索引或对象,渲染到 zaudio 组件, 可用于异步渲染|  索引(number或string类型) 或 音频对象(object类型)				|
 | operate(index)              | 指定索引, 自动判断播放暂停,并渲染对应的音频数据,没有索引时则判断当前音频	| 索引, Number或undefined											|
 | stop()						| 停止播放音频 (强制停止)										|
 | stepPlay(count)             | 快进快退						| 单位秒, Number类型											|
