@@ -139,6 +139,7 @@ export default class ZAudio extends EventBus {
      * @returns undefined
      * **/
     stepPlay(value: number): void;
+    private getNextKey;
     /**
      * @description 切歌
      * @param {Number}        count      数量

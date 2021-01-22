@@ -148,11 +148,7 @@ export default {
 	},
 
 	mounted() {
-		this.$nextTick(() => {
-			//修复小程序autoplay为false时的bug
-			this.audio = this.$zaudio.renderinfo;
-			this.renderIsPlay = this.$zaudio.renderIsPlay;
-			
+		this.$nextTick(() => {			
 			let action = this.action;
 			this.$zaudio.syncStateOn(action, ({ audiolist, paused, playinfo, renderIsPlay, renderinfo, loading }) => {
 				this.audiolist = audiolist;

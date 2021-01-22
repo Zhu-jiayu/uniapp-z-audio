@@ -12,8 +12,10 @@
 		</view>
 
 		<div class="demo">
+			<button @click="asyncSetAudio" size="mini">异步设置音频</button>
 			<button @click="reset" size="mini">覆盖音频</button>
 			<button @click="add" size="mini">添加音频</button>
+			<button @click="setRender" size="mini">渲染第2首</button>
 			<button @click="willStop" size="mini">注册5秒后暂停事件</button>
 			<button @click="removeStop" size="mini">卸载5秒后暂停事件</button>
 			<button @click="logPlaying('log')" size="mini">注册播放时打印事件</button>
@@ -86,12 +88,6 @@ export default {
 					title: '二人转',
 					singer: '作者333',
 					coverImgUrl: 'https://img.1ting.com/images/special/374/s300_2f06b17427718e01e54be1cfe462f3e0.jpg'
-				},
-				{
-					src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2014iSep/15F/15xwsk/21.mp3',
-					title: '蓝莲花',
-					singer: '许巍',
-					coverImgUrl: 'https://img.1ting.com/images/special/358/s100_6d9c9a3f9f67fa76b041561ff0042ae4.jpg'
 				}
 			];
 			this.$zaudio.setAudio(data);
@@ -107,7 +103,25 @@ export default {
 			];
 			this.$zaudio.updateAudio(data);
 		},
-
+		//异步加载音频并渲染
+		asyncSetAudio() {
+			let data = [{
+					src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2014iSep/15F/15xwsk/21.mp3',
+					title: '蓝莲花',
+					singer: '许巍',
+					coverImgUrl: 'https://img.1ting.com/images/special/358/s100_6d9c9a3f9f67fa76b041561ff0042ae4.jpg'
+				}];
+				
+				uni.showLoading()
+				setTimeout(()=>{
+					this.$zaudio.setAudio(data);
+					this.$zaudio.setRender(0);  //setRender: 用于渲染zaudio, 具体查看文档
+					uni.hideLoading()
+				},1500)
+		},
+		setRender(){
+			this.$zaudio.setRender(1);
+		},
 		willStop() {
 			this.$zaudio.on('playing', 'recharge', info => {
 				if (info.current_value > 5) {

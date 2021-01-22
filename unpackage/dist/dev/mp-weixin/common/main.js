@@ -18,7 +18,7 @@ var _App = _interopRequireDefault(__webpack_require__(/*! ./App */ 5));
 var _uniappZaudio = _interopRequireDefault(__webpack_require__(/*! @/components/uniapp-zaudio */ 11));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}_vue.default.config.productionTip = false;_App.default.mpType = 'app';
 // import ZAudio from 'uniapp-zaudio' // npm引用方式
 
-console.log("\u5F53\u524D\u7248\u672C", _uniappZaudio.default.version);
+console.log("ZAudio\u5F53\u524D\u7248\u672C", _uniappZaudio.default.version);
 var zaudio = new _uniappZaudio.default({
   continuePlay: true, //续播
   autoPlay: false //自动播放 部分浏览器不支持
@@ -41,9 +41,13 @@ var data = [{
   coverImgUrl: 'https://img.1ting.com/images/special/204/s150_77254cd4a4da1a33b8faf89c4cbf6e40.jpg' }];
 
 
+
+
 // 设置音频数据
 zaudio.setAudio(data);
 
+//渲染第一首音频
+zaudio.setRender(0);
 
 var app = new _vue.default(_objectSpread({},
 _App.default));

@@ -39,7 +39,6 @@ enum zaudioCbName {
   syncStateOn = "syncStateOn", //同步获取属性回调
 }
 
-
 import { formatSeconds, throttle, EventBus } from "./util";
 
 /**
@@ -73,7 +72,7 @@ import { formatSeconds, throttle, EventBus } from "./util";
  * **/
 
 export default class ZAudio extends EventBus {
-  static version: string = "2.2.4";
+  static version: string = "2.2.5";
 
   loading: boolean = false;
   renderIndex: number = 0;
@@ -206,7 +205,7 @@ export default class ZAudio extends EventBus {
   private onCanplayHandler(): void {
     this.emit(zaudioCbName.onCanplay, { ...this.playinfo, waiting: false });
     this.syncStateEmit();
-		this.commit("setLoading", false);
+    this.commit("setLoading", false);
   }
   private onPlayHandler(): void {
     // #ifdef APP-PLUS
@@ -235,12 +234,16 @@ export default class ZAudio extends EventBus {
     this.commit("setPlayinfo", {
       current: "00:00",
       current_value: 0,
+      src: "", //fix: 当audiolist只有一个对象时, 无法续播问题
     });
     this.emit(zaudioCbName.onEnded);
     this.syncStateEmit();
     //续播
     if (this.continuePlay) {
       this.changeplay(1);
+    } else {
+      let nextkey = this.getNextKey(1);
+      this.commit("setRender", nextkey);
     }
   }
   //fix: 防抖触发音频播放中事件
@@ -368,37 +371,30 @@ export default class ZAudio extends EventBus {
     }
   }
   /**
+   * @description 获取下一首歌曲索引(用于渲染和播放)
+   * @param {Number}        count     切换数量 
+   * @returns number
+   * **/
+  private getNextKey(count: number): number {
+    let nextkey: number = this.renderIndex;
+    nextkey += count;
+    nextkey =
+      nextkey < 0
+        ? this.audiolist.length - 1
+        : nextkey > this.audiolist.length - 1
+        ? 0
+        : nextkey;
+    return nextkey;
+  }
+  /**
    * @description 切歌
    * @param {Number}        count      数量
    * @returns undefined
    * **/
   changeplay(count: number): void {
-    //fix: 当audiolist只有一个对象时, 无法续播问题
-    if (this.audiolist.length == 1) {
-      this.commit("setPlayinfo", {
-        current: "00:00",
-        current_value: 0,
-        duration: "00:00",
-        duration_value: 0,
-        title: "",
-        src: "",
-      });
-    }
-    if (this.renderIsPlay) {
-      let nowindex: number = this.renderIndex;
-      nowindex += count;
-      nowindex =
-        nowindex < 0
-          ? this.audiolist.length - 1
-          : nowindex > this.audiolist.length - 1
-          ? 0
-          : nowindex;
-      this.commit("setPause", true);
-      this.operate(nowindex);
-    } else {
-      this.commit("setPause", true);
-      this.operate(this.renderIndex);
-    }
+    let nextkey = this.getNextKey(count);
+    this.commit("setPause", true);
+    this.operate(nextkey);
   }
   /**
    * @description 手动播放或暂停, 并渲染对应的数据
@@ -568,6 +564,7 @@ export default class ZAudio extends EventBus {
         this.renderIndex = renderIndex;
       }
     }
+    this.syncStateEmit();
   }
 
   //当前索引
