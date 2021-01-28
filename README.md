@@ -29,8 +29,10 @@
 
 _注意大小写:ZAudio是类_
 
+_HbuilderX插件导入方式, import可能需要修改目录名哦_
+
 ```javascript
-import ZAudio from '@/components/uniapp-zaudio'
+import ZAudio from '@/components/uniapp-zaudio' //HbuilderX插件导入方式, import可能需要修改目录名哦
 // import ZAudio from 'uniapp-zaudio' // npm引用方式
 
 let zaudio = new ZAudio({
