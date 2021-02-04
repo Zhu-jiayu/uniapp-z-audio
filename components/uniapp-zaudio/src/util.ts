@@ -34,24 +34,22 @@ export class EventBus {
   constructor() {
     this._events = new Map();
   }
-  protected on(event: any, action: string, fn: any): void {
-    if (event !== undefined && action !== undefined) {
-      let arr = this._events.get(event);
+  protected on(event: any, action: any, fn: () => {}): void {
+    let arr = this._events.get(event);
 
-      let hasAction = arr
-        ? arr.findIndex((i: { action: string }) => i.action == action)
-        : -1;
-      if (hasAction > -1) {
-        return;
-      }
-      this._events.set(event, [
-        ...(this._events.get(event) || []),
-        {
-          action,
-          fn,
-        },
-      ]);
+    let hasAction = arr
+      ? arr.findIndex((i: { action: string }) => i.action == action)
+      : -1;
+    if (hasAction > -1) {
+      return;
     }
+    this._events.set(event, [
+      ...(this._events.get(event) || []),
+      {
+        action,
+        fn,
+      },
+    ]);
   }
   private has(event: any): boolean {
     return this._events.has(event);
@@ -74,4 +72,3 @@ export class EventBus {
     this._events.set(event, [...newdata]);
   }
 }
-

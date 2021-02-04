@@ -72,21 +72,22 @@ export default class ZAudio extends EventBus {
         continuePlay: boolean;
     });
     private init;
+    checkEventParams(event: zaudioCbName, action: string | symbol, fn?: () => {}): boolean;
     /**
      * @description 回调中卸载业务事件
-     * @param {<zaudioCbName>}   event     回调名称枚举值,具体看zaudioCbName
-     * @param {Sting}         action    业务函数名,用于区分不同业务
+     * @param {<zaudioCbName>}   event     回调名称枚举值
+     * @param {Sting|Symbol}         action    业务函数名,用于区分不同业务
      * @returns undefined
      * **/
-    off(event: zaudioCbName, action: string): void;
+    off(event: zaudioCbName, action: string | symbol): void;
     /**
      * @description 回调中注册业务事件
-     * @param {<zaudioCbName>}        event     回调名称枚举值,具体看types.ts
-     * @param {Sting}              action    业务函数名,用于区分不同业务
+     * @param {<zaudioCbName>}        event     回调名称枚举值
+     * @param {Sting|Symbol}              action    业务函数名,用于区分不同业务
      * @param {function(object|string|number|undefined):undefined}      fn      业务函数, 参数或为音频状态
      * @returns undefined
      * **/
-    on(event: zaudioCbName, action: string, fn: (arg0?: any) => void): void;
+    on(event: zaudioCbName, action: string | symbol, fn: () => {}): void;
     /**
      * @description 订阅触发音频回调
      * @param {<zaudioCbName>}        event      回调名称枚举值,具体看zaudioCbName
@@ -139,6 +140,11 @@ export default class ZAudio extends EventBus {
      * @returns undefined
      * **/
     stepPlay(value: number): void;
+    /**
+     * @description 获取下一首歌曲索引(用于渲染和播放)
+     * @param {Number}        count     切换数量
+     * @returns number
+     * **/
     private getNextKey;
     /**
      * @description 切歌

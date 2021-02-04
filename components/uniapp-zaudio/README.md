@@ -29,8 +29,10 @@
 
 _注意大小写:ZAudio是类_
 
+_HbuilderX插件导入方式, import可能需要修改目录名哦_
+
 ```javascript
-import ZAudio from '@/components/uniapp-zaudio'
+import ZAudio from '@/components/uniapp-zaudio' //HbuilderX插件导入方式, import可能需要修改目录名哦
 // import ZAudio from 'uniapp-zaudio' // npm引用方式
 
 let zaudio = new ZAudio({
@@ -59,6 +61,7 @@ var data = [
   },
 ];
 zaudio.setAudio(data); //添加音频
+zaudio.setRender(0)//渲染第一首音频
 ```
 
 3. 引用组件
@@ -118,6 +121,7 @@ export default {
 
 + 用法示例:
 
+初始化ZAudio类, 并渲染音频
 ```javascript
 let zaudio = new ZAudio({
   continuePlay: true, //续播
@@ -141,9 +145,23 @@ var data = [
       "https://img.1ting.com/images/special/204/s150_77254cd4a4da1a33b8faf89c4cbf6e40.jpg",
   },
 ];
-zaudio.setAudio(data);
-//播放或暂停第一首音频
-zaudio.operate(1);
+
+
+// 设置音频数据
+zaudio.setAudio(data)
+//渲染第一首音频
+zaudio.setRender(0)
+
+```
+
+
+异步加载
+```js
+setTimeout(()=>{
+	zaudio.setAudio(data);
+	zaudio.operate(0); //手动去渲染第1首音频
+},2000)
+
 ```
 
 ## <span id="fn">音频回调事件中注册业务</span>
@@ -151,24 +169,24 @@ zaudio.operate(1);
 - `zaudio.on(event, action, fn)`: 注册业务事件
 - `zaudio.off(event, action)`: 卸载业务事件, 页面卸载时可以卸载不必要的业务事件, 这样可以提高页面性能
 - `event`: 回调方法名,具体表格如下
-- `action`: 自定义的业务函数名, 一个业务函数名在同一个音频回调中只能注册一次, 多次注册不会被覆盖
+- `action`: 自定义的业务名, 一个业务名在同一个音频回调中只能注册一次, 多次注册不会被覆盖
 - `fn`: 触发的业务函数, 部分回调会实时返回当前播放的状态, 见下表
 
 
 
 
-| event(音频回调名)  | 描述           |  fn参数                              |
-| ----------- | -------------- | --------------------------------- |
-| waiting       | 加载音频时回调 | 当前加载状态
-| error       | 错误播放时回调 |
-| playing     | 播放时回调     | 实时返回当前播放的音频对象 |
-| canPlay     | 初始播放时回调 | 当前播放的音频对象 |
-| pause       | 暂停回调       |
-| ended       | 结束回调       |
-| setAudio    | 覆盖音频的回调 | 当前音频列表       |
-| updateAudio | 添加音频的回调 | 当前音频列表       |
-| stop        | 强制停止播放回调, 小程序音频浮窗关闭回调   |
-| seek        | 快进拖动回调   | 当前跳转的时间点
+| event(音频回调名)  |action(自定义业务名)| 描述           |  fn参数                              |
+| -----------| ---- | -------------- | --------------------------------- |
+| waiting      |类型string或symbol | 加载音频时回调 | 当前加载状态
+| error       |类型string或symbol| 错误播放时回调 |
+| playing     |类型string或symbol| 播放时回调     | 实时返回当前播放的音频对象 |
+| canPlay     |类型string或symbol| 初始播放时回调 | 当前播放的音频对象 |
+| pause       |类型string或symbol| 暂停回调       |
+| ended       |类型string或symbol| 结束回调       |
+| setAudio    |类型string或symbol| 覆盖音频的回调 | 当前音频列表       |
+| updateAudio |类型string或symbol| 添加音频的回调 | 当前音频列表       |
+| stop        |类型string或symbol| 强制停止播放回调, 小程序音频浮窗关闭回调   |
+| seek        |类型string或symbol| 快进拖动回调   | 当前跳转的时间点
 
 + 用法示例:
 

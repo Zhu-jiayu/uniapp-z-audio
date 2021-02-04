@@ -39,6 +39,13 @@ enum zaudioCbName {
   syncStateOn = "syncStateOn", //同步获取属性回调
 }
 
+let zaudioCbNameArr: zaudioCbName[] = [];
+for (const key in zaudioCbName) {
+  if (Object.prototype.hasOwnProperty.call(zaudioCbName, key)) {
+    const item = zaudioCbName[key as keyof typeof zaudioCbName];
+    zaudioCbNameArr.push(item);
+  }
+}
 import { formatSeconds, throttle, EventBus } from "./util";
 
 /**
@@ -162,24 +169,50 @@ export default class ZAudio extends EventBus {
 
     this.appCheckReplay();
   }
+
+  //检测on off的参数
+  checkEventParams(
+    event: zaudioCbName,
+    action: string | symbol,
+    fn?: () => {}
+  ): boolean {
+    if (zaudioCbNameArr.indexOf(event) < 0) {
+      console.error(
+        `参数${event}错误, 必须为${zaudioCbNameArr.join(" | ")}中某一项`
+      );
+      return false;
+    }
+    if (typeof action !== "string" && typeof action !== "symbol") {
+      console.error(`参数${action}错误, 参数必须为string或symbol类型`);
+      return false;
+    }
+    if (fn && typeof fn !== "function") {
+      console.error("fn参数错误");
+      return false;
+    }
+    return true;
+  }
+
   /**
    * @description 回调中卸载业务事件
-   * @param {<zaudioCbName>}   event     回调名称枚举值,具体看zaudioCbName
-   * @param {Sting}         action    业务函数名,用于区分不同业务
+   * @param {<zaudioCbName>}   event     回调名称枚举值
+   * @param {Sting|Symbol}         action    业务函数名,用于区分不同业务
    * @returns undefined
    * **/
-  off(event: zaudioCbName, action: string): void {
+  off(event: zaudioCbName, action: string | symbol): void {
+    if (!this.checkEventParams(event, action)) return;
     super.off(event, action);
   }
 
   /**
    * @description 回调中注册业务事件
-   * @param {<zaudioCbName>}        event     回调名称枚举值,具体看types.ts
-   * @param {Sting}              action    业务函数名,用于区分不同业务
+   * @param {<zaudioCbName>}        event     回调名称枚举值
+   * @param {Sting|Symbol}              action    业务函数名,用于区分不同业务
    * @param {function(object|string|number|undefined):undefined}      fn      业务函数, 参数或为音频状态
    * @returns undefined
    * **/
-  on(event: zaudioCbName, action: string, fn: (arg0?: any) => void): void {
+  on(event: zaudioCbName, action: string | symbol, fn: () => {}): void {
+    if (!this.checkEventParams(event, action)) return;
     super.on(event, action, fn);
   }
   /**
@@ -203,9 +236,9 @@ export default class ZAudio extends EventBus {
     this.syncStateEmit();
   }
   private onCanplayHandler(): void {
-    this.emit(zaudioCbName.onCanplay, { ...this.playinfo, waiting: false });
-    this.syncStateEmit();
+    this.emit(zaudioCbName.onCanplay, this.playinfo);
     this.commit("setLoading", false);
+    this.syncStateEmit();
   }
   private onPlayHandler(): void {
     // #ifdef APP-PLUS
@@ -273,8 +306,6 @@ export default class ZAudio extends EventBus {
       // #endif
     }
 
-    // this.emit(zaudioCbName.onTimeUpdate, this.playinfo);
-    // this.syncStateEmit();
     this.throttlePlaying();
   }
   private onErrorHandler(): void {
@@ -372,7 +403,7 @@ export default class ZAudio extends EventBus {
   }
   /**
    * @description 获取下一首歌曲索引(用于渲染和播放)
-   * @param {Number}        count     切换数量 
+   * @param {Number}        count     切换数量
    * @returns number
    * **/
   private getNextKey(count: number): number {

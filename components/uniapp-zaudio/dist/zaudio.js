@@ -23,6 +23,13 @@ var zaudioCbName;
     zaudioCbName["onStop"] = "stop";
     zaudioCbName["syncStateOn"] = "syncStateOn";
 })(zaudioCbName || (zaudioCbName = {}));
+let zaudioCbNameArr = [];
+for (const key in zaudioCbName) {
+    if (Object.prototype.hasOwnProperty.call(zaudioCbName, key)) {
+        const item = zaudioCbName[key];
+        zaudioCbNameArr.push(item);
+    }
+}
 const util_1 = require("./util");
 /**
  * ZAudio类
@@ -133,23 +140,43 @@ class ZAudio extends util_1.EventBus {
         // #endif
         this.appCheckReplay();
     }
+    //检测on off的参数
+    checkEventParams(event, action, fn) {
+        if (zaudioCbNameArr.indexOf(event) < 0) {
+            console.error(`参数${event}错误, 必须为${zaudioCbNameArr.join(" | ")}中某一项`);
+            return false;
+        }
+        if (typeof action !== "string" && typeof action !== "symbol") {
+            console.error(`参数${action}错误, 参数必须为string或symbol类型`);
+            return false;
+        }
+        if (fn && typeof fn !== "function") {
+            console.error("fn参数错误");
+            return false;
+        }
+        return true;
+    }
     /**
      * @description 回调中卸载业务事件
-     * @param {<zaudioCbName>}   event     回调名称枚举值,具体看zaudioCbName
-     * @param {Sting}         action    业务函数名,用于区分不同业务
+     * @param {<zaudioCbName>}   event     回调名称枚举值
+     * @param {Sting|Symbol}         action    业务函数名,用于区分不同业务
      * @returns undefined
      * **/
     off(event, action) {
+        if (!this.checkEventParams(event, action))
+            return;
         super.off(event, action);
     }
     /**
      * @description 回调中注册业务事件
-     * @param {<zaudioCbName>}        event     回调名称枚举值,具体看types.ts
-     * @param {Sting}              action    业务函数名,用于区分不同业务
+     * @param {<zaudioCbName>}        event     回调名称枚举值
+     * @param {Sting|Symbol}              action    业务函数名,用于区分不同业务
      * @param {function(object|string|number|undefined):undefined}      fn      业务函数, 参数或为音频状态
      * @returns undefined
      * **/
     on(event, action, fn) {
+        if (!this.checkEventParams(event, action))
+            return;
         super.on(event, action, fn);
     }
     /**
@@ -170,9 +197,9 @@ class ZAudio extends util_1.EventBus {
         this.syncStateEmit();
     }
     onCanplayHandler() {
-        this.emit(zaudioCbName.onCanplay, Object.assign(Object.assign({}, this.playinfo), { waiting: false }));
-        this.syncStateEmit();
+        this.emit(zaudioCbName.onCanplay, this.playinfo);
         this.commit("setLoading", false);
+        this.syncStateEmit();
     }
     onPlayHandler() {
         // #ifdef APP-PLUS
@@ -233,8 +260,6 @@ class ZAudio extends util_1.EventBus {
             }
             // #endif
         }
-        // this.emit(zaudioCbName.onTimeUpdate, this.playinfo);
-        // this.syncStateEmit();
         this.throttlePlaying();
     }
     onErrorHandler() {
@@ -327,6 +352,11 @@ class ZAudio extends util_1.EventBus {
             this.seek(pos);
         }
     }
+    /**
+     * @description 获取下一首歌曲索引(用于渲染和播放)
+     * @param {Number}        count     切换数量
+     * @returns number
+     * **/
     getNextKey(count) {
         let nextkey = this.renderIndex;
         nextkey += count;
@@ -344,14 +374,6 @@ class ZAudio extends util_1.EventBus {
      * @returns undefined
      * **/
     changeplay(count) {
-        // if (this.renderIsPlay) {
-        //   let nextkey = this.getNextKey(count);
-        //   this.commit("setPause", true);
-        //   this.operate(nextkey);
-        // } else {
-        //   this.commit("setPause", true);
-        //   this.operate(this.renderIndex);
-        // }
         let nextkey = this.getNextKey(count);
         this.commit("setPause", true);
         this.operate(nextkey);

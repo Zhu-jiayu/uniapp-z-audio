@@ -128,8 +128,8 @@ export default {
 					this.$zaudio.stop();
 
 					uni.showModal({
-						title: '打钱后才可以听',
-						content: '打钱后才可以听',
+						title: '提示',
+						content: '请续费',
 						success: function(res) {
 							if (res.confirm) {
 								console.log('用户点击确定');

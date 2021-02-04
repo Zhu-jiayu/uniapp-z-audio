@@ -20,7 +20,7 @@ Vue.prototype.$zaudio = zaudio
 
 //模拟初始数据
 var data = [{
-		src: 'https://96.f.1ting.com/local_to_cube_202004121813/96kmp3/zzzzzmp3/2016aJan/18X/18d_DeH/01.mp3',
+		src: 'https://static.quhouse.com/audio/6103-359339075946911-20210129121317-209600.mp3',
 		title: '恭喜发财',
 		singer: '刘德华',
 		coverImgUrl: 'https://img.1ting.com/images/special/75/s150_f84ef5082b0420f74cd2546b986ab0fc.jpg'

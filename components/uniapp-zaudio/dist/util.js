@@ -35,22 +35,20 @@ class EventBus {
         this._events = new Map();
     }
     on(event, action, fn) {
-        if (event !== undefined && action !== undefined) {
-            let arr = this._events.get(event);
-            let hasAction = arr
-                ? arr.findIndex((i) => i.action == action)
-                : -1;
-            if (hasAction > -1) {
-                return;
-            }
-            this._events.set(event, [
-                ...(this._events.get(event) || []),
-                {
-                    action,
-                    fn,
-                },
-            ]);
+        let arr = this._events.get(event);
+        let hasAction = arr
+            ? arr.findIndex((i) => i.action == action)
+            : -1;
+        if (hasAction > -1) {
+            return;
         }
+        this._events.set(event, [
+            ...(this._events.get(event) || []),
+            {
+                action,
+                fn,
+            },
+        ]);
     }
     has(event) {
         return this._events.has(event);
