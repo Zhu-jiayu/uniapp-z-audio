@@ -1,6 +1,6 @@
 # uniapp-zaudio 背景音频播放组件
 
-当前版本`v2.2.5`, 查看版本`console.log(ZAudio.version)`
+当前版本`v2.2.51`, 查看版本`console.log(ZAudio.version)`
 ## 预览
 [http://jingangtui.gitee.io/uniapp-z-audio/#/](http://jingangtui.gitee.io/uniapp-z-audio/#/)
 
